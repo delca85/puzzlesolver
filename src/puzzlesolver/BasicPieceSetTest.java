@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class PieceSetTest {
+public class BasicPieceSetTest {
 
 	@Test
 	public void testConstructor() {
