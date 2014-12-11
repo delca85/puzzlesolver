@@ -27,74 +27,75 @@ public class BasicPieceSet implements PieceSet {
 		}
 
 		private static void BFSSolve (PuzzlePiece root, HashMap<String, PuzzlePiece> map) throws MissingPiecesException {
+			// Implements a textbook breadth first traversal with minimal adjustments.
 			Queue<PuzzlePiece> queued = new LinkedList<PuzzlePiece>();
-			Set<PuzzlePiece> visited = new HashSet<PuzzlePiece>();
-			visited.add(root);
+			Set<String> visited = new HashSet<String>();
+
+			visited.add(root.getId());
 			queued.add(root);
+			
 			while (!queued.isEmpty()) {
-
 				PuzzlePiece t = queued.remove();
-				
-				if (t == null) {
-					return;
-				}
 
-				PuzzlePiece n = t.getNorth();
-				PuzzlePiece s = t.getSouth();
-				PuzzlePiece w = t.getWest();
-				PuzzlePiece e = t.getEast();
+				String n = t.getNorthId();
+				String s = t.getSouthId();
+				String w = t.getWestId();
+				String e = t.getEastId();
 					
 				if (!visited.contains(n)) {
-					if (!t.isNRow() && n == null) { 
+					if (!t.isNRow()) { 
+						/*
+						 *  We don't care about the northern neighbour if this is part of the topmost row
+						 */ 
 						PuzzlePiece northNeighbour = map.get(t.getNorthId());
+						// This is  ~O(1) for realistic inputs
 						if (northNeighbour == null) {
 							throw new MissingPiecesException();
+							// The piece set is incomplete (or northId is wrong)
 						}
 						t.setNorth(northNeighbour);
+						visited.add(n);
+						// Will pay visit in due time
+						queued.add(northNeighbour);
 					}
-					visited.add(n);
-					queued.add(n);
 				}
 
 				if (!visited.contains(s)) {
-					if (!t.isSRow() && s == null) { 
+					if (!t.isSRow()) { 
 						PuzzlePiece southNeighbour = map.get(t.getSouthId());
 						if (southNeighbour == null) {
 							throw new MissingPiecesException();
 						}
 						t.setSouth(southNeighbour);
+						visited.add(s);
+						queued.add(southNeighbour);
 					}
-					visited.add(s);
-					queued.add(s);
 				}
 
 				if (!visited.contains(w)) {
-					if (!t.isWRow() && w == null) { 
+					if (!t.isWRow()) { 
 						PuzzlePiece westNeighbour = map.get(t.getWestId());
 						if (westNeighbour == null) {
 							throw new MissingPiecesException();
 						}						
 						t.setWest(westNeighbour);
+						visited.add(w);
+						queued.add(westNeighbour);
 					}
-					visited.add(w);
-					queued.add(w);
 				}
 
 				if (!visited.contains(e)) {
-					if (!t.isERow() && e == null) { 
+					if (!t.isERow()) { 
 						PuzzlePiece eastNeighbour = map.get(t.getEastId());
 						if (eastNeighbour == null) {
 							throw new MissingPiecesException();
 						}						
 						t.setEast(eastNeighbour);
+						visited.add(e);
+						queued.add(eastNeighbour);
 					}
-					visited.add(e);
-					queued.add(e);
-				}
-
-				
+				}			
 			}
-			
 		}
 		
 		private static void NWrecursiveSolve(PuzzlePiece p, HashMap<String, PuzzlePiece> map) throws MissingPiecesException {
