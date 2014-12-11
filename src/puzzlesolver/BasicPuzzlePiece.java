@@ -100,7 +100,6 @@ public class BasicPuzzlePiece implements PuzzlePiece {
 		return (isSRow() && isERow());
 	}
 
-
 	public boolean isNECorner() {
 		return (isNRow() && isERow());
 	}
@@ -119,5 +118,9 @@ public class BasicPuzzlePiece implements PuzzlePiece {
 
 	public boolean isERow() {
 		return (getEastId().equals(kEmptyId));
+	}
+	
+	public String toString() {
+		return id;
 	}
 }
