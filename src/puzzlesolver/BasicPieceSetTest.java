@@ -19,10 +19,10 @@ public class BasicPieceSetTest {
 		 *  A1 A2
 		 *  B1 B2
 		 */
-		PuzzlePiece A1 = new BasicPuzzlePiece("A1", "VUOTO", "B1", "VUOTO", "A2");
-		PuzzlePiece A2 = new BasicPuzzlePiece("A2", "VUOTO", "B2", "A1", "VUOTO");
-		PuzzlePiece B1 = new BasicPuzzlePiece("B1", "A1", "VUOTO", "VUOTO", "B2");
-		PuzzlePiece B2 = new BasicPuzzlePiece("B2", "A2", "VUOTO", "B1", "VUOTO");
+		PuzzlePiece A1 = new BasicPuzzlePiece("A1", "A-one", "VUOTO", "B1", "VUOTO", "A2");
+		PuzzlePiece A2 = new BasicPuzzlePiece("A2", "A-two", "VUOTO", "B2", "A1", "VUOTO");
+		PuzzlePiece B1 = new BasicPuzzlePiece("B1", "B-one", "A1", "VUOTO", "VUOTO", "B2");
+		PuzzlePiece B2 = new BasicPuzzlePiece("B2", "B-two", "A2", "VUOTO", "B1", "VUOTO");
 		
 		PieceSet foo = new BasicPieceSet();
 		foo.addPiece(A1);
@@ -37,10 +37,10 @@ public class BasicPieceSetTest {
 		 *  A1 A2
 		 *  B1 B2
 		 */
-		PuzzlePiece A1 = new BasicPuzzlePiece("A1", "VUOTO", "B1", "VUOTO", "A2");
-		PuzzlePiece A2 = new BasicPuzzlePiece("A2", "VUOTO", "B2", "A1", "VUOTO");
-		PuzzlePiece B1 = new BasicPuzzlePiece("B1", "A1", "VUOTO", "VUOTO", "B2");
-		PuzzlePiece B2 = new BasicPuzzlePiece("B2", "A2", "VUOTO", "B1", "VUOTO");
+		PuzzlePiece A1 = new BasicPuzzlePiece("A1", "A-one", "VUOTO", "B1", "VUOTO", "A2");
+		PuzzlePiece A2 = new BasicPuzzlePiece("A2", "A-two", "VUOTO", "B2", "A1", "VUOTO");
+		PuzzlePiece B1 = new BasicPuzzlePiece("B1", "B-one", "A1", "VUOTO", "VUOTO", "B2");
+		PuzzlePiece B2 = new BasicPuzzlePiece("B2", "B-two", "A2", "VUOTO", "B1", "VUOTO");
 		
 		PieceSet foo = new BasicPieceSet();
 		foo.addPiece(A1);
@@ -56,10 +56,10 @@ public class BasicPieceSetTest {
 		 *  A1 A2
 		 *  XX B2
 		 */
-		PuzzlePiece A1 = new BasicPuzzlePiece("A1", "VUOTO", "B1", "VUOTO", "A2");
-		PuzzlePiece A2 = new BasicPuzzlePiece("A2", "VUOTO", "B2", "A1", "VUOTO");
-		PuzzlePiece B2 = new BasicPuzzlePiece("B2", "A2", "VUOTO", "B1", "VUOTO");
-		
+		PuzzlePiece A1 = new BasicPuzzlePiece("A1", "A-one", "VUOTO", "B1", "VUOTO", "A2");
+		PuzzlePiece A2 = new BasicPuzzlePiece("A2", "A-two", "VUOTO", "B2", "A1", "VUOTO");
+		PuzzlePiece B2 = new BasicPuzzlePiece("B2", "B-two", "A2", "VUOTO", "B1", "VUOTO");
+
 		PieceSet foo = new BasicPieceSet();
 		foo.addPiece(A1);
 		foo.addPiece(A2);
@@ -74,15 +74,15 @@ public class BasicPieceSetTest {
 		 *  B1 B2 B3
 		 *  C1 C2 C3
 		 */
-		PuzzlePiece A1 = new BasicPuzzlePiece("A1", "VUOTO", "B1", "VUOTO", "A2");
-		PuzzlePiece A2 = new BasicPuzzlePiece("A2", "VUOTO", "B2", "A1", "A3");
-		PuzzlePiece A3 = new BasicPuzzlePiece("A3", "VUOTO", "B3", "A2", "VUOTO");
-		PuzzlePiece B1 = new BasicPuzzlePiece("B1", "A1", "C1", "VUOTO", "B2");
-		PuzzlePiece B2 = new BasicPuzzlePiece("B2", "A2", "C2", "B1", "B3");
-		PuzzlePiece B3 = new BasicPuzzlePiece("B3", "A2", "C3", "B2", "VUOTO");
-		PuzzlePiece C1 = new BasicPuzzlePiece("C1", "B1", "VUOTO", "VUOTO", "C2");
-		PuzzlePiece C2 = new BasicPuzzlePiece("C2", "B2", "VUOTO", "C1", "C3");
-		PuzzlePiece C3 = new BasicPuzzlePiece("C3", "B3", "VUOTO", "C2", "VUOTO");
+		PuzzlePiece A1 = new BasicPuzzlePiece("A1", "A1", "VUOTO", "B1", "VUOTO", "A2");
+		PuzzlePiece A2 = new BasicPuzzlePiece("A2", "A2", "VUOTO", "B2", "A1", "A3");
+		PuzzlePiece A3 = new BasicPuzzlePiece("A3", "A3", "VUOTO", "B3", "A2", "VUOTO");
+		PuzzlePiece B1 = new BasicPuzzlePiece("B1", "B1", "A1", "C1", "VUOTO", "B2");
+		PuzzlePiece B2 = new BasicPuzzlePiece("B2", "B2", "A2", "C2", "B1", "B3");
+		PuzzlePiece B3 = new BasicPuzzlePiece("B3", "B3", "A2", "C3", "B2", "VUOTO");
+		PuzzlePiece C1 = new BasicPuzzlePiece("C1", "C1", "B1", "VUOTO", "VUOTO", "C2");
+		PuzzlePiece C2 = new BasicPuzzlePiece("C2", "C2", "B2", "VUOTO", "C1", "C3");
+		PuzzlePiece C3 = new BasicPuzzlePiece("C3", "C3", "B3", "VUOTO", "C2", "VUOTO");
 		
 		PieceSet foo = new BasicPieceSet();
 		foo.addPiece(A1);
@@ -103,11 +103,11 @@ public class BasicPieceSetTest {
 		 *  A1 A2
 		 *  B1 B2
 		 */
-		PuzzlePiece A1 = new BasicPuzzlePiece("A1", "VUOTO", "B1", "VUOTO", "A2");
-		PuzzlePiece A2 = new BasicPuzzlePiece("A2", "VUOTO", "B2", "A1", "VUOTO");
-		PuzzlePiece B1 = new BasicPuzzlePiece("B1", "A1", "VUOTO", "VUOTO", "B2");
-		PuzzlePiece B2 = new BasicPuzzlePiece("B2", "A2", "VUOTO", "B1", "VUOTO");
-		
+		PuzzlePiece A1 = new BasicPuzzlePiece("A1", "A-one", "VUOTO", "B1", "VUOTO", "A2");
+		PuzzlePiece A2 = new BasicPuzzlePiece("A2", "A-two", "VUOTO", "B2", "A1", "VUOTO");
+		PuzzlePiece B1 = new BasicPuzzlePiece("B1", "B-one", "A1", "VUOTO", "VUOTO", "B2");
+		PuzzlePiece B2 = new BasicPuzzlePiece("B2", "B-two", "A2", "VUOTO", "B1", "VUOTO");
+
 		PieceSet foo = new BasicPieceSet();
 		foo.addPiece(A1);
 		foo.addPiece(A2);
