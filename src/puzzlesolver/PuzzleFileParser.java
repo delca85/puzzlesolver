@@ -20,7 +20,7 @@ public class PuzzleFileParser {
 			String line = null;
 			while ((line = reader.readLine()) != null) {
 				String[] tokens = line.split("\t");
-				if (tokens.length != 5) {
+				if (tokens.length != 6) {
 					throw new MalformedFileException();
 				}
 				l.add(tokens);
