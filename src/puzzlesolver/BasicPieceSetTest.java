@@ -3,6 +3,7 @@ package puzzlesolver;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+import java.util.Iterator;
 
 public class BasicPieceSetTest {
 
@@ -96,5 +97,33 @@ public class BasicPieceSetTest {
 		foo.solve();
 	}
 
-	
+	@Test
+	public void testIterate() throws MissingPiecesException, PuzzleNotSolvedException {
+		/*
+		 *  A1 A2
+		 *  B1 B2
+		 */
+		PuzzlePiece A1 = new BasicPuzzlePiece("A1", "VUOTO", "B1", "VUOTO", "A2");
+		PuzzlePiece A2 = new BasicPuzzlePiece("A2", "VUOTO", "B2", "A1", "VUOTO");
+		PuzzlePiece B1 = new BasicPuzzlePiece("B1", "A1", "VUOTO", "VUOTO", "B2");
+		PuzzlePiece B2 = new BasicPuzzlePiece("B2", "A2", "VUOTO", "B1", "VUOTO");
+		
+		PieceSet foo = new BasicPieceSet();
+		foo.addPiece(A1);
+		foo.addPiece(A2);
+		foo.addPiece(B1);
+		foo.addPiece(B2);
+		foo.solve();
+		String output = "";
+		for (Iterator<Iterator<PuzzlePiece>> rowIt = foo.iterator(); 
+			 rowIt.hasNext();){
+			for (Iterator<PuzzlePiece> colIt = rowIt.next(); 
+				 colIt.hasNext();){
+				output += colIt.next();
+			}
+			output += "\n";
+		}
+		
+		assert (output.equals(("" + A1 + A2) + "\n" + ("" + B1 + B2) + "\n"));
+	}
 }
