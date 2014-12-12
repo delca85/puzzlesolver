@@ -191,7 +191,7 @@ public class BasicPuzzle implements Puzzle {
 		return count;
 	}
 	
-	private String getOneLineSol() throws MissingPiecesException {
+	public String getSolution() throws MissingPiecesException {
 		String output = "";
 		for (Iterator<Iterator<PuzzlePiece>> rowIt = iterator(); 
 				 rowIt.hasNext();){
@@ -205,7 +205,7 @@ public class BasicPuzzle implements Puzzle {
 	
 	public String toString() {
 		try {
-			return getOneLineSol();
+			return "A "+getCols()+"x"+getRows()+" puzzle";
 		} catch (MissingPiecesException e) {
 			return "A puzzle with missing pieces.";
 		}

@@ -19,7 +19,7 @@ public class FilePuzzlePrinter implements PuzzlePrinter {
 
 	public void print(Puzzle puzzle) throws IOException, MissingPiecesException {
 		BufferedWriter writer = Files.newBufferedWriter(outputPath, charset);
-		writer.write(puzzle.toString());
+		writer.write(puzzle.getSolution());
 		writer.write("\n\n");
 		String output = "";
 		for (Iterator<Iterator<PuzzlePiece>> rowIt = puzzle.iterator(); 

@@ -53,7 +53,7 @@ public class BasicPuzzleTest {
 	}
 
 	@Test
-	public void testSolve() throws MissingPiecesException {
+	public void testGetSolution() throws MissingPiecesException {
 		/*
 		 *  A1 A2
 		 *  B1 B2
@@ -68,7 +68,7 @@ public class BasicPuzzleTest {
 		foo.addPiece(A2);
 		foo.addPiece(B1);
 		foo.addPiece(B2);
-		foo.solve();
+		foo.getSolution();
 	}
 	
 	@Test(expected = MissingPiecesException.class)
@@ -85,7 +85,7 @@ public class BasicPuzzleTest {
 		foo.addPiece(A1);
 		foo.addPiece(A2);
 		foo.addPiece(B2);
-		foo.solve();
+		Iterator<Iterator<PuzzlePiece>> it = foo.iterator();
 	}
 	
 	@Test
@@ -105,7 +105,7 @@ public class BasicPuzzleTest {
 		foo.addPiece(B2);
 		boolean thrown = false;
 		try {
-			foo.solve();
+			Iterator<Iterator<PuzzlePiece>> it = foo.iterator();
 		} catch (MissingPiecesException e) {
 			thrown = true;
 		}
@@ -152,7 +152,7 @@ public class BasicPuzzleTest {
 		foo.addPiece(C1);
 		foo.addPiece(C2);
 		foo.addPiece(C3);
-		foo.solve();
+		Iterator<Iterator<PuzzlePiece>> it = foo.iterator();
 	}
 
 	@Test
@@ -171,7 +171,6 @@ public class BasicPuzzleTest {
 		foo.addPiece(A2);
 		foo.addPiece(B1);
 		foo.addPiece(B2);
-		foo.solve();
 		String output = "";
 		for (Iterator<Iterator<PuzzlePiece>> rowIt = foo.iterator(); 
 			 rowIt.hasNext();){
