@@ -12,11 +12,13 @@ public class PuzzleSolver {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Path srcPath = Paths.get(args[0]);	
+		Path srcPath = Paths.get(args[0]);
+		Path dstPath = Paths.get(args[1]);
 		try {
 			List<String[]> tokenList = PuzzleFileParser.parseFile(srcPath);
 			Iterator<String[]> it = tokenList.iterator();
-			BasicPieceSet ps = new BasicPieceSet();
+			
+			BasicPuzzle ps = new BasicPuzzle();
 			while (it.hasNext()) {
 				String[] tokens = it.next();
 				ps.addPiece(new BasicPuzzlePiece(
@@ -28,19 +30,9 @@ public class PuzzleSolver {
 						tokens[5]
 						));
 			}
-			ps.solve();
 			
-			String output = "";
-			for (Iterator<Iterator<PuzzlePiece>> rowIt = ps.iterator(); 
-				 rowIt.hasNext();){
-				for (Iterator<PuzzlePiece> colIt = rowIt.next(); 
-					 colIt.hasNext();){
-					output += colIt.next();
-				}
-				output += "\n";
-			}
-			
-			System.out.println(output);
+			PuzzlePrinter p = new FilePuzzlePrinter(dstPath);
+			p.print(ps);
 		} catch (MalformedFileException e) {
 			System.out.println("Malformed file!");
 		} catch (IOException e) {
