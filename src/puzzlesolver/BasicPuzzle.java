@@ -4,10 +4,70 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 import java.util.Queue;
 import java.util.Set;
 
 public class BasicPuzzle implements Puzzle {
+	private class BasicPuzzleIterator implements Iterator<Iterator<PuzzlePiece>> {
+		class BasicPuzzleRowIterator implements Iterator<PuzzlePiece>{
+			private PuzzlePiece col;
+			
+			public BasicPuzzleRowIterator(PuzzlePiece p) {
+				col = p;
+			}
+			
+			public boolean hasNext() {
+				if (col == null) {
+					return false;
+				}
+				return true;
+			}
+			
+			public PuzzlePiece next() {
+				if (col != null) {
+					PuzzlePiece res = col;
+					col = col.getEast();
+					return res;
+				} else {
+					throw new NoSuchElementException();
+				}
+
+			}
+			
+			public void remove() {
+				throw new UnsupportedOperationException();
+			}
+		}
+		
+		private PuzzlePiece row;
+		
+		public BasicPuzzleIterator(BasicPuzzle ps) throws MissingPiecesException {
+			ps.solve();
+			row = ps.getNWCorner();
+		}	
+		
+		public boolean hasNext() {
+			if (row == null) {
+				return false;
+			}
+			return true;
+		}
+		
+		public Iterator<PuzzlePiece> next() {
+			if (row != null) {
+				PuzzlePiece res = row;
+				row = row.getSouth();
+				return new BasicPuzzleRowIterator(res);
+			} else {
+				throw new NoSuchElementException();
+			}
+		}
+
+		public void remove() {
+			throw new UnsupportedOperationException();
+		}	
+	}
 	
 	private PuzzlePiece NWCorner = null;
 	private HashMap<String,PuzzlePiece> pieceHashMap = new HashMap<String,PuzzlePiece>();
@@ -104,7 +164,7 @@ public class BasicPuzzle implements Puzzle {
 
 	public Iterator<Iterator<PuzzlePiece>> iterator() throws MissingPiecesException {
 		solve();
-		return new PieceSetIterator(this);
+		return new BasicPuzzleIterator(this);
 	}
 
 	public PuzzlePiece getNWCorner() {
