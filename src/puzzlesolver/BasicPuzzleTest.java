@@ -5,12 +5,12 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import java.util.Iterator;
 
-public class BasicPieceSetTest {
+public class BasicPuzzleTest {
 
 	@Test
 	public void testConstructor() {
-		PieceSet foo;
-		foo = new BasicPieceSet();
+		Puzzle foo;
+		foo = new BasicPuzzle();
 	}
 	
 	@Test
@@ -24,13 +24,34 @@ public class BasicPieceSetTest {
 		PuzzlePiece B1 = new BasicPuzzlePiece("B1", "B-one", "A1", "VUOTO", "VUOTO", "B2");
 		PuzzlePiece B2 = new BasicPuzzlePiece("B2", "B-two", "A2", "VUOTO", "B1", "VUOTO");
 		
-		PieceSet foo = new BasicPieceSet();
+		Puzzle foo = new BasicPuzzle();
 		foo.addPiece(A1);
 		foo.addPiece(A2);
 		foo.addPiece(B1);
 		foo.addPiece(B2);
 	}
 	
+	@Test
+	public void testCount() throws MissingPiecesException {
+		/*
+		 *  A1 A2
+		 *  B1 B2
+		 */
+		PuzzlePiece A1 = new BasicPuzzlePiece("A1", "A-one", "VUOTO", "B1", "VUOTO", "A2");
+		PuzzlePiece A2 = new BasicPuzzlePiece("A2", "A-two", "VUOTO", "B2", "A1", "VUOTO");
+		PuzzlePiece B1 = new BasicPuzzlePiece("B1", "B-one", "A1", "VUOTO", "VUOTO", "B2");
+		PuzzlePiece B2 = new BasicPuzzlePiece("B2", "B-two", "A2", "VUOTO", "B1", "VUOTO");
+		
+		Puzzle foo = new BasicPuzzle();
+		foo.addPiece(A1);
+		foo.addPiece(A2);
+		foo.addPiece(B1);
+		foo.addPiece(B2);
+		
+		assert(foo.getCols() == 2);
+		assert(foo.getRows() == 2);
+	}
+
 	@Test
 	public void testSolve() throws MissingPiecesException {
 		/*
@@ -42,7 +63,7 @@ public class BasicPieceSetTest {
 		PuzzlePiece B1 = new BasicPuzzlePiece("B1", "B-one", "A1", "VUOTO", "VUOTO", "B2");
 		PuzzlePiece B2 = new BasicPuzzlePiece("B2", "B-two", "A2", "VUOTO", "B1", "VUOTO");
 		
-		PieceSet foo = new BasicPieceSet();
+		Puzzle foo = new BasicPuzzle();
 		foo.addPiece(A1);
 		foo.addPiece(A2);
 		foo.addPiece(B1);
@@ -60,11 +81,48 @@ public class BasicPieceSetTest {
 		PuzzlePiece A2 = new BasicPuzzlePiece("A2", "A-two", "VUOTO", "B2", "A1", "VUOTO");
 		PuzzlePiece B2 = new BasicPuzzlePiece("B2", "B-two", "A2", "VUOTO", "B1", "VUOTO");
 
-		PieceSet foo = new BasicPieceSet();
+		Puzzle foo = new BasicPuzzle();
 		foo.addPiece(A1);
 		foo.addPiece(A2);
 		foo.addPiece(B2);
 		foo.solve();
+	}
+	
+	@Test
+	public void testMissingThenAdd() throws MissingPiecesException {
+		/*
+		 *  A1 A2
+		 *  XX B2
+		 */
+		PuzzlePiece A1 = new BasicPuzzlePiece("A1", "A-one", "VUOTO", "B1", "VUOTO", "A2");
+		PuzzlePiece A2 = new BasicPuzzlePiece("A2", "A-two", "VUOTO", "B2", "A1", "VUOTO");
+		PuzzlePiece B1 = new BasicPuzzlePiece("B1", "B-one", "A1", "VUOTO", "VUOTO", "B2");
+		PuzzlePiece B2 = new BasicPuzzlePiece("B2", "B-two", "A2", "VUOTO", "B1", "VUOTO");
+
+		Puzzle foo = new BasicPuzzle();
+		foo.addPiece(A1);
+		foo.addPiece(A2);
+		foo.addPiece(B2);
+		boolean thrown = false;
+		try {
+			foo.solve();
+		} catch (MissingPiecesException e) {
+			thrown = true;
+		}
+		assert(thrown == true);
+		
+		foo.addPiece(B1);
+		String output = "";
+		for (Iterator<Iterator<PuzzlePiece>> rowIt = foo.iterator(); 
+			 rowIt.hasNext();){
+			for (Iterator<PuzzlePiece> colIt = rowIt.next(); 
+				 colIt.hasNext();){
+				output += colIt.next();
+			}
+			output += "\n";
+		}
+		
+		assert (output.equals(("" + A1 + A2) + "\n" + ("" + B1 + B2) + "\n"));
 	}
 	
 	@Test
@@ -84,7 +142,7 @@ public class BasicPieceSetTest {
 		PuzzlePiece C2 = new BasicPuzzlePiece("C2", "C2", "B2", "VUOTO", "C1", "C3");
 		PuzzlePiece C3 = new BasicPuzzlePiece("C3", "C3", "B3", "VUOTO", "C2", "VUOTO");
 		
-		PieceSet foo = new BasicPieceSet();
+		Puzzle foo = new BasicPuzzle();
 		foo.addPiece(A1);
 		foo.addPiece(A2);
 		foo.addPiece(A3);
@@ -98,7 +156,7 @@ public class BasicPieceSetTest {
 	}
 
 	@Test
-	public void testIterate() throws MissingPiecesException, PuzzleNotSolvedException {
+	public void testIterate() throws MissingPiecesException {
 		/*
 		 *  A1 A2
 		 *  B1 B2
@@ -108,7 +166,7 @@ public class BasicPieceSetTest {
 		PuzzlePiece B1 = new BasicPuzzlePiece("B1", "B-one", "A1", "VUOTO", "VUOTO", "B2");
 		PuzzlePiece B2 = new BasicPuzzlePiece("B2", "B-two", "A2", "VUOTO", "B1", "VUOTO");
 
-		PieceSet foo = new BasicPieceSet();
+		Puzzle foo = new BasicPuzzle();
 		foo.addPiece(A1);
 		foo.addPiece(A2);
 		foo.addPiece(B1);

@@ -2,15 +2,17 @@ package puzzlesolver;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
 
-public class BasicPieceSet implements PieceSet {
+public class BasicPuzzle implements Puzzle {
 	
 	private PuzzlePiece NWCorner = null;
 	private HashMap<String,PuzzlePiece> pieceHashMap = new HashMap<String,PuzzlePiece>();
-
+	private boolean solved = false;
+	
 	private static void BFSSolve (PuzzlePiece root, HashMap<String, PuzzlePiece> map) throws MissingPiecesException {
 		// Implements a textbook breadth first traversal with minimal adjustments.
 		Queue<PuzzlePiece> queued = new LinkedList<PuzzlePiece>();
@@ -85,6 +87,8 @@ public class BasicPieceSet implements PieceSet {
 
 	
 	public void addPiece(PuzzlePiece p) {
+		solved = false;
+		
 		if (p.isNWCorner()) {
 			NWCorner = p;
 		}
@@ -92,10 +96,14 @@ public class BasicPieceSet implements PieceSet {
 	}
 
 	public void solve() throws MissingPiecesException {
-		BFSSolve(NWCorner, pieceHashMap);
+		if (solved == false) {
+			BFSSolve(NWCorner, pieceHashMap);
+		}
+		solved = true;
 	}
 
-	public PieceSetIterator iterator() {
+	public Iterator<Iterator<PuzzlePiece>> iterator() throws MissingPiecesException {
+		solve();
 		return new PieceSetIterator(this);
 	}
 
@@ -103,4 +111,43 @@ public class BasicPieceSet implements PieceSet {
 		return NWCorner;
 	}
 
+	public int getRows() throws MissingPiecesException {
+		int count = 0;
+		for (Iterator<Iterator<PuzzlePiece>> rowIt = iterator(); 
+				rowIt.hasNext(); rowIt.next()){
+				count++;
+		}
+		return count;
+	}
+
+	public int getCols() throws MissingPiecesException {
+		Iterator<Iterator<PuzzlePiece>> rowIt = iterator();
+		if (!rowIt.hasNext()) { return 0; }
+		int count = 0;
+		for (Iterator<PuzzlePiece> colIt = rowIt.next(); 
+				colIt.hasNext(); colIt.next()){
+				count++;
+		}
+		return count;
+	}
+	
+	private String getOneLineSol() throws MissingPiecesException {
+		String output = "";
+		for (Iterator<Iterator<PuzzlePiece>> rowIt = iterator(); 
+				 rowIt.hasNext();){
+			for (Iterator<PuzzlePiece> colIt = rowIt.next(); 
+				 colIt.hasNext();){
+				output += colIt.next();
+			}
+		}			 
+		return output;
+	}
+	
+	public String toString() {
+		try {
+			return getOneLineSol();
+		} catch (MissingPiecesException e) {
+			return "A puzzle with missing pieces.";
+		}
+	}
 }

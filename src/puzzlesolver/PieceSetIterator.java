@@ -36,7 +36,8 @@ public class PieceSetIterator implements Iterator<Iterator<PuzzlePiece>> {
 	
 	private PuzzlePiece row;
 	
-	public PieceSetIterator(PieceSet ps) {
+	public PieceSetIterator(Puzzle ps) throws MissingPiecesException {
+		ps.solve();
 		row = ps.getNWCorner();
 	}	
 	
