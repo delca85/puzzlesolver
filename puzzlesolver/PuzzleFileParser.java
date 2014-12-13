@@ -9,10 +9,11 @@ import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Helper class to parse puzzle input files.   
+ */
 public class PuzzleFileParser {
-	
 	private static Charset charset = StandardCharsets.UTF_8;
-	
 	static List<String[]> parseFile(Path filePath) throws IOException  {
 		BufferedReader reader = Files.newBufferedReader(filePath,  charset);
 		List<String[]> l = new LinkedList<String[]>();
@@ -20,7 +21,7 @@ public class PuzzleFileParser {
 			String line = null;
 			while ((line = reader.readLine()) != null) {
 				if (!line.equals("")) {
-					// An empty line can be safely ignored.
+					// An empty line - especially at the end - although not really legal can be safely ignored. 
 					String[] tokens = line.split("\t");
 					if (tokens.length != 6) {
 						throw new MalformedFileException();

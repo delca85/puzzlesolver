@@ -6,7 +6,9 @@ import java.nio.file.Paths;
 import java.nio.file.NoSuchFileException;
 import java.util.Iterator;
 import java.util.List;
-
+/**
+ * Usage: java PuzzleSolver input.txt output.txt   
+ */
 public class PuzzleSolver {
 
 	public static void main(String[] args) {

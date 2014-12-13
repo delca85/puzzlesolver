@@ -120,7 +120,7 @@ public class BasicPuzzle implements Puzzle {
 			}
 
 			if (!visited.contains(w)) {
-				if (!t.isWRow()) { 
+				if (!t.isWCol()) { 
 					PuzzlePiece westNeighbour = map.get(t.getWestId());
 					if (westNeighbour == null) {
 						throw new MissingPiecesException();
@@ -132,7 +132,7 @@ public class BasicPuzzle implements Puzzle {
 			}
 
 			if (!visited.contains(e)) {
-				if (!t.isERow()) { 
+				if (!t.isECol()) { 
 					PuzzlePiece eastNeighbour = map.get(t.getEastId());
 					if (eastNeighbour == null) {
 						throw new MissingPiecesException();

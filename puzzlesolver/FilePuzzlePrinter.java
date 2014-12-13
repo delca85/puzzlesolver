@@ -8,11 +8,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Iterator;
 
+/**
+ * Outputs a solved puzzle to a text file.   
+ */
 public class FilePuzzlePrinter implements PuzzlePrinter {
 	
 	private Path outputPath;
 	private final Charset charset = StandardCharsets.UTF_8;
 	
+	/**
+	 * @param  outputPath the path to write the output to.   
+	 */
 	FilePuzzlePrinter(Path outputPath) {
 		this.outputPath = outputPath;
 	}

@@ -86,19 +86,19 @@ public class BasicPuzzlePiece implements PuzzlePiece {
 	}
 
 	public boolean isNWCorner() {
-		return (isNRow() && isWRow());
+		return (isNRow() && isWCol());
 	}
 
 	public boolean isSWCorner() {
-		return (isSRow() && isWRow());
+		return (isSRow() && isWCol());
 	}
 
 	public boolean isSECorner() {
-		return (isSRow() && isERow());
+		return (isSRow() && isECol());
 	}
 
 	public boolean isNECorner() {
-		return (isNRow() && isERow());
+		return (isNRow() && isECol());
 	}
 
 	public boolean isNRow() {
@@ -109,11 +109,11 @@ public class BasicPuzzlePiece implements PuzzlePiece {
 		return (getSouthId().equals(kEmptyId));
 	}
 
-	public boolean isWRow() {
+	public boolean isWCol() {
 		return (getWestId().equals(kEmptyId));
 	}
 
-	public boolean isERow() {
+	public boolean isECol() {
 		return (getEastId().equals(kEmptyId));
 	}
 	

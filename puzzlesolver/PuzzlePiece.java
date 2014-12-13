@@ -1,7 +1,14 @@
 package puzzlesolver;
 
 public interface PuzzlePiece {
+	/**
+	 * Returns the ID.
+	 */
 	String getId();
+	/**
+	 * Returns a reference to the northern neighbour, /if/ set.
+	 * (Might not be set if the puzzle is yet in an "unsolved" state)
+	 */
 	PuzzlePiece getNorth();
 	PuzzlePiece getSouth();
 	PuzzlePiece getWest();
@@ -10,14 +17,24 @@ public interface PuzzlePiece {
 	void setSouth(PuzzlePiece p);
 	void setWest(PuzzlePiece p);
 	void setEast(PuzzlePiece p);
+	/**
+	 * Returns the ID of the northern neighbour.
+	 */
 	String getNorthId();
 	String getSouthId();
 	String getEastId();
-	String getWestId();
+	String getWestId();	
+	/**
+	 * See if the piece belongs to the northern (topmost) row, according to the
+	 * neighbours' IDs.
+	 */
 	boolean isNRow();
-	boolean isWRow();
+	boolean isWCol();
 	boolean isSRow();
-	boolean isERow();
+	boolean isECol();
+	/**
+	 * See if the piece is the NW corner.
+	 */
 	boolean isNWCorner();
 	boolean isSWCorner();
 	boolean isSECorner();
