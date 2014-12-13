@@ -25,7 +25,7 @@ public class BasicPuzzlePiece implements PuzzlePiece {
 		neighboursId[Direction.WEST.ordinal()] = westId;
 		neighboursId[Direction.EAST.ordinal()] = eastId;
 		
-		int empty = 0;
+		
 		for (int i=0; i<4; i++) {
 			for (int j=i+1; j<4; j++) {
 				if (neighboursId[i].equals(neighboursId[j]) &&
@@ -33,12 +33,6 @@ public class BasicPuzzlePiece implements PuzzlePiece {
 					throw new IllegalArgumentException();
 				}
 			}
-			if (neighboursId[i].equals(kEmptyId)) {
-				empty++;
-			}
-		}
-		if (empty > 2) {
-			throw new IllegalArgumentException();
 		}
 	}
 	

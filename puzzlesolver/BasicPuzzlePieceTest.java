@@ -1,7 +1,5 @@
 package puzzlesolver;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 public class BasicPuzzlePieceTest {
@@ -12,10 +10,10 @@ public class BasicPuzzlePieceTest {
 		foo = new BasicPuzzlePiece("foo", "foo", "n", "s", "w", "e");
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
-	public void testIncomplete() {
+	@Test
+	public void testSinglePiece() {
 		PuzzlePiece foo;
-		foo = new BasicPuzzlePiece("foo", "foo", "VUOTO", "VUOTO", "VUOTO", "e");
+		foo = new BasicPuzzlePiece("foo", "foo", "VUOTO", "VUOTO", "VUOTO", "VUOTO");
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -34,6 +32,10 @@ public class BasicPuzzlePieceTest {
 		
 		foo = new BasicPuzzlePiece("foo", "foo",  "bar", "VUOTO", "baz", "VUOTO");
 		assert(!foo.isNWCorner());
+		assert(foo.isSECorner());
+		
+		foo = new BasicPuzzlePiece("foo", "foo",  "VUOTO", "VUOTO", "VUOTO", "VUOTO");
+		assert(foo.isNWCorner());
 		assert(foo.isSECorner());
 	}
 	
