@@ -5,6 +5,7 @@ public interface PuzzlePiece {
 	 * Returns the ID.
 	 */
 	String getId();
+	char getCharacter();
 	/**
 	 * Returns a reference to the northern neighbour, /if/ set.
 	 * (Might not be set if the puzzle is yet in an "unsolved" state)

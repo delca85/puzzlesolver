@@ -14,11 +14,11 @@ public class BasicPuzzlePiece implements PuzzlePiece {
 	private final String[] neighboursId = new String[4];
 	private PuzzlePiece[] neighbours = new PuzzlePiece[4];
 	private String id;
-	private String text;
+	private char character;
 	
-	public BasicPuzzlePiece(String id, String text, String northId, String southId, String westId, String eastId) {
+	public BasicPuzzlePiece(String id, char character, String northId, String southId, String westId, String eastId) {
 		this.id = id;
-		this.text = text;
+		this.character = character;
 		
 		neighboursId[Direction.NORTH.ordinal()] = northId;
 		neighboursId[Direction.SOUTH.ordinal()] = southId;
@@ -118,6 +118,9 @@ public class BasicPuzzlePiece implements PuzzlePiece {
 	}
 	
 	public String toString() {
-		return text;
+		return "Puzzle piece: "+character;
+	}
+	public char getCharacter() {
+		return character;
 	}
 }

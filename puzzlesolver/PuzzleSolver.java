@@ -21,20 +21,21 @@ public class PuzzleSolver {
 		Path dstPath = Paths.get(args[1]);
 		
 		try {
-			List<String[]> tokenList = PuzzleFileParser.parseFile(srcPath);
+			List<PuzzleFileParser.PieceStruct> tokenList = PuzzleFileParser.parseFile(srcPath);
 			try {
-				Iterator<String[]> it = tokenList.iterator();
+				Iterator<PuzzleFileParser.PieceStruct> it = tokenList.iterator();
 				
 				BasicPuzzle ps = new BasicPuzzle();
+				
 				while (it.hasNext()) {
-					String[] tokens = it.next();
+					PuzzleFileParser.PieceStruct struct = it.next();
 					ps.addPiece(new BasicPuzzlePiece(
-							tokens[0],
-							tokens[1],
-							tokens[2],
-							tokens[4],
-							tokens[5],
-							tokens[3]
+									struct.id,
+									struct.character,
+									struct.n,
+									struct.s,
+									struct.w,
+									struct.e
 							));
 				}
 				

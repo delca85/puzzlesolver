@@ -32,7 +32,7 @@ public class FilePuzzlePrinter implements PuzzlePrinter {
 			 rowIt.hasNext();){
 			for (Iterator<PuzzlePiece> colIt = rowIt.next(); 
 				 colIt.hasNext();){
-				output += colIt.next();
+				output += colIt.next().getCharacter();
 			}
 			output += "\n";
 		}			 

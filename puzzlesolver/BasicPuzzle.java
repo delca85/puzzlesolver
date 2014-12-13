@@ -197,7 +197,7 @@ public class BasicPuzzle implements Puzzle {
 				 rowIt.hasNext();){
 			for (Iterator<PuzzlePiece> colIt = rowIt.next(); 
 				 colIt.hasNext();){
-				output += colIt.next();
+				output += colIt.next().getCharacter();
 			}
 		}			 
 		return output;
