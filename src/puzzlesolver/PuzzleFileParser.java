@@ -19,11 +19,14 @@ public class PuzzleFileParser {
 		try {
 			String line = null;
 			while ((line = reader.readLine()) != null) {
-				String[] tokens = line.split("\t");
-				if (tokens.length != 6) {
-					throw new MalformedFileException();
+				if (line.equals("")) {
+					// An empty line can be safely ignored.
+					String[] tokens = line.split("\t");
+					if (tokens.length != 6) {
+						throw new MalformedFileException();
+					}
+					l.add(tokens);
 				}
-				l.add(tokens);
 			}
 		} catch (MalformedFileException e) {
 			throw e;
