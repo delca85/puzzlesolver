@@ -19,7 +19,7 @@ public class PuzzleFileParser {
 		try {
 			String line = null;
 			while ((line = reader.readLine()) != null) {
-				if (line.equals("")) {
+				if (!line.equals("")) {
 					// An empty line can be safely ignored.
 					String[] tokens = line.split("\t");
 					if (tokens.length != 6) {
