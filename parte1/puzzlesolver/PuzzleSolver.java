@@ -10,6 +10,7 @@ import java.util.List;
 import puzzlesolver.core.BasicPuzzle;
 import puzzlesolver.core.BasicPuzzlePiece;
 import puzzlesolver.core.MissingPiecesException;
+import puzzlesolver.core.Puzzle;
 import puzzlesolver.io.FilePuzzlePrinter;
 import puzzlesolver.io.MalformedFileException;
 import puzzlesolver.io.PuzzleFileParser;
@@ -33,11 +34,11 @@ public class PuzzleSolver {
 			try {
 				Iterator<PuzzleFileParser.PieceStruct> it = tokenList.iterator();
 
-				BasicPuzzle ps = new BasicPuzzle();
+				Puzzle puzzle = new BasicPuzzle();
 
 				while (it.hasNext()) {
 					PuzzleFileParser.PieceStruct struct = it.next();
-					ps.addPiece(new BasicPuzzlePiece(
+					puzzle.addPiece(new BasicPuzzlePiece(
 					                struct.id,
 					                struct.character,
 					                struct.n,
@@ -47,9 +48,9 @@ public class PuzzleSolver {
 					            ));
 				}
 
-				ps.solve();
-				PuzzlePrinter p = new FilePuzzlePrinter(dstPath);
-				p.print(ps);
+				puzzle.solve();
+				PuzzlePrinter printer = new FilePuzzlePrinter(dstPath);
+				printer.print(puzzle);
 			} catch (MissingPiecesException e) {
 				System.err.println("Pieces seem to be missing from input.");
 			}
