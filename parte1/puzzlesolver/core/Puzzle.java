@@ -1,7 +1,15 @@
 package puzzlesolver.core;
 
 import java.util.Iterator;
-
+/**
+ * Represent a puzzle.
+ * The target program flow must be:
+ * - addPiece(...)
+ * - ... 
+ * - addPiece(...)
+ * - solve()
+ * - getSolution() or iterator() or getRows();
+ */
 public interface Puzzle {
 	/**
 	 * Adds a PuzzlePiece to the puzzle.
