@@ -12,7 +12,7 @@ import java.util.Iterator;
  */
 public interface IPuzzle {
 	/**
-	 * Adds a PuzzlePiece to the puzzle.
+	 * Adds a IPuzzlePiece to the puzzle.
 	 * Note that this invalidates any previously computed solution, so solve() needs to be called again. 
 	 */
 	public void addPiece(IPuzzlePiece p);
