@@ -54,8 +54,10 @@ public class PuzzleSolver {
 			} catch (MissingPiecesException e) {
 				System.err.println("Pieces seem to be missing from input.");
 			}
+		} catch (IllegalArgumentException e) {
+			System.err.println("A puzzle piece appears to be invalid.");
 		} catch (MalformedFileException e) {
-			System.err.println("Malformed file!");
+			System.err.println("Could not parse - malformed file!");
 		} catch (NoSuchFileException e) {
 			System.err.println("File not found!");
 		} catch (IOException e) {
