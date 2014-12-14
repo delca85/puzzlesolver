@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
 
-public class BFSBasicPuzzle extends AbstractBasicPuzzle {
+public class BFSHashmapPuzzle extends HashmapPuzzle {
 	/**
 	 * Implements a textbook breadth first traversal (with trivial modifications).
 	 */

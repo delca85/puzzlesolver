@@ -7,8 +7,8 @@ JC = javac
 
 CLASSES = \
 		puzzlesolver/core/BasicPuzzlePiece.java \
-		puzzlesolver/core/AbstractBasicPuzzle.java \
-		puzzlesolver/core/BFSBasicPuzzle.java \
+		puzzlesolver/core/HashmapPuzzle.java \
+		puzzlesolver/core/BFSHashmapPuzzle.java \
 		puzzlesolver/io/FilePuzzlePrinter.java \
 		puzzlesolver/io/MalformedFileException.java \
 		puzzlesolver/core/MissingPiecesException.java \

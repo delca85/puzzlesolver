@@ -7,7 +7,7 @@ import java.nio.file.NoSuchFileException;
 import java.util.Iterator;
 import java.util.List;
 
-import puzzlesolver.core.BFSBasicPuzzle;
+import puzzlesolver.core.BFSHashmapPuzzle;
 import puzzlesolver.core.BasicPuzzlePiece;
 import puzzlesolver.core.MissingPiecesException;
 import puzzlesolver.core.Puzzle;
@@ -34,7 +34,7 @@ public class PuzzleSolver {
 			try {
 				Iterator<PuzzleFileParser.PieceStruct> it = tokenList.iterator();
 
-				Puzzle puzzle = new BFSBasicPuzzle();
+				Puzzle puzzle = new BFSHashmapPuzzle();
 
 				while (it.hasNext()) {
 					PuzzleFileParser.PieceStruct struct = it.next();

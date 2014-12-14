@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public abstract class AbstractBasicPuzzle implements Puzzle {
+public abstract class HashmapPuzzle implements Puzzle {
 	private class BasicPuzzleIterator implements Iterator<Iterator<PuzzlePiece>> {
 		private class BasicPuzzleRowIterator implements Iterator<PuzzlePiece> {
 			private PuzzlePiece col;
@@ -38,7 +38,7 @@ public abstract class AbstractBasicPuzzle implements Puzzle {
 
 		private PuzzlePiece row;
 
-		public BasicPuzzleIterator(AbstractBasicPuzzle abstractBasicPuzzle) throws PuzzleNotSolvedException {
+		public BasicPuzzleIterator(HashmapPuzzle abstractBasicPuzzle) throws PuzzleNotSolvedException {
 			if (!solved) {
 				throw new PuzzleNotSolvedException();
 			}
