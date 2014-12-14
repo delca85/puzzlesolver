@@ -6,6 +6,14 @@ import java.nio.file.Paths;
 import java.nio.file.NoSuchFileException;
 import java.util.Iterator;
 import java.util.List;
+
+import puzzlesolver.core.BasicPuzzle;
+import puzzlesolver.core.BasicPuzzlePiece;
+import puzzlesolver.core.MissingPiecesException;
+import puzzlesolver.io.FilePuzzlePrinter;
+import puzzlesolver.io.MalformedFileException;
+import puzzlesolver.io.PuzzleFileParser;
+import puzzlesolver.io.PuzzlePrinter;
 /**
  * Usage: java PuzzleSolver input.txt output.txt
  */

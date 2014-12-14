@@ -1,4 +1,4 @@
-package puzzlesolver;
+package puzzlesolver.core;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -75,8 +75,10 @@ public class BasicPuzzle implements Puzzle {
 	private HashMap<String, PuzzlePiece> pieceHashMap = new HashMap<String, PuzzlePiece>();
 	private boolean solved = false;
 
+	/**
+	 * Implements a textbook breadth first traversal (with trivial modifications).
+	 */
 	private static void BFSSolve(PuzzlePiece root, HashMap<String, PuzzlePiece> map) throws MissingPiecesException {
-		// Implements a textbook breadth first traversal with minimal adjustments.
 		Queue<PuzzlePiece> queued = new LinkedList<PuzzlePiece>();
 		Set<String> visited = new HashSet<String>();
 
@@ -108,7 +110,7 @@ public class BasicPuzzle implements Puzzle {
 					queued.add(northNeighbour);
 				}
 			}
-
+			// The following 3 blocks are the same as the one for the northern neighbour
 			if (!visited.contains(s)) {
 				if (!t.isSRow()) {
 					PuzzlePiece southNeighbour = map.get(t.getSouthId());
@@ -150,7 +152,6 @@ public class BasicPuzzle implements Puzzle {
 
 	public void addPiece(PuzzlePiece p) {
 		solved = false;
-
 		if (p.isNWCorner()) {
 			NWCorner = p;
 		}
@@ -171,7 +172,7 @@ public class BasicPuzzle implements Puzzle {
 		return new BasicPuzzleIterator(this);
 	}
 
-	public PuzzlePiece getNWCorner() {
+	private PuzzlePiece getNWCorner() {
 		return NWCorner;
 	}
 

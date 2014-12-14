@@ -1,4 +1,4 @@
-package puzzlesolver;
+package puzzlesolver.io;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -7,6 +7,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Iterator;
+
+import puzzlesolver.core.Puzzle;
+import puzzlesolver.core.PuzzleNotSolvedException;
+import puzzlesolver.core.PuzzlePiece;
 
 /**
  * Outputs a solved puzzle to a text file.
@@ -19,7 +23,7 @@ public class FilePuzzlePrinter implements PuzzlePrinter {
 	/**
 	 * @param  outputPath the path to write the output to.
 	 */
-	FilePuzzlePrinter(Path outputPath) {
+	public FilePuzzlePrinter(Path outputPath) {
 		this.outputPath = outputPath;
 	}
 

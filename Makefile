@@ -6,15 +6,15 @@ JC = javac
 		$(JC) $(JFLAGS) $*.java
 
 CLASSES = \
-		puzzlesolver/BasicPuzzle.java \
-		puzzlesolver/BasicPuzzlePiece.java \
-		puzzlesolver/FilePuzzlePrinter.java \
-		puzzlesolver/MalformedFileException.java \
-		puzzlesolver/MissingPiecesException.java \
-		puzzlesolver/Puzzle.java \
-		puzzlesolver/PuzzleFileParser.java \
-		puzzlesolver/PuzzlePiece.java \
-		puzzlesolver/PuzzlePrinter.java \
+		puzzlesolver/core/BasicPuzzle.java \
+		puzzlesolver/core/BasicPuzzlePiece.java \
+		puzzlesolver/io/FilePuzzlePrinter.java \
+		puzzlesolver/io/MalformedFileException.java \
+		puzzlesolver/core/MissingPiecesException.java \
+		puzzlesolver/core/Puzzle.java \
+		puzzlesolver/io/PuzzleFileParser.java \
+		puzzlesolver/core/PuzzlePiece.java \
+		puzzlesolver/io/PuzzlePrinter.java \
 		puzzlesolver/PuzzleSolver.java
 
 default: PuzzleSolver.jar
@@ -24,4 +24,4 @@ PuzzleSolver.jar: $(CLASSES:.java=.class)
 javadoc:
 	javadoc puzzlesolver -d doc 
 clean:	
-	rm *.jar puzzlesolver/*.class doc/puzzlesolver/* doc/resources/* doc/*
+	$(RM) *.jar puzzlesolver/*.class puzzlesolver/io/*.class puzzlesolver/core/*.class doc/puzzlesolver/* doc/resources/* doc/*

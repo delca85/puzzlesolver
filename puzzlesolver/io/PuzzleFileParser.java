@@ -1,4 +1,4 @@
-package puzzlesolver;
+package puzzlesolver.io;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
+
 
 /**
  * Helper class to parse puzzle input files.
@@ -25,7 +26,7 @@ public class PuzzleFileParser {
 
 	private static Charset charset = StandardCharsets.UTF_8;
 
-	static List<PieceStruct> parseFile(Path filePath) throws IOException  {
+	public static List<PieceStruct> parseFile(Path filePath) throws IOException  {
 		BufferedReader reader = Files.newBufferedReader(filePath,  charset);
 		List<PieceStruct> l = new LinkedList<PieceStruct>();
 		try {

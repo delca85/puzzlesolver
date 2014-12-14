@@ -1,4 +1,4 @@
-package puzzlesolver;
+package puzzlesolver.io;
 
 import java.io.IOException;
 

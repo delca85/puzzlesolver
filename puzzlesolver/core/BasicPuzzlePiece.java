@@ -1,4 +1,4 @@
-package puzzlesolver;
+package puzzlesolver.core;
 
 public class BasicPuzzlePiece implements PuzzlePiece {
 

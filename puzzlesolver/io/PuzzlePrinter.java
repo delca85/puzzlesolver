@@ -1,6 +1,9 @@
-package puzzlesolver;
+package puzzlesolver.io;
 
 import java.io.IOException;
+
+import puzzlesolver.core.Puzzle;
+import puzzlesolver.core.PuzzleNotSolvedException;
 
 /**
  * Classes implementing PuzzlePrinter provide capabilities to output

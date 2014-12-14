@@ -1,4 +1,4 @@
-package puzzlesolver;
+package puzzlesolver.core;
 
 import org.junit.Test;
 import java.util.Iterator;
