@@ -24,7 +24,7 @@ public interface PuzzlePiece {
 	String getNorthId();
 	String getSouthId();
 	String getEastId();
-	String getWestId();	
+	String getWestId();
 	/**
 	 * See if the piece belongs to the northern (topmost) row, according to the
 	 * neighbours' IDs.

@@ -7,7 +7,7 @@ import java.nio.file.NoSuchFileException;
 import java.util.Iterator;
 import java.util.List;
 /**
- * Usage: java PuzzleSolver input.txt output.txt   
+ * Usage: java PuzzleSolver input.txt output.txt
  */
 public class PuzzleSolver {
 
@@ -16,29 +16,29 @@ public class PuzzleSolver {
 			System.err.println("Usage: java PuzzleSolver input.txt output.txt");
 			return;
 		}
-	
+
 		Path srcPath = Paths.get(args[0]);
 		Path dstPath = Paths.get(args[1]);
-		
+
 		try {
 			List<PuzzleFileParser.PieceStruct> tokenList = PuzzleFileParser.parseFile(srcPath);
 			try {
 				Iterator<PuzzleFileParser.PieceStruct> it = tokenList.iterator();
-				
+
 				BasicPuzzle ps = new BasicPuzzle();
-				
+
 				while (it.hasNext()) {
 					PuzzleFileParser.PieceStruct struct = it.next();
 					ps.addPiece(new BasicPuzzlePiece(
-									struct.id,
-									struct.character,
-									struct.n,
-									struct.s,
-									struct.w,
-									struct.e
-							));
+					                struct.id,
+					                struct.character,
+					                struct.n,
+					                struct.s,
+					                struct.w,
+					                struct.e
+					            ));
 				}
-				
+
 				ps.solve();
 				PuzzlePrinter p = new FilePuzzlePrinter(dstPath);
 				p.print(ps);

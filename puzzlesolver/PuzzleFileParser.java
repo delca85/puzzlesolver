@@ -10,10 +10,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Helper class to parse puzzle input files.   
+ * Helper class to parse puzzle input files.
  */
 public class PuzzleFileParser {
-	
+
 	public static class PieceStruct {
 		public String id;
 		public char character;
@@ -22,9 +22,9 @@ public class PuzzleFileParser {
 		public String s;
 		public String w;
 	}
-	
+
 	private static Charset charset = StandardCharsets.UTF_8;
-	
+
 	static List<PieceStruct> parseFile(Path filePath) throws IOException  {
 		BufferedReader reader = Files.newBufferedReader(filePath,  charset);
 		List<PieceStruct> l = new LinkedList<PieceStruct>();
@@ -32,7 +32,7 @@ public class PuzzleFileParser {
 			String line = null;
 			while ((line = reader.readLine()) != null) {
 				if (!line.equals("")) {
-					// An empty line - especially at the end - although not really legal can be safely ignored. 
+					// An empty line - especially at the end - although not really legal can be safely ignored.
 					String[] tokens = line.split("\t");
 					if (tokens.length != 6) {
 						throw new MalformedFileException();

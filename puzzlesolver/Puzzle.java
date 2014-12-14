@@ -14,7 +14,7 @@ public interface Puzzle {
 	public Iterator<Iterator<PuzzlePiece>> iterator() throws PuzzleNotSolvedException;
 	/**
 	 * Returns the puzzle solution as a string.
-	 * No guarantee re:complexity as it might have to solve the puzzle 
+	 * No guarantee re:complexity as it might have to solve the puzzle
 	 * depending on implementation.
 	 */
 	public String getSolution() throws PuzzleNotSolvedException;
