@@ -22,6 +22,6 @@ default: PuzzleSolver.jar
 PuzzleSolver.jar: $(CLASSES:.java=.class)
 	jar cvfe PuzzleSolver.jar puzzlesolver.PuzzleSolver puzzlesolver/*.class
 javadoc:
-	javadoc puzzlesolver -d doc 
+	javadoc puzzlesolver puzzlesolver.io puzzlesolver.core -d doc 
 clean:	
 	$(RM) *.jar puzzlesolver/*.class puzzlesolver/io/*.class puzzlesolver/core/*.class doc/puzzlesolver/* doc/resources/* doc/*
