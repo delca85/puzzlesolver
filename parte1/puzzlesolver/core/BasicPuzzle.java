@@ -10,7 +10,7 @@ import java.util.Set;
 
 public class BasicPuzzle implements Puzzle {
 	private class BasicPuzzleIterator implements Iterator<Iterator<PuzzlePiece>> {
-		class BasicPuzzleRowIterator implements Iterator<PuzzlePiece> {
+		private class BasicPuzzleRowIterator implements Iterator<PuzzlePiece> {
 			private PuzzlePiece col;
 
 			public BasicPuzzleRowIterator(PuzzlePiece p) {
