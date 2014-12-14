@@ -28,11 +28,10 @@ public class PlaintextPuzzlePrinter implements IPuzzlePrinter {
 	}
 
 	public void print(IPuzzle puzzle) throws IOException, PuzzleNotSolvedException {
-		BufferedWriter writer = Files.newBufferedWriter(outputPath, charset);
-		writer.write(puzzle.getSolution());
-		writer.write("\n\n");
 		String output = "";
-		for (Iterator<Iterator<IPuzzlePiece>> rowIt = puzzle.iterator();
+		output += puzzle.getSolution();
+		output += "\n\n";
+				for (Iterator<Iterator<IPuzzlePiece>> rowIt = puzzle.iterator();
 		        rowIt.hasNext();) {
 			for (Iterator<IPuzzlePiece> colIt = rowIt.next();
 			        colIt.hasNext();) {
@@ -40,9 +39,17 @@ public class PlaintextPuzzlePrinter implements IPuzzlePrinter {
 			}
 			output += "\n";
 		}
-		writer.write(output);
-		writer.write("\n");
-		writer.write(puzzle.getRows() + " " + puzzle.getCols() + "\n");
-		writer.close();
+		
+		output += "\n";
+		output += puzzle.getRows() + " " + puzzle.getCols() + "\n";
+		
+		BufferedWriter writer = Files.newBufferedWriter(outputPath, charset);
+		try { 
+			writer.write(output);
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			writer.close();
+		}
 	}
 }
