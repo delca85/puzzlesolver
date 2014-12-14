@@ -3,7 +3,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{cite}
-
+\usepackage{hyperref}
 \newcommand{\Classname}[1]{\textsc{#1}}
 \newcommand{\Ifacename}[1]{\textsc{#1}}
 \newcommand{\Methodname}[1]{\texttt{#1}}
@@ -33,11 +33,17 @@ minimum height=3em
 \tikzstyle{line} = [draw, -latex']
 
 
-\title{Relazione Programmazione ad Oggetti}
+\title{PuzzleSolver - Relazione Programmazione Concorrente e Distribuita}
+\author{Tobia Tesan - \#1051819}
 \begin{document}
 \maketitle
 \tableofcontents
-\section{Organizzazione delle classi}
+
+\begin{abstract}
+La presente relazione dettaglia e motiva le scelte progettuali dell'allegato programma \texttt{PuzzleSolver}, che realizza le specifiche della parte 1 del progetto di Programmazione Concorrente e Distribuita per l'A.A. 2014/2015 \cite{prspec}.
+\end{abstract}
+
+\section{Vista d'insieme}
 
 Il progetto consta di 11 classi principali, di cui 2 interfacce, 1 classe astratta e 3 eccezioni, organizzate in due package a seconda della funzionalit\`a (I/O e logica) nel modo seguente:
 
@@ -62,8 +68,10 @@ puzzlesolver/
 \end{verbatim}
 
 Ad esse si aggiungono due piccole classi annidate di utilit\`a, il main e alcuni unit test.
-Il perno principale del progetto sono le interfacce \Ifacename{Puzzle} e \Ifacename{IPuzzlePiece}.
-Esse rappresentano rispettivamente un singolo pezzo di puzzle e una classe contenitrice.
+
+Il perno principale del progetto sono le interfacce \Ifacename{Puzzle} e \Ifacename{IPuzzlePiece}: le classi che le implementano rappresentano rispettivamente un singolo pezzo di puzzle e una classe contenitrice.
+
+\section{Dettaglio delle classi}
 \subsection{\Pkgname{puzzlesolver.core}}
 \subsubsection{\Classname{IPuzzlePiece}}
 \Ifacename{IPuzzlePiece} prescrive dei metodi di ispezione dell'ID del pezzo, dell'ID dei suoi vicini e alcuni semplici helper per ottenere informazioni sintetiche come \Methodname{isNWCorner()}.
@@ -74,7 +82,7 @@ L'interfaccia prescrive tuttavia dei metodi \Methodname{getNorth()} ... \Methodn
 
 Ogni \Ifacename{IPuzzlePiece} pu\`o essere visto come nodo di un grafo di grado massimo (uscente) 4 e inizialmente 0 in cui i riferimenti ai vicini sono archi.
 
-Per esempio, lo stato finale desiderato per i quattro pezzi del puzzle $2\times2$ ``Ciao'' \`e quello in figura.
+Per esempio, lo stato finale desiderato per i quattro pezzi del puzzle $2\times2$ ``Ciao'' \`e quello in figura \ref{fig:ciao}.
 
 \begin{figure}[h!]
   \centering
@@ -105,6 +113,7 @@ Per esempio, lo stato finale desiderato per i quattro pezzi del puzzle $2\times2
          edge [bend left] node[left] {E} (n4);
 \end{tikzpicture}
 \caption {Un puzzle $2\times2$}
+\label{fig:ciao}
 \end{figure}
 
 \begin{figure}[h]
@@ -152,7 +161,7 @@ Il flusso di programma che si intende realizzare \`e:
 
 A questo scopo, i metodi di cui al quarto punto sollevano una \Classname{RuntimeException} chiamata \Classname{PuzzleNotSolvedException} - l'invocazione di tali metodi prima dell'avvenuto calcolo di una soluzione costituisce un \emph{errore logico} da parte del programmatore.
 \label{pnse}
-Il metodo \Methodname{solve} pu\`o sollevare una MissingPiecesException se non \`e possibile calcolare una soluzione per mancanza di pezzi.
+Il metodo \Methodname{solve} pu\`o sollevare una \Classname{MissingPiecesException} se non \`e possibile calcolare una soluzione per mancanza di pezzi.
 
 Non \`e prevista una eccezione da sollevare in caso di pezzi \emph{in eccesso} o di errori logici pi\`u  sottili nel puzzle, anche se non \`e nemmeno esclusa (ne \`e possibile escludere) una RuntimeException.
 
@@ -188,9 +197,9 @@ Con questo l'intenzione \`e di lasciare libert\`a nella scelta e nell'implementa
 
 \subsubsection{\Classname{BFSHashmapPuzzle}}
 \Classname{BFSHashmapPuzzle} estende \Classname{HashmapPuzzle}.
-\Methodname{solve()} \`e implementato attraverso un algoritmo di traversal breadth-first (\cite{cormen2001introduction}) in cui a ogni iterazione si impostano nel nodo i riferimenti agli oggetti corretti per gli ID.
+\Methodname{solve()} \`e implementato attraverso un algoritmo di traversal breadth-first \cite{cormen2001introduction} in cui a ogni iterazione si impostano nel nodo i riferimenti agli oggetti corretti per gli ID.
 
-L'algoritmo \`e stato scelto poich\`e BFS \`e dimostrato essere ottimale in termini di complessit\`a e perch\`e appoggiandosi su una coda appare ingenuamente pi\`u semplice da parallelizzare - come suggerito opzionalmente al punto 5. delle specifiche di progetto.
+L'algoritmo \`e stato scelto poich\`e BFS \`e dimostrato essere ottimale in termini di complessit\`a e perch\`e appoggiandosi su una coda appare ingenuamente pi\`u semplice da parallelizzare - come suggerito opzionalmente al punto 5. delle specifiche di progetto\cite{prspec}.
 \subsubsection{\Classname{MissingPiecesException}}
 \Classname{MissingPiecesException} estende \Classname{Exception} indica che l'algoritmo di risoluzione si blocca perch\`e vi sono dei pezzi mancanti.
 
@@ -199,15 +208,15 @@ L'algoritmo \`e stato scelto poich\`e BFS \`e dimostrato essere ottimale in term
 Indica un errore da parte del programmatore nel tentare di accedere o iterare sulla soluzione senza prima avere invocato \Methodname{solve()}, come discusso in \ref{pnse}.
 %TODO cit
 \subsection{\Pkgname{puzzlesolver.io}}
-\subsubsection{\Classname{PuzzlePrinter}}
-\Classname{PuzzlePrinter} \`e un'interfaccia che definisce un singolo metodo, \Methodname{print(Puzzle p) throws IOException, PuzzleNotSolvedException}, e si applica nell'intenzione a tutte quelle classi che stampano in \emph{qualche modo} un puzzle - su file, in console, in un file grafico (e.g. SVG) 
+\subsubsection{\Classname{IPuzzlePrinter}}
+\Classname{IPuzzlePrinter} \`e un'interfaccia che definisce un singolo metodo, \Methodname{print(Puzzle p) throws IOException, PuzzleNotSolvedException}, e si applica nell'intenzione a tutte quelle classi che stampano in \emph{qualche modo} un puzzle - su file, in console, in un file grafico (e.g. SVG) 
 \subsubsection{\Classname{PlaintextPuzzlePrinter}}
-\Classname{PlaintextPuzzlePrinter} implementa \Classname{PuzzlePrinter} e stampa su file di testo come prescritto nelle specifiche del progetto alla sezione 3.
+\Classname{PlaintextPuzzlePrinter} implementa \Classname{IPuzzlePrinter} e stampa su file di testo come prescritto nelle specifiche del progetto alla sezione 3 \cite{prspec}.
 \subsubsection{\Classname{PuzzleFileParser}}
 \Classname{PuzzleFileParser} \`e una classe che fornisce un metodo statico di utilit\`a \Methodname{parseFile} che legge file nel formato prescritto nella sezione 3 delle specifiche di progetto.
 Si \`e fatto in modo che il metodo ritorni una lista di semplici struct ``alla C''.
 Si \`e preferito infatti mantenerlo completamente disaccoppiato dalla logica del puzzle e dalla sua rappresentazione interna al programma.
-Utilizzare una struct ``alla C'' \`e stata una scelta sofferta, ma le alternative - e.g. una ``vera'' classe ad hoc o un array con indici numerico sono apparse eccessivamente complesse o scomode per il programmatore, in particolare perch\`e \`e facile confondere l'ordine dei punti cardinali.
+Utilizzare una struct ``alla C'' \`e stata una scelta \emph{particolarmente sofferta}, ma le alternative - es. una ``vera'' classe ad hoc o un array con indici numerico sono apparse eccessivamente complesse o scomode per il programmatore, in particolare perch\`e \`e facile confondere l'ordine dei punti cardinali.
 
 \subsubsection{\Classname{MalformedFileException}}
 \Classname{MalformedFileException} estende \Classname{Exception} viene sollevata quando il parser incontra un file con sintassi invalida.
@@ -220,9 +229,22 @@ Nelle prime fasi di scrittura si sono approntati dei semplici unit test (\texttt
 Tali unit test non hanno la pretesa di essere particolarmente curati o ben strutturati, ma solo ``buoni abbastanza'' per ottenere lo scopo summenzionato.
 Si sono inoltre utilizzati dei file di esempio - alcuni dei quali malformati o altrimenti inaccettabili (presenti nella cartella \texttt{samples}) unitamente al semplice script (\texttt{quicktest.sh}) per effettuare il collaudo finale.
 
-Non \`e stato dato molto peso a errori non triviali nell'input (e.g. grafi di collegamenti non planari e dunque impossibili da ricostruire o collegamenti non reciprocati dal vicino ``puntato'' da un nodo); sono considerati undefined behaviour e evitarli \`e responsabilit\`a dell'utente.
+Non \`e stato dato molto peso a errori non triviali nell'input (e.g. grafi di collegamenti non planari e dunque impossibili da ricostruire o collegamenti non corrisposti dal vicino); sono considerati undefined behaviour e evitarli \`e responsabilit\`a dell'utente.
 
-La correttezza del programma non \`e stata dimostrata formalmente - tuttavia, il solo algoritmo non triviale utilizzato finora (BFS) \`e gi\`a dimostrato in letteratura e si ritiene di poter quindi approcciare il programma con una sufficiente confidenza.
+La correttezza del programma non \`e stata dimostrata formalmente - tuttavia, il solo algoritmo non triviale utilizzato finora (BFS) \`e gi\`a dimostrato in letteratura \cite{cormen2001introduction} e si ritiene di poter quindi approcciare il programma con una sufficiente confidenza.
+
+\section{Compilazione e utilizzo}
+\begin{verbatim}
+$ cd parte1/ 
+$ make
+$ ./PuzzleSolver input.txt output.txt
+\end{verbatim}
+oppure
+\begin{verbatim}
+$ cd parte1/ 
+$ make
+$ java -jar PuzzleSolver.jar input.txt output.txt
+\end{verbatim}
 
 \bibliography{mybib}{}
 \bibliographystyle{plain}
