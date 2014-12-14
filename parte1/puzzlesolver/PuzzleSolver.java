@@ -50,11 +50,11 @@ public class PuzzleSolver {
 				ps.solve();
 				PuzzlePrinter p = new FilePuzzlePrinter(dstPath);
 				p.print(ps);
-			} catch (MalformedFileException e) {
-				System.err.println("Malformed file!");
 			} catch (MissingPiecesException e) {
 				System.err.println("Pieces seem to be missing from input.");
 			}
+		} catch (MalformedFileException e) {
+			System.err.println("Malformed file!");
 		} catch (NoSuchFileException e) {
 			System.err.println("File not found!");
 		} catch (IOException e) {
