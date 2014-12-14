@@ -8,5 +8,5 @@ import java.io.IOException;
  * Output format is up to the implementing class.  
  */
 public interface PuzzlePrinter {
-	void print(Puzzle pieceSet) throws IOException, MissingPiecesException;
+	void print(Puzzle pieceSet) throws IOException, PuzzleNotSolvedException;
 }

@@ -23,7 +23,7 @@ public class FilePuzzlePrinter implements PuzzlePrinter {
 		this.outputPath = outputPath;
 	}
 
-	public void print(Puzzle puzzle) throws IOException, MissingPiecesException {
+	public void print(Puzzle puzzle) throws IOException, PuzzleNotSolvedException {
 		BufferedWriter writer = Files.newBufferedWriter(outputPath, charset);
 		writer.write(puzzle.getSolution());
 		writer.write("\n\n");

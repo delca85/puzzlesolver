@@ -42,8 +42,10 @@ public class BasicPuzzle implements Puzzle {
 		
 		private PuzzlePiece row;
 		
-		public BasicPuzzleIterator(BasicPuzzle ps) throws MissingPiecesException {
-			ps.solve();
+		public BasicPuzzleIterator(BasicPuzzle ps) throws PuzzleNotSolvedException {
+			if (!solved) {
+				throw new PuzzleNotSolvedException();
+			}
 			row = ps.getNWCorner();
 		}	
 		
@@ -162,8 +164,10 @@ public class BasicPuzzle implements Puzzle {
 		solved = true;
 	}
 
-	public Iterator<Iterator<PuzzlePiece>> iterator() throws MissingPiecesException {
-		solve();
+	public Iterator<Iterator<PuzzlePiece>> iterator() throws PuzzleNotSolvedException {
+		if (!solved) {
+			throw new PuzzleNotSolvedException();
+		}
 		return new BasicPuzzleIterator(this);
 	}
 
@@ -171,7 +175,10 @@ public class BasicPuzzle implements Puzzle {
 		return NWCorner;
 	}
 
-	public int getRows() throws MissingPiecesException {
+	public int getRows() throws PuzzleNotSolvedException {
+		if (!solved) {
+			throw new PuzzleNotSolvedException();
+		}		
 		int count = 0;
 		for (Iterator<Iterator<PuzzlePiece>> rowIt = iterator(); 
 				rowIt.hasNext(); rowIt.next()){
@@ -180,7 +187,10 @@ public class BasicPuzzle implements Puzzle {
 		return count;
 	}
 
-	public int getCols() throws MissingPiecesException {
+	public int getCols() throws PuzzleNotSolvedException {
+		if (!solved) {
+			throw new PuzzleNotSolvedException();
+		}				
 		Iterator<Iterator<PuzzlePiece>> rowIt = iterator();
 		if (!rowIt.hasNext()) { return 0; }
 		int count = 0;
@@ -191,7 +201,10 @@ public class BasicPuzzle implements Puzzle {
 		return count;
 	}
 	
-	public String getSolution() throws MissingPiecesException {
+	public String getSolution() throws PuzzleNotSolvedException {
+		if (!solved) {
+			throw new PuzzleNotSolvedException();
+		}
 		String output = "";
 		for (Iterator<Iterator<PuzzlePiece>> rowIt = iterator(); 
 				 rowIt.hasNext();){
@@ -206,8 +219,8 @@ public class BasicPuzzle implements Puzzle {
 	public String toString() {
 		try {
 			return "A "+getCols()+"x"+getRows()+" puzzle";
-		} catch (MissingPiecesException e) {
-			return "A puzzle with missing pieces.";
+		} catch (PuzzleNotSolvedException e) {
+			return "An unsolved puzzle";
 		}
 	}
 }

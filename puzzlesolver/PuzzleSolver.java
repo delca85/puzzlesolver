@@ -39,6 +39,7 @@ public class PuzzleSolver {
 							));
 				}
 				
+				ps.solve();
 				PuzzlePrinter p = new FilePuzzlePrinter(dstPath);
 				p.print(ps);
 			} catch (MalformedFileException e) {
