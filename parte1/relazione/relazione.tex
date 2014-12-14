@@ -172,7 +172,7 @@ Non \`e prevista una eccezione da sollevare in caso di pezzi \emph{in eccesso} o
 public interface IPuzzle {
 	public void addPiece(IPuzzlePiece p);
 	public void solve() throws MissingPiecesException;
-	public Iterator<Iterator<PuzzlePiece>> iterator();
+	public Iterator<Iterator<IPuzzlePiece>> iterator();
 	public String getSolution() throws PuzzleNotSolvedException;
 	public int getRows() throws PuzzleNotSolvedException;
 	public int getCols() throws PuzzleNotSolvedException;
