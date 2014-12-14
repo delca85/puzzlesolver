@@ -1,0 +1,210 @@
+\documentclass[a4paper]{article}
+\usepackage[italian]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{cite}
+
+\newcommand{\Classname}[1]{\textsc{#1}}
+\newcommand{\Ifacename}[1]{\textsc{#1}}
+\newcommand{\Methodname}[1]{\texttt{#1}}
+\newcommand{\Pkgname}[1]{\texttt{#1}}
+\usepackage{listings} % Include the listings-package
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+
+\lstset{
+language=Java,
+basicstyle=\small\sffamily,
+numbers=left,
+numberstyle=\tiny,
+frame=tb,
+columns=fullflexible,
+showstringspaces=false
+}
+
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\tikzstyle{frame} = [
+rectangle, draw,
+text width=4em, text centered,
+minimum height=3em
+% minimum width=5em
+]
+\tikzstyle{line} = [draw, -latex']
+
+
+\title{Relazione Programmazione ad Oggetti}
+\begin{document}
+\maketitle
+\tableofcontents
+\section{Organizzazione delle classi}
+
+Il progetto consta di 10 classi principali, di cui 2 interfacce e 3 eccezioni, organizzate in due package a seconda della funzionalit\`a (I/O e logica) nel modo seguente:
+
+\begin{verbatim}
+puzzlesolver/
+|-- core
+|   |-- BasicPuzzlePiece.java
+|   |-- BasicPuzzlePieceTest.java
+|   |-- BFSHashmapPuzzle.java
+|   |-- BFSHashmapPuzzleTest.java
+|   |-- HashmapPuzzle.java
+|   |-- IPuzzle.java
+|   |-- IPuzzlePiece.java
+|   |-- MissingPiecesException.java
+|   `-- PuzzleNotSolvedException.java
+|-- io
+|   |-- IPuzzlePrinter.java
+|   |-- MalformedFileException.java
+|   |-- PlaintextPuzzlePrinter.java
+|   `-- PuzzleFileParser.java
+`-- PuzzleSolver.java
+\end{verbatim}
+
+Ad esse si aggiungono due piccole classi annidate di utilit\`a, il main e alcuni unit test.
+Il perno principale del progetto sono le interfacce \Ifacename{Puzzle} e \Ifacename{IPuzzlePiece}.
+Esse rappresentano rispettivamente un singolo pezzo di puzzle e una classe contenitrice.
+\subsection{\Pkgname{puzzlesolver.core}}
+\subsubsection{\Classname{IPuzzlePiece}}
+\Ifacename{IPuzzlePiece} prescrive dei metodi di ispezione dell'ID del pezzo, dell'ID dei suoi vicini e alcuni semplici helper per ottenere informazioni sintetiche come \Methodname{isNWCorner()}.
+
+Per natura del task \`e fatta l'assunzione che gli ID del pezzo e dei vicini non possiano cambiare e dunque l'interfaccia non prescrive metodi di inserimento e modifica di tali informazioni.
+
+L'interfaccia prescrive tuttavia dei metodi \Methodname{getNorth()} ... \Methodname{getEast()}  e  \Methodname{getNorth()} ... \Methodname{getEast()} che permettono di leggere e modificare riferimenti ai vicini man mano che il puzzle viene risolto.
+
+Ogni \Ifacename{IPuzzlePiece} pu\`o essere visto come nodo di un grafo di grado massimo (uscente) 4 e inizialmente 0 in cui i riferimenti ai vicini sono archi.
+
+Per esempio, lo stato finale desiderato per i quattro pezzi del puzzle $2\times2$ ``Ciao'' \`e il seguente:
+
+\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm,
+  thick,main node/.style={circle,draw}]
+
+  \node[main node] (1) {C};
+  \node[main node] (3) [below of=1] {a};
+  \node[main node] (2) [right of=1] {i};
+  \node[main node] (4) [right of=3] {o};
+
+  \path[every node/.style={font=\sffamily\small}]
+    (1)  edge [bend right] node[below] {E} (2)
+         edge [bend right] node[left] {S} (3)
+    (2)  edge [bend right] node[above] {W} (1)
+         edge [bend right] node[left] {S} (4)
+    (3)  edge [bend right] node[left] {N} (1)
+         edge [bend right] node[below] {E} (4)
+    (4)  edge [bend right] node[left] {N} (2)
+         edge [bend right] node[below] {W} (3);
+\end{tikzpicture}
+
+\begin{lstlisting}[frame=single]
+public interface IPuzzlePiece {
+	String getId();
+	char getCharacter();
+	IPuzzlePiece getNorth();
+	IPuzzlePiece getSouth();
+	IPuzzlePiece getWest();
+	IPuzzlePiece getEast();
+	void setNorth(IPuzzlePiece p);
+	void setSouth(IPuzzlePiece p);
+	void setWest(IPuzzlePiece p);
+	void setEast(IPuzzlePiece p);
+	String getNorthId();
+	String getSouthId();
+	String getEastId();
+	String getWestId();
+	boolean isNRow();
+	boolean isWCol();
+	boolean isSRow();
+	boolean isECol();
+	boolean isNWCorner();
+	boolean isSWCorner();
+	boolean isSECorner();
+	boolean isNECorner();
+}
+\end{lstlisting}
+
+\subsubsection{\Classname{IPuzzle}}
+L'interfaccia \Ifacename{IPuzzle} espone i metodi \Methodname{addPiece}, \Methodname{solve}, \Methodname{getSolution}, \Methodname{Iterator}, \Methodname{getRows} e \Methodname{getCols}.
+
+Il flusso di programma che si intende realizzare \`e:
+
+\begin{enumerate}
+\item Istanziazione
+\item Aggiunta dei pezzi con \Methodname{addPiece}
+\item Calcolo di una soluzione con \Methodname{solve}
+\item Output di una soluzione con \Methodname{getSolution}, \Methodname{getIterator}, \Methodname{getRows}, \Methodname{getCols}.
+\end{enumerate}
+
+A questo scopo, i metodi di cui al quarto punto sollevano una \Classname{RuntimeException} chiamata \Classname{PuzzleNotSolvedException} - l'invocazione di tali metodi prima dell'avvenuto calcolo di una soluzione costituisce un \emph{errore logico} da parte del programmatore.
+\label{pnse}
+Il metodo \Methodname{solve} pu\`o sollevare una MissingPiecesException se non \`e possibile calcolare una soluzione per mancanza di pezzi.
+
+Non \`e prevista una eccezione da sollevare in caso di pezzi \emph{in eccesso} o di errori logici pi\`u  sottili nel puzzle, anche se non \`e nemmeno vietata una RuntimeException.
+
+\begin{lstlisting}[frame=single]
+public interface IPuzzle {
+	public void addPiece(IPuzzlePiece p);
+	public void solve() throws MissingPiecesException;
+	public Iterator<Iterator<PuzzlePiece>> iterator();
+	public String getSolution() throws PuzzleNotSolvedException;
+	public int getRows() throws PuzzleNotSolvedException;
+	public int getCols() throws PuzzleNotSolvedException;
+}
+\end{lstlisting}
+
+\subsubsection{\Classname{BasicPuzzlePiece}}
+\Classname{BasicPuzzlePiece} \`e una triviale implementazione dell'interfaccia \Ifacename{IPuzzlePiece} costruita intorno a due array di 4 elementi.
+Si rimanda al codice per i dettagli.
+
+\subsubsection{\Classname{HashmapPuzzle}}
+\Classname{HashmapPuzzle} \`e una classe astratta che implementa \Ifacename{IPuzzle}.
+
+Fornisce una Hashmap dove salvare dei \Ifacename{IPuzzlePiece}  e recuperarli a costo $\approx O(1)$ nel caso medio e una serie di metodi di utilit\`a.
+
+Ha una classe annidata privata \Classname{BasicPuzzleIterator} di utilit\`a che implementa l'interfaccia \Ifacename{Iterator<Iterator<PuzzlePiece>>}. Non \`e stato ritenuto necessario renderla standalone visto che \`e fortemente dipendente da \Classname{BasicPuzzle}, n\`e \`e stato ritenuto opportuno renderla pubblica.
+
+Ha un solo metodo astratto: \Methodname{solve}.
+
+Con questo l'intenzione \`e di lasciare libert\`a nella scelta e nell'implementazione dell'algoritmo di soluzione/traversal.
+
+\subsubsection{\Classname{BFSHashmapPuzzle}}
+\Classname{BFSHashmapPuzzle} estende \Classname{HashmapPuzzle}.
+\Methodname{solve()} \`e implementato attraverso un algoritmo di traversal breadth-first (\cite{cormen2001introduction}).
+
+L'algoritmo \`e stato scelto poich\`e BFS \`e dimostrato essere ottimale in termini di complessit\`a e perch\`e appoggiandosi su una coda appare \emph{intuitivamente} (o ingenuamente) pi\`u semplice da parallelizzare - come suggerito opzionalmente al punto 5. delle specifiche di progetto.
+
+\subsubsection{\Classname{MissingPiecesException}}
+\Classname{MissingPiecesException} estende \Classname{Exception} indica che l'algoritmo di risoluzione si blocca perch\`e vi sono dei pezzi mancanti.
+
+\subsubsection{\Classname{PuzzleNotSolvedException}}
+\Classname{PuzzleNotSolvedException} estende \Classname{RuntimeException}.
+Indica un errore da parte del programmatore nel tentare di accedere o iterare sulla soluzione senza prima avere invocato \Methodname{solve()}, come discusso in \ref{pnse}.
+%TODO cit
+\subsection{\Pkgname{puzzlesolver.io}}
+\subsubsection{\Classname{PuzzlePrinter}}
+\Classname{PuzzlePrinter} \`e un'interfaccia che definisce un singolo metodo, \Methodname{print(Puzzle p) throws IOException, PuzzleNotSolvedException}, e si applica nell'intenzione a tutte quelle classi che stampano in \emph{qualche modo} un puzzle - su file, in console, in un file grafico (e.g. SVG) 
+\subsubsection{\Classname{PlaintextPuzzlePrinter}}
+\Classname{PlaintextPuzzlePrinter} implementa \Classname{PuzzlePrinter} e stampa su file di testo come prescritto nelle specifiche del progetto alla sezione 3.
+\subsubsection{\Classname{PuzzleFileParser}}
+\Classname{PuzzleFileParser} \`e una classe che fornisce un metodo statico di utilit\`a \Methodname{parseFile} che legge file nel formato prescritto nella sezione 3 delle specifiche di progetto.
+Si \`e fatto in modo che il metodo ritorni una lista di semplici struct ``alla C''.
+Si \`e preferito infatti mantenerlo completamente disaccoppiato dalla logica del puzzle e dalla sua rappresentazione interna al programma.
+Utilizzare una struct ``alla C'' \`e stata una scelta sofferta, ma le alternative - e.g. una ``vera'' classe ad hoc o un array con indici numerico sono apparse eccessivamente complesse o scomode per il programmatore, in particolare perch\`e \`e facile confondere l'ordine dei punti cardinali.
+
+\subsubsection{\Classname{MalformedFileException}}
+\Classname{MalformedFileException} estende \Classname{Exception} viene sollevata quando il parser incontra un file con sintassi invalida.
+\section{Ragioni progettuali}
+Come visto nella disanima classe per classe, si \`e cercato di tenere le interfacce (ovvero i contratti, i cosa-fa) come perno centrale della progettazione per ottenere il massimo disaccoppiamento tra componenti e favorire il riuso del codice.
+Similmente, encapsulation e information hiding sono garantiti massimizzando l'interazione tramite metodi - specificati nell'interfaccia e dove necessario propri delle classi - ed evitando di esporre dettagli implementativi o attributi delle classi.
+
+\section{Test e collaudo}
+Nelle prime fasi di scrittura si sono approntati dei semplici unit test (\texttt{Basic\-Puzzle\-Piece\-Test} e \texttt{BFS\-Hash\-map\-Puzzle\-Test}) per fare da ``parapetto'' contro errori triviali e modifiche involontarie nel comportamento del codice.
+Tali unit test non hanno la pretesa di essere particolarmente curati o ben strutturati, ma solo ``buoni abbastanza'' per ottenere lo scopo summenzionato.
+Si sono inoltre utilizzati dei file di esempio - alcuni dei quali malformati o altrimenti inaccettabili (presenti nella cartella \texttt{samples}) unitamente al semplice script (\texttt{quicktest.sh}) per effettuare il collaudo finale.
+
+Non \`e stato dato molto peso a errori non triviali nell'input (e.g. grafi di collegamenti non planari e dunque impossibili da ricostruire o collegamenti non reciprocati dal vicino ``puntato'' da un nodo); sono considerati undefined behaviour e evitarli \`e responsabilit\`a dell'utente.
+
+La correttezza del programma non \`e stata dimostrata formalmente - tuttavia, il solo algoritmo non triviale utilizzato finora (BFS) \`e gi\`a dimostrato in letteratura e si ritiene di poter quindi approcciare il programma con una sufficiente confidenza.
+
+\bibliography{mybib}{}
+\bibliographystyle{plain}
+\end{document}
