@@ -6,8 +6,9 @@ JC = javac
 		$(JC) $(JFLAGS) $*.java
 
 CLASSES = \
-		puzzlesolver/core/BasicPuzzle.java \
 		puzzlesolver/core/BasicPuzzlePiece.java \
+		puzzlesolver/core/AbstractBasicPuzzle.java \
+		puzzlesolver/core/BFSBasicPuzzle.java \
 		puzzlesolver/io/FilePuzzlePrinter.java \
 		puzzlesolver/io/MalformedFileException.java \
 		puzzlesolver/core/MissingPiecesException.java \
