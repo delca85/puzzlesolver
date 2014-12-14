@@ -20,7 +20,7 @@ CLASSES = \
 default: PuzzleSolver.jar
 
 PuzzleSolver.jar: $(CLASSES:.java=.class)
-	jar cvfe PuzzleSolver.jar puzzlesolver.PuzzleSolver puzzlesolver/*.class
+	jar cvfe PuzzleSolver.jar puzzlesolver.PuzzleSolver puzzlesolver/*.class puzzlesolver/io/*.class puzzlesolver/core/*.class
 javadoc:
 	javadoc puzzlesolver puzzlesolver.io puzzlesolver.core -d doc 
 clean:	
