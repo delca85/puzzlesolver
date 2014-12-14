@@ -190,7 +190,7 @@ Si rimanda al codice per i dettagli.
 
 Fornisce una Hashmap dove salvare dei \Ifacename{IPuzzlePiece}  e recuperarli a costo $\approx O(1)$ nel caso medio e una serie di metodi di utilit\`a.
 
-Ha una classe annidata privata \Classname{BasicPuzzleIterator} di utilit\`a che implementa l'interfaccia \Ifacename{Iterator<Iterator<PuzzlePiece>>}. Non \`e stato ritenuto necessario renderla standalone visto che \`e fortemente dipendente da \Classname{BasicPuzzle}, n\`e \`e stato ritenuto opportuno renderla pubblica.
+Ha una classe annidata privata \Classname{HashmapPuzzleIterator} di utilit\`a che implementa l'interfaccia \Ifacename{Iterator<Iterator<IPuzzlePiece>>}. Non \`e stato ritenuto necessario renderla standalone visto che \`e fortemente dipendente da \Classname{HashmapPuzzle}, n\`e \`e stato ritenuto opportuno renderla pubblica.
 
 Ha un solo metodo astratto: \Methodname{solve}.
 
