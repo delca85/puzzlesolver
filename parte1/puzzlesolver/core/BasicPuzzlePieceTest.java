@@ -6,25 +6,25 @@ public class BasicPuzzlePieceTest {
 
 	@Test
 	public void testConstructor() {
-		PuzzlePiece foo;
+		IPuzzlePiece foo;
 		foo = new BasicPuzzlePiece("foo", 'f', "n", "s", "w", "e");
 	}
 
 	@Test
 	public void testSinglePiece() {
-		PuzzlePiece foo;
+		IPuzzlePiece foo;
 		foo = new BasicPuzzlePiece("foo", 'f', "VUOTO", "VUOTO", "VUOTO", "VUOTO");
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testDuplicate() {
-		PuzzlePiece foo;
+		IPuzzlePiece foo;
 		foo = new BasicPuzzlePiece("foo", 'f', "bar", "VUOTO", "VUOTO", "bar");
 	}
 
 	@Test
 	public void testNW() {
-		PuzzlePiece foo;
+		IPuzzlePiece foo;
 
 		foo = new BasicPuzzlePiece("foo", 'f', "VUOTO", "bar", "VUOTO", "baz");
 		assert(foo.isNWCorner());

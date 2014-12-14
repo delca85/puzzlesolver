@@ -10,11 +10,11 @@ import java.util.List;
 import puzzlesolver.core.BFSHashmapPuzzle;
 import puzzlesolver.core.BasicPuzzlePiece;
 import puzzlesolver.core.MissingPiecesException;
-import puzzlesolver.core.Puzzle;
-import puzzlesolver.io.FilePuzzlePrinter;
+import puzzlesolver.core.IPuzzle;
+import puzzlesolver.io.PlaintextPuzzlePrinter;
 import puzzlesolver.io.MalformedFileException;
 import puzzlesolver.io.PuzzleFileParser;
-import puzzlesolver.io.PuzzlePrinter;
+import puzzlesolver.io.IPuzzlePrinter;
 /**
  * Usage: java PuzzleSolver input.txt output.txt
  */
@@ -34,7 +34,7 @@ public class PuzzleSolver {
 			try {
 				Iterator<PuzzleFileParser.PieceStruct> it = tokenList.iterator();
 
-				Puzzle puzzle = new BFSHashmapPuzzle();
+				IPuzzle puzzle = new BFSHashmapPuzzle();
 
 				while (it.hasNext()) {
 					PuzzleFileParser.PieceStruct struct = it.next();
@@ -49,7 +49,7 @@ public class PuzzleSolver {
 				}
 
 				puzzle.solve();
-				PuzzlePrinter printer = new FilePuzzlePrinter(dstPath);
+				IPuzzlePrinter printer = new PlaintextPuzzlePrinter(dstPath);
 				printer.print(puzzle);
 			} catch (MissingPiecesException e) {
 				System.err.println("Pieces seem to be missing from input.");

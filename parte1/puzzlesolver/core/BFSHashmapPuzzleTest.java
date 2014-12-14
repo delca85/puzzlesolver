@@ -7,7 +7,7 @@ public class BFSHashmapPuzzleTest {
 
 	@Test
 	public void testConstructor() {
-		Puzzle foo;
+		IPuzzle foo;
 		foo = new BFSHashmapPuzzle();
 	}
 
@@ -17,12 +17,12 @@ public class BFSHashmapPuzzleTest {
 		 *  A1 A2
 		 *  B1 B2
 		 */
-		PuzzlePiece A1 = new BasicPuzzlePiece("A1", 'a', "VUOTO", "B1", "VUOTO", "A2");
-		PuzzlePiece A2 = new BasicPuzzlePiece("A2", 'A', "VUOTO", "B2", "A1", "VUOTO");
-		PuzzlePiece B1 = new BasicPuzzlePiece("B1", 'b', "A1", "VUOTO", "VUOTO", "B2");
-		PuzzlePiece B2 = new BasicPuzzlePiece("B2", 'B', "A2", "VUOTO", "B1", "VUOTO");
+		IPuzzlePiece A1 = new BasicPuzzlePiece("A1", 'a', "VUOTO", "B1", "VUOTO", "A2");
+		IPuzzlePiece A2 = new BasicPuzzlePiece("A2", 'A', "VUOTO", "B2", "A1", "VUOTO");
+		IPuzzlePiece B1 = new BasicPuzzlePiece("B1", 'b', "A1", "VUOTO", "VUOTO", "B2");
+		IPuzzlePiece B2 = new BasicPuzzlePiece("B2", 'B', "A2", "VUOTO", "B1", "VUOTO");
 
-		Puzzle foo = new BFSHashmapPuzzle();
+		IPuzzle foo = new BFSHashmapPuzzle();
 		foo.addPiece(A1);
 		foo.addPiece(A2);
 		foo.addPiece(B1);
@@ -35,12 +35,12 @@ public class BFSHashmapPuzzleTest {
 		 *  A1 A2
 		 *  B1 B2
 		 */
-		PuzzlePiece A1 = new BasicPuzzlePiece("A1", 'a', "VUOTO", "B1", "VUOTO", "A2");
-		PuzzlePiece A2 = new BasicPuzzlePiece("A2", 'A', "VUOTO", "B2", "A1", "VUOTO");
-		PuzzlePiece B1 = new BasicPuzzlePiece("B1", 'b', "A1", "VUOTO", "VUOTO", "B2");
-		PuzzlePiece B2 = new BasicPuzzlePiece("B2", 'B', "A2", "VUOTO", "B1", "VUOTO");
+		IPuzzlePiece A1 = new BasicPuzzlePiece("A1", 'a', "VUOTO", "B1", "VUOTO", "A2");
+		IPuzzlePiece A2 = new BasicPuzzlePiece("A2", 'A', "VUOTO", "B2", "A1", "VUOTO");
+		IPuzzlePiece B1 = new BasicPuzzlePiece("B1", 'b', "A1", "VUOTO", "VUOTO", "B2");
+		IPuzzlePiece B2 = new BasicPuzzlePiece("B2", 'B', "A2", "VUOTO", "B1", "VUOTO");
 
-		Puzzle foo = new BFSHashmapPuzzle();
+		IPuzzle foo = new BFSHashmapPuzzle();
 		foo.addPiece(A1);
 		foo.addPiece(A2);
 		foo.addPiece(B1);
@@ -56,12 +56,12 @@ public class BFSHashmapPuzzleTest {
 		 *  A1 A2
 		 *  B1 B2
 		 */
-		PuzzlePiece A1 = new BasicPuzzlePiece("A1", 'a', "VUOTO", "B1", "VUOTO", "A2");
-		PuzzlePiece A2 = new BasicPuzzlePiece("A2", 'A', "VUOTO", "B2", "A1", "VUOTO");
-		PuzzlePiece B1 = new BasicPuzzlePiece("B1", 'b', "A1", "VUOTO", "VUOTO", "B2");
-		PuzzlePiece B2 = new BasicPuzzlePiece("B2", 'B', "A2", "VUOTO", "B1", "VUOTO");
+		IPuzzlePiece A1 = new BasicPuzzlePiece("A1", 'a', "VUOTO", "B1", "VUOTO", "A2");
+		IPuzzlePiece A2 = new BasicPuzzlePiece("A2", 'A', "VUOTO", "B2", "A1", "VUOTO");
+		IPuzzlePiece B1 = new BasicPuzzlePiece("B1", 'b', "A1", "VUOTO", "VUOTO", "B2");
+		IPuzzlePiece B2 = new BasicPuzzlePiece("B2", 'B', "A2", "VUOTO", "B1", "VUOTO");
 
-		Puzzle foo = new BFSHashmapPuzzle();
+		IPuzzle foo = new BFSHashmapPuzzle();
 		foo.addPiece(A1);
 		foo.addPiece(A2);
 		foo.addPiece(B1);
@@ -77,12 +77,12 @@ public class BFSHashmapPuzzleTest {
 		 *  A1 A2
 		 *  B1 B2
 		 */
-		PuzzlePiece A1 = new BasicPuzzlePiece("A1", 'a', "VUOTO", "B1", "VUOTO", "A2");
-		PuzzlePiece A2 = new BasicPuzzlePiece("A2", 'A', "VUOTO", "B2", "A1", "VUOTO");
-		PuzzlePiece B1 = new BasicPuzzlePiece("B1", 'b', "A1", "VUOTO", "VUOTO", "B2");
-		PuzzlePiece B2 = new BasicPuzzlePiece("B2", 'B', "A2", "VUOTO", "B1", "VUOTO");
+		IPuzzlePiece A1 = new BasicPuzzlePiece("A1", 'a', "VUOTO", "B1", "VUOTO", "A2");
+		IPuzzlePiece A2 = new BasicPuzzlePiece("A2", 'A', "VUOTO", "B2", "A1", "VUOTO");
+		IPuzzlePiece B1 = new BasicPuzzlePiece("B1", 'b', "A1", "VUOTO", "VUOTO", "B2");
+		IPuzzlePiece B2 = new BasicPuzzlePiece("B2", 'B', "A2", "VUOTO", "B1", "VUOTO");
 
-		Puzzle foo = new BFSHashmapPuzzle();
+		IPuzzle foo = new BFSHashmapPuzzle();
 		foo.addPiece(A1);
 		foo.addPiece(A2);
 		foo.addPiece(B1);
@@ -97,16 +97,16 @@ public class BFSHashmapPuzzleTest {
 		 *  A1 A2
 		 *  XX B2
 		 */
-		PuzzlePiece A1 = new BasicPuzzlePiece("A1", 'a', "VUOTO", "B1", "VUOTO", "A2");
-		PuzzlePiece A2 = new BasicPuzzlePiece("A2", 'A', "VUOTO", "B2", "A1", "VUOTO");
-		PuzzlePiece B2 = new BasicPuzzlePiece("B2", 'B', "A2", "VUOTO", "B1", "VUOTO");
+		IPuzzlePiece A1 = new BasicPuzzlePiece("A1", 'a', "VUOTO", "B1", "VUOTO", "A2");
+		IPuzzlePiece A2 = new BasicPuzzlePiece("A2", 'A', "VUOTO", "B2", "A1", "VUOTO");
+		IPuzzlePiece B2 = new BasicPuzzlePiece("B2", 'B', "A2", "VUOTO", "B1", "VUOTO");
 
-		Puzzle foo = new BFSHashmapPuzzle();
+		IPuzzle foo = new BFSHashmapPuzzle();
 		foo.addPiece(A1);
 		foo.addPiece(A2);
 		foo.addPiece(B2);
 		foo.solve();
-		Iterator<Iterator<PuzzlePiece>> it = foo.iterator();
+		Iterator<Iterator<IPuzzlePiece>> it = foo.iterator();
 	}
 
 	@Test
@@ -115,12 +115,12 @@ public class BFSHashmapPuzzleTest {
 		 *  A1 A2
 		 *  XX B2
 		 */
-		PuzzlePiece A1 = new BasicPuzzlePiece("A1", 'a', "VUOTO", "B1", "VUOTO", "A2");
-		PuzzlePiece A2 = new BasicPuzzlePiece("A2", 'A', "VUOTO", "B2", "A1", "VUOTO");
-		PuzzlePiece B1 = new BasicPuzzlePiece("B1", 'b', "A1", "VUOTO", "VUOTO", "B2");
-		PuzzlePiece B2 = new BasicPuzzlePiece("B2", 'B', "A2", "VUOTO", "B1", "VUOTO");
+		IPuzzlePiece A1 = new BasicPuzzlePiece("A1", 'a', "VUOTO", "B1", "VUOTO", "A2");
+		IPuzzlePiece A2 = new BasicPuzzlePiece("A2", 'A', "VUOTO", "B2", "A1", "VUOTO");
+		IPuzzlePiece B1 = new BasicPuzzlePiece("B1", 'b', "A1", "VUOTO", "VUOTO", "B2");
+		IPuzzlePiece B2 = new BasicPuzzlePiece("B2", 'B', "A2", "VUOTO", "B1", "VUOTO");
 
-		Puzzle foo = new BFSHashmapPuzzle();
+		IPuzzle foo = new BFSHashmapPuzzle();
 		foo.addPiece(A1);
 		foo.addPiece(A2);
 		foo.addPiece(B2);
@@ -135,9 +135,9 @@ public class BFSHashmapPuzzleTest {
 		foo.addPiece(B1);
 		String output = "";
 		foo.solve();
-		for (Iterator<Iterator<PuzzlePiece>> rowIt = foo.iterator();
+		for (Iterator<Iterator<IPuzzlePiece>> rowIt = foo.iterator();
 		        rowIt.hasNext();) {
-			for (Iterator<PuzzlePiece> colIt = rowIt.next();
+			for (Iterator<IPuzzlePiece> colIt = rowIt.next();
 			        colIt.hasNext();) {
 				output += colIt.next();
 			}
@@ -154,17 +154,17 @@ public class BFSHashmapPuzzleTest {
 		 *  B1 B2 B3
 		 *  C1 C2 C3
 		 */
-		PuzzlePiece A1 = new BasicPuzzlePiece("A1", 'a', "VUOTO", "B1", "VUOTO", "A2");
-		PuzzlePiece A2 = new BasicPuzzlePiece("A2", 'A', "VUOTO", "B2", "A1", "A3");
-		PuzzlePiece A3 = new BasicPuzzlePiece("A3", '4', "VUOTO", "B3", "A2", "VUOTO");
-		PuzzlePiece B1 = new BasicPuzzlePiece("B1", 'b', "A1", "C1", "VUOTO", "B2");
-		PuzzlePiece B2 = new BasicPuzzlePiece("B2", 'B', "A2", "C2", "B1", "B3");
-		PuzzlePiece B3 = new BasicPuzzlePiece("B3", '3', "A2", "C3", "B2", "VUOTO");
-		PuzzlePiece C1 = new BasicPuzzlePiece("C1", 'c', "B1", "VUOTO", "VUOTO", "C2");
-		PuzzlePiece C2 = new BasicPuzzlePiece("C2", 'C', "B2", "VUOTO", "C1", "C3");
-		PuzzlePiece C3 = new BasicPuzzlePiece("C3", '6', "B3", "VUOTO", "C2", "VUOTO");
+		IPuzzlePiece A1 = new BasicPuzzlePiece("A1", 'a', "VUOTO", "B1", "VUOTO", "A2");
+		IPuzzlePiece A2 = new BasicPuzzlePiece("A2", 'A', "VUOTO", "B2", "A1", "A3");
+		IPuzzlePiece A3 = new BasicPuzzlePiece("A3", '4', "VUOTO", "B3", "A2", "VUOTO");
+		IPuzzlePiece B1 = new BasicPuzzlePiece("B1", 'b', "A1", "C1", "VUOTO", "B2");
+		IPuzzlePiece B2 = new BasicPuzzlePiece("B2", 'B', "A2", "C2", "B1", "B3");
+		IPuzzlePiece B3 = new BasicPuzzlePiece("B3", '3', "A2", "C3", "B2", "VUOTO");
+		IPuzzlePiece C1 = new BasicPuzzlePiece("C1", 'c', "B1", "VUOTO", "VUOTO", "C2");
+		IPuzzlePiece C2 = new BasicPuzzlePiece("C2", 'C', "B2", "VUOTO", "C1", "C3");
+		IPuzzlePiece C3 = new BasicPuzzlePiece("C3", '6', "B3", "VUOTO", "C2", "VUOTO");
 
-		Puzzle foo = new BFSHashmapPuzzle();
+		IPuzzle foo = new BFSHashmapPuzzle();
 		foo.addPiece(A1);
 		foo.addPiece(A2);
 		foo.addPiece(A3);
@@ -175,7 +175,7 @@ public class BFSHashmapPuzzleTest {
 		foo.addPiece(C2);
 		foo.addPiece(C3);
 		foo.solve();
-		Iterator<Iterator<PuzzlePiece>> it = foo.iterator();
+		Iterator<Iterator<IPuzzlePiece>> it = foo.iterator();
 	}
 
 	@Test
@@ -184,21 +184,21 @@ public class BFSHashmapPuzzleTest {
 		 *  A1 A2
 		 *  B1 B2
 		 */
-		PuzzlePiece A1 = new BasicPuzzlePiece("A1", 'a', "VUOTO", "B1", "VUOTO", "A2");
-		PuzzlePiece A2 = new BasicPuzzlePiece("A2", 'A', "VUOTO", "B2", "A1", "VUOTO");
-		PuzzlePiece B1 = new BasicPuzzlePiece("B1", 'b', "A1", "VUOTO", "VUOTO", "B2");
-		PuzzlePiece B2 = new BasicPuzzlePiece("B2", 'B', "A2", "VUOTO", "B1", "VUOTO");
+		IPuzzlePiece A1 = new BasicPuzzlePiece("A1", 'a', "VUOTO", "B1", "VUOTO", "A2");
+		IPuzzlePiece A2 = new BasicPuzzlePiece("A2", 'A', "VUOTO", "B2", "A1", "VUOTO");
+		IPuzzlePiece B1 = new BasicPuzzlePiece("B1", 'b', "A1", "VUOTO", "VUOTO", "B2");
+		IPuzzlePiece B2 = new BasicPuzzlePiece("B2", 'B', "A2", "VUOTO", "B1", "VUOTO");
 
-		Puzzle foo = new BFSHashmapPuzzle();
+		IPuzzle foo = new BFSHashmapPuzzle();
 		foo.addPiece(A1);
 		foo.addPiece(A2);
 		foo.addPiece(B1);
 		foo.addPiece(B2);
 		String output = "";
 		foo.solve();
-		for (Iterator<Iterator<PuzzlePiece>> rowIt = foo.iterator();
+		for (Iterator<Iterator<IPuzzlePiece>> rowIt = foo.iterator();
 		        rowIt.hasNext();) {
-			for (Iterator<PuzzlePiece> colIt = rowIt.next();
+			for (Iterator<IPuzzlePiece> colIt = rowIt.next();
 			        colIt.hasNext();) {
 				output += colIt.next();
 			}

@@ -2,7 +2,7 @@ package puzzlesolver.io;
 
 import java.io.IOException;
 
-import puzzlesolver.core.Puzzle;
+import puzzlesolver.core.IPuzzle;
 import puzzlesolver.core.PuzzleNotSolvedException;
 
 /**
@@ -10,6 +10,6 @@ import puzzlesolver.core.PuzzleNotSolvedException;
  * puzzles *somehow* (e.g. text file, console, a nice SVG drawing...).
  * Output format is up to the implementing class.
  */
-public interface PuzzlePrinter {
-	void print(Puzzle pieceSet) throws IOException, PuzzleNotSolvedException;
+public interface IPuzzlePrinter {
+	void print(IPuzzle pieceSet) throws IOException, PuzzleNotSolvedException;
 }

@@ -8,14 +8,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Iterator;
 
-import puzzlesolver.core.Puzzle;
+import puzzlesolver.core.IPuzzle;
 import puzzlesolver.core.PuzzleNotSolvedException;
-import puzzlesolver.core.PuzzlePiece;
+import puzzlesolver.core.IPuzzlePiece;
 
 /**
  * Outputs a solved puzzle to a text file.
  */
-public class FilePuzzlePrinter implements PuzzlePrinter {
+public class PlaintextPuzzlePrinter implements IPuzzlePrinter {
 
 	private Path outputPath;
 	private final Charset charset = StandardCharsets.UTF_8;
@@ -23,18 +23,18 @@ public class FilePuzzlePrinter implements PuzzlePrinter {
 	/**
 	 * @param  outputPath the path to write the output to.
 	 */
-	public FilePuzzlePrinter(Path outputPath) {
+	public PlaintextPuzzlePrinter(Path outputPath) {
 		this.outputPath = outputPath;
 	}
 
-	public void print(Puzzle puzzle) throws IOException, PuzzleNotSolvedException {
+	public void print(IPuzzle puzzle) throws IOException, PuzzleNotSolvedException {
 		BufferedWriter writer = Files.newBufferedWriter(outputPath, charset);
 		writer.write(puzzle.getSolution());
 		writer.write("\n\n");
 		String output = "";
-		for (Iterator<Iterator<PuzzlePiece>> rowIt = puzzle.iterator();
+		for (Iterator<Iterator<IPuzzlePiece>> rowIt = puzzle.iterator();
 		        rowIt.hasNext();) {
-			for (Iterator<PuzzlePiece> colIt = rowIt.next();
+			for (Iterator<IPuzzlePiece> colIt = rowIt.next();
 			        colIt.hasNext();) {
 				output += colIt.next().getCharacter();
 			}

@@ -4,12 +4,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public abstract class HashmapPuzzle implements Puzzle {
-	private class BasicPuzzleIterator implements Iterator<Iterator<PuzzlePiece>> {
-		private class BasicPuzzleRowIterator implements Iterator<PuzzlePiece> {
-			private PuzzlePiece col;
+public abstract class HashmapPuzzle implements IPuzzle {
+	private class BasicPuzzleIterator implements Iterator<Iterator<IPuzzlePiece>> {
+		private class BasicPuzzleRowIterator implements Iterator<IPuzzlePiece> {
+			private IPuzzlePiece col;
 
-			public BasicPuzzleRowIterator(PuzzlePiece p) {
+			public BasicPuzzleRowIterator(IPuzzlePiece p) {
 				col = p;
 			}
 
@@ -20,9 +20,9 @@ public abstract class HashmapPuzzle implements Puzzle {
 				return true;
 			}
 
-			public PuzzlePiece next() {
+			public IPuzzlePiece next() {
 				if (col != null) {
-					PuzzlePiece res = col;
+					IPuzzlePiece res = col;
 					col = col.getEast();
 					return res;
 				} else {
@@ -36,7 +36,7 @@ public abstract class HashmapPuzzle implements Puzzle {
 			}
 		}
 
-		private PuzzlePiece row;
+		private IPuzzlePiece row;
 
 		public BasicPuzzleIterator(HashmapPuzzle abstractBasicPuzzle) throws PuzzleNotSolvedException {
 			if (!solved) {
@@ -52,9 +52,9 @@ public abstract class HashmapPuzzle implements Puzzle {
 			return true;
 		}
 
-		public Iterator<PuzzlePiece> next() {
+		public Iterator<IPuzzlePiece> next() {
 			if (row != null) {
-				PuzzlePiece res = row;
+				IPuzzlePiece res = row;
 				row = row.getSouth();
 				return new BasicPuzzleRowIterator(res);
 			} else {
@@ -67,13 +67,13 @@ public abstract class HashmapPuzzle implements Puzzle {
 		}
 	}
 
-	protected PuzzlePiece NWCorner = null;
-	protected HashMap<String, PuzzlePiece> pieceHashMap = new HashMap<String, PuzzlePiece>();
+	protected IPuzzlePiece NWCorner = null;
+	protected HashMap<String, IPuzzlePiece> pieceHashMap = new HashMap<String, IPuzzlePiece>();
 	protected boolean solved = false;
 
 	
 
-	public void addPiece(PuzzlePiece p) {
+	public void addPiece(IPuzzlePiece p) {
 		solved = false;
 		if (p.isNWCorner()) {
 			NWCorner = p;
@@ -83,14 +83,14 @@ public abstract class HashmapPuzzle implements Puzzle {
 
 	abstract public void solve() throws MissingPiecesException;
 	
-	public Iterator<Iterator<PuzzlePiece>> iterator() throws PuzzleNotSolvedException {
+	public Iterator<Iterator<IPuzzlePiece>> iterator() throws PuzzleNotSolvedException {
 		if (!solved) {
 			throw new PuzzleNotSolvedException();
 		}
 		return new BasicPuzzleIterator(this);
 	}
 
-	private PuzzlePiece getNWCorner() {
+	private IPuzzlePiece getNWCorner() {
 		return NWCorner;
 	}
 
@@ -99,7 +99,7 @@ public abstract class HashmapPuzzle implements Puzzle {
 			throw new PuzzleNotSolvedException();
 		}
 		int count = 0;
-		for (Iterator<Iterator<PuzzlePiece>> rowIt = iterator();
+		for (Iterator<Iterator<IPuzzlePiece>> rowIt = iterator();
 		        rowIt.hasNext(); rowIt.next()) {
 			count++;
 		}
@@ -110,12 +110,12 @@ public abstract class HashmapPuzzle implements Puzzle {
 		if (!solved) {
 			throw new PuzzleNotSolvedException();
 		}
-		Iterator<Iterator<PuzzlePiece>> rowIt = iterator();
+		Iterator<Iterator<IPuzzlePiece>> rowIt = iterator();
 		if (!rowIt.hasNext()) {
 			return 0;
 		}
 		int count = 0;
-		for (Iterator<PuzzlePiece> colIt = rowIt.next();
+		for (Iterator<IPuzzlePiece> colIt = rowIt.next();
 		        colIt.hasNext(); colIt.next()) {
 			count++;
 		}
@@ -127,9 +127,9 @@ public abstract class HashmapPuzzle implements Puzzle {
 			throw new PuzzleNotSolvedException();
 		}
 		String output = "";
-		for (Iterator<Iterator<PuzzlePiece>> rowIt = iterator();
+		for (Iterator<Iterator<IPuzzlePiece>> rowIt = iterator();
 		        rowIt.hasNext();) {
-			for (Iterator<PuzzlePiece> colIt = rowIt.next();
+			for (Iterator<IPuzzlePiece> colIt = rowIt.next();
 			        colIt.hasNext();) {
 				output += colIt.next().getCharacter();
 			}

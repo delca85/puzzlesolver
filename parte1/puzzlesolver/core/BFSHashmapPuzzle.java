@@ -10,15 +10,15 @@ public class BFSHashmapPuzzle extends HashmapPuzzle {
 	/**
 	 * Implements a textbook breadth first traversal (with trivial modifications).
 	 */
-	private static void BFSSolve(PuzzlePiece root, HashMap<String, PuzzlePiece> map) throws MissingPiecesException {
-		Queue<PuzzlePiece> queued = new LinkedList<PuzzlePiece>();
+	private static void BFSSolve(IPuzzlePiece root, HashMap<String, IPuzzlePiece> map) throws MissingPiecesException {
+		Queue<IPuzzlePiece> queued = new LinkedList<IPuzzlePiece>();
 		Set<String> visited = new HashSet<String>();
 
 		visited.add(root.getId());
 		queued.add(root);
 
 		while (!queued.isEmpty()) {
-			PuzzlePiece t = queued.remove();
+			IPuzzlePiece t = queued.remove();
 
 			String n = t.getNorthId();
 			String s = t.getSouthId();
@@ -30,7 +30,7 @@ public class BFSHashmapPuzzle extends HashmapPuzzle {
 					/*
 					 *  We don't care about the northern neighbour if this is part of the topmost row
 					 */
-					PuzzlePiece northNeighbour = map.get(t.getNorthId());
+					IPuzzlePiece northNeighbour = map.get(t.getNorthId());
 					// This is  ~O(1) for realistic inputs
 					if (northNeighbour == null) {
 						throw new MissingPiecesException();
@@ -45,7 +45,7 @@ public class BFSHashmapPuzzle extends HashmapPuzzle {
 			// The following 3 blocks are the same as the one for the northern neighbour
 			if (!visited.contains(s)) {
 				if (!t.isSRow()) {
-					PuzzlePiece southNeighbour = map.get(t.getSouthId());
+					IPuzzlePiece southNeighbour = map.get(t.getSouthId());
 					if (southNeighbour == null) {
 						throw new MissingPiecesException();
 					}
@@ -57,7 +57,7 @@ public class BFSHashmapPuzzle extends HashmapPuzzle {
 
 			if (!visited.contains(w)) {
 				if (!t.isWCol()) {
-					PuzzlePiece westNeighbour = map.get(t.getWestId());
+					IPuzzlePiece westNeighbour = map.get(t.getWestId());
 					if (westNeighbour == null) {
 						throw new MissingPiecesException();
 					}
@@ -69,7 +69,7 @@ public class BFSHashmapPuzzle extends HashmapPuzzle {
 
 			if (!visited.contains(e)) {
 				if (!t.isECol()) {
-					PuzzlePiece eastNeighbour = map.get(t.getEastId());
+					IPuzzlePiece eastNeighbour = map.get(t.getEastId());
 					if (eastNeighbour == null) {
 						throw new MissingPiecesException();
 					}

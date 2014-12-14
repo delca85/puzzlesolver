@@ -9,13 +9,13 @@ CLASSES = \
 		puzzlesolver/core/BasicPuzzlePiece.java \
 		puzzlesolver/core/HashmapPuzzle.java \
 		puzzlesolver/core/BFSHashmapPuzzle.java \
-		puzzlesolver/io/FilePuzzlePrinter.java \
+		puzzlesolver/io/PlaintextPuzzlePrinter.java \
 		puzzlesolver/io/MalformedFileException.java \
 		puzzlesolver/core/MissingPiecesException.java \
-		puzzlesolver/core/Puzzle.java \
+		puzzlesolver/core/IPuzzle.java \
 		puzzlesolver/io/PuzzleFileParser.java \
-		puzzlesolver/core/PuzzlePiece.java \
-		puzzlesolver/io/PuzzlePrinter.java \
+		puzzlesolver/core/IPuzzlePiece.java \
+		puzzlesolver/io/IPuzzlePrinter.java \
 		puzzlesolver/PuzzleSolver.java
 
 default: PuzzleSolver.jar

@@ -1,6 +1,6 @@
 package puzzlesolver.core;
 
-public class BasicPuzzlePiece implements PuzzlePiece {
+public class BasicPuzzlePiece implements IPuzzlePiece {
 
 	private enum Direction {
 		NORTH,
@@ -12,7 +12,7 @@ public class BasicPuzzlePiece implements PuzzlePiece {
 	private final String kEmptyId = "VUOTO";
 
 	private final String[] neighboursId = new String[4];
-	private PuzzlePiece[] neighbours = new PuzzlePiece[4];
+	private IPuzzlePiece[] neighbours = new IPuzzlePiece[4];
 	private String id;
 	private char character;
 
@@ -40,32 +40,32 @@ public class BasicPuzzlePiece implements PuzzlePiece {
 		return id;
 	};
 
-	public PuzzlePiece getNorth() {
+	public IPuzzlePiece getNorth() {
 		return neighbours[Direction.NORTH.ordinal()];
 	};
 
-	public PuzzlePiece getSouth() {
+	public IPuzzlePiece getSouth() {
 		return neighbours[Direction.SOUTH.ordinal()];
 	};
 
-	public PuzzlePiece getWest() {
+	public IPuzzlePiece getWest() {
 		return neighbours[Direction.WEST.ordinal()];
 	};
 
-	public PuzzlePiece getEast() {
+	public IPuzzlePiece getEast() {
 		return neighbours[Direction.EAST.ordinal()];
 	};
 
-	public void setNorth(PuzzlePiece p) {
+	public void setNorth(IPuzzlePiece p) {
 		neighbours[Direction.NORTH.ordinal()] = p;
 	};
-	public void setSouth(PuzzlePiece p) {
+	public void setSouth(IPuzzlePiece p) {
 		neighbours[Direction.SOUTH.ordinal()] = p;
 	};
-	public void setWest(PuzzlePiece p) {
+	public void setWest(IPuzzlePiece p) {
 		neighbours[Direction.WEST.ordinal()] = p;
 	};
-	public void setEast(PuzzlePiece p) {
+	public void setEast(IPuzzlePiece p) {
 		neighbours[Direction.EAST.ordinal()] = p;
 	};
 

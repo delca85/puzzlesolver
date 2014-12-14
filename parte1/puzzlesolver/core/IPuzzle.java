@@ -10,12 +10,12 @@ import java.util.Iterator;
  * - solve()
  * - getSolution() or iterator() or getRows();
  */
-public interface Puzzle {
+public interface IPuzzle {
 	/**
 	 * Adds a PuzzlePiece to the puzzle.
 	 * Note that this invalidates any previously computed solution, so solve() needs to be called again. 
 	 */
-	public void addPiece(PuzzlePiece p);
+	public void addPiece(IPuzzlePiece p);
 	/**
 	 * Computes the solution.
 	 * @throws MissingPiecesException if the traversal algorithm gets stuck.
@@ -25,7 +25,7 @@ public interface Puzzle {
 	 * Returns a 2D-iterator for the solved puzzle.
 	 * @throws PuzzleNotSolvedException if solve() was not called beforehand.
 	 */
-	public Iterator<Iterator<PuzzlePiece>> iterator();
+	public Iterator<Iterator<IPuzzlePiece>> iterator();
 	/**
 	 * Returns the puzzle solution as a string.
 	 * @throws PuzzleNotSolvedException if solve() was not called beforehand.
