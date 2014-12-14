@@ -39,7 +39,7 @@ minimum height=3em
 \tableofcontents
 \section{Organizzazione delle classi}
 
-Il progetto consta di 10 classi principali, di cui 2 interfacce e 3 eccezioni, organizzate in due package a seconda della funzionalit\`a (I/O e logica) nel modo seguente:
+Il progetto consta di 11 classi principali, di cui 2 interfacce, 1 classe astratta e 3 eccezioni, organizzate in due package a seconda della funzionalit\`a (I/O e logica) nel modo seguente:
 
 \begin{verbatim}
 puzzlesolver/
@@ -74,27 +74,41 @@ L'interfaccia prescrive tuttavia dei metodi \Methodname{getNorth()} ... \Methodn
 
 Ogni \Ifacename{IPuzzlePiece} pu\`o essere visto come nodo di un grafo di grado massimo (uscente) 4 e inizialmente 0 in cui i riferimenti ai vicini sono archi.
 
-Per esempio, lo stato finale desiderato per i quattro pezzi del puzzle $2\times2$ ``Ciao'' \`e il seguente:
+Per esempio, lo stato finale desiderato per i quattro pezzi del puzzle $2\times2$ ``Ciao'' \`e quello in figura.
 
+\begin{figure}[h!]
+  \centering
 \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm,
   thick,main node/.style={circle,draw}]
-
   \node[main node] (1) {C};
+  \node[main node] (n1)[above left of=1] {\texttt{null}};
   \node[main node] (3) [below of=1] {a};
   \node[main node] (2) [right of=1] {i};
   \node[main node] (4) [right of=3] {o};
-
+  \node[main node] (n4)[below right of=4] {\texttt{null}};
   \path[every node/.style={font=\sffamily\small}]
     (1)  edge [bend right] node[below] {E} (2)
          edge [bend right] node[left] {S} (3)
+         edge [bend right] node[left] {N} (n1)
+         edge [bend left] node[left] {W} (n1)
     (2)  edge [bend right] node[above] {W} (1)
          edge [bend right] node[left] {S} (4)
+         edge [bend right] node[above] {N} (n1)
+         edge [bend left] node[above] {E} (n4)
     (3)  edge [bend right] node[left] {N} (1)
          edge [bend right] node[below] {E} (4)
+         edge [bend right] node[above] {S} (n4)
+         edge [bend left] node[above] {W} (n1)
     (4)  edge [bend right] node[left] {N} (2)
-         edge [bend right] node[below] {W} (3);
+         edge [bend right] node[below] {W} (3)
+         edge [bend right] node[left] {S} (n4)
+         edge [bend left] node[left] {E} (n4);
 \end{tikzpicture}
+\caption {Un puzzle $2\times2$}
+\end{figure}
 
+\begin{figure}[h]
+  \centering
 \begin{lstlisting}[frame=single]
 public interface IPuzzlePiece {
 	String getId();
@@ -121,6 +135,8 @@ public interface IPuzzlePiece {
 	boolean isNECorner();
 }
 \end{lstlisting}
+\caption {\textsc{IPuzzlePiece}}
+\end{figure}
 
 \subsubsection{\Classname{IPuzzle}}
 L'interfaccia \Ifacename{IPuzzle} espone i metodi \Methodname{addPiece}, \Methodname{solve}, \Methodname{getSolution}, \Methodname{Iterator}, \Methodname{getRows} e \Methodname{getCols}.
@@ -138,8 +154,10 @@ A questo scopo, i metodi di cui al quarto punto sollevano una \Classname{Runtime
 \label{pnse}
 Il metodo \Methodname{solve} pu\`o sollevare una MissingPiecesException se non \`e possibile calcolare una soluzione per mancanza di pezzi.
 
-Non \`e prevista una eccezione da sollevare in caso di pezzi \emph{in eccesso} o di errori logici pi\`u  sottili nel puzzle, anche se non \`e nemmeno vietata una RuntimeException.
+Non \`e prevista una eccezione da sollevare in caso di pezzi \emph{in eccesso} o di errori logici pi\`u  sottili nel puzzle, anche se non \`e nemmeno esclusa (ne \`e possibile escludere) una RuntimeException.
 
+\begin{figure}[h]
+  \centering
 \begin{lstlisting}[frame=single]
 public interface IPuzzle {
 	public void addPiece(IPuzzlePiece p);
@@ -150,6 +168,8 @@ public interface IPuzzle {
 	public int getCols() throws PuzzleNotSolvedException;
 }
 \end{lstlisting}
+\caption {\textsc{IPuzzle}}
+\end{figure}
 
 \subsubsection{\Classname{BasicPuzzlePiece}}
 \Classname{BasicPuzzlePiece} \`e una triviale implementazione dell'interfaccia \Ifacename{IPuzzlePiece} costruita intorno a due array di 4 elementi.
@@ -168,10 +188,9 @@ Con questo l'intenzione \`e di lasciare libert\`a nella scelta e nell'implementa
 
 \subsubsection{\Classname{BFSHashmapPuzzle}}
 \Classname{BFSHashmapPuzzle} estende \Classname{HashmapPuzzle}.
-\Methodname{solve()} \`e implementato attraverso un algoritmo di traversal breadth-first (\cite{cormen2001introduction}).
+\Methodname{solve()} \`e implementato attraverso un algoritmo di traversal breadth-first (\cite{cormen2001introduction}) in cui a ogni iterazione si impostano nel nodo i riferimenti agli oggetti corretti per gli ID.
 
-L'algoritmo \`e stato scelto poich\`e BFS \`e dimostrato essere ottimale in termini di complessit\`a e perch\`e appoggiandosi su una coda appare \emph{intuitivamente} (o ingenuamente) pi\`u semplice da parallelizzare - come suggerito opzionalmente al punto 5. delle specifiche di progetto.
-
+L'algoritmo \`e stato scelto poich\`e BFS \`e dimostrato essere ottimale in termini di complessit\`a e perch\`e appoggiandosi su una coda appare ingenuamente pi\`u semplice da parallelizzare - come suggerito opzionalmente al punto 5. delle specifiche di progetto.
 \subsubsection{\Classname{MissingPiecesException}}
 \Classname{MissingPiecesException} estende \Classname{Exception} indica che l'algoritmo di risoluzione si blocca perch\`e vi sono dei pezzi mancanti.
 
