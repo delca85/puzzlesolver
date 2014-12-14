@@ -9,11 +9,11 @@ import java.util.NoSuchElementException;
  * To be instantiated solve() needs to be implemented with a chosen algorithm,
  */
 public abstract class HashmapPuzzle implements IPuzzle {
-	private class BasicPuzzleIterator implements Iterator<Iterator<IPuzzlePiece>> {
-		private class BasicPuzzleRowIterator implements Iterator<IPuzzlePiece> {
+	private class HashmapPuzzleIterator implements Iterator<Iterator<IPuzzlePiece>> {
+		private class HashmapPuzzleRowIterator implements Iterator<IPuzzlePiece> {
 			private IPuzzlePiece col;
 
-			public BasicPuzzleRowIterator(IPuzzlePiece p) {
+			public HashmapPuzzleRowIterator(IPuzzlePiece p) {
 				col = p;
 			}
 
@@ -42,11 +42,11 @@ public abstract class HashmapPuzzle implements IPuzzle {
 
 		private IPuzzlePiece row;
 
-		public BasicPuzzleIterator(HashmapPuzzle abstractBasicPuzzle) throws PuzzleNotSolvedException {
+		public HashmapPuzzleIterator(HashmapPuzzle hashmapPuzzle) throws PuzzleNotSolvedException {
 			if (!solved) {
 				throw new PuzzleNotSolvedException();
 			}
-			row = abstractBasicPuzzle.getNWCorner();
+			row = hashmapPuzzle.getNWCorner();
 		}
 
 		public boolean hasNext() {
@@ -60,7 +60,7 @@ public abstract class HashmapPuzzle implements IPuzzle {
 			if (row != null) {
 				IPuzzlePiece res = row;
 				row = row.getSouth();
-				return new BasicPuzzleRowIterator(res);
+				return new HashmapPuzzleRowIterator(res);
 			} else {
 				throw new NoSuchElementException();
 			}
@@ -90,7 +90,7 @@ public abstract class HashmapPuzzle implements IPuzzle {
 		if (!solved) {
 			throw new PuzzleNotSolvedException();
 		}
-		return new BasicPuzzleIterator(this);
+		return new HashmapPuzzleIterator(this);
 	}
 
 	private IPuzzlePiece getNWCorner() {
