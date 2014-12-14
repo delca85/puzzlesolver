@@ -4,6 +4,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+/**
+ * Abstract class; provides a skeleton HashMap-based storage IPuzzlePiece and a bunch of helper methods.
+ * To be instantiated solve() needs to be implemented with a chosen algorithm,
+ */
 public abstract class HashmapPuzzle implements IPuzzle {
 	private class BasicPuzzleIterator implements Iterator<Iterator<IPuzzlePiece>> {
 		private class BasicPuzzleRowIterator implements Iterator<IPuzzlePiece> {
@@ -70,7 +74,6 @@ public abstract class HashmapPuzzle implements IPuzzle {
 	protected IPuzzlePiece NWCorner = null;
 	protected HashMap<String, IPuzzlePiece> pieceHashMap = new HashMap<String, IPuzzlePiece>();
 	protected boolean solved = false;
-
 	
 
 	public void addPiece(IPuzzlePiece p) {
