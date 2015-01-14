@@ -8,7 +8,7 @@ JC = javac
 CLASSES = \
 		puzzlesolver/core/BasicPuzzlePiece.java \
 		puzzlesolver/core/HashmapPuzzle.java \
-		puzzlesolver/core/BFSHashmapPuzzle.java \
+		puzzlesolver/core/ConcurrentHashmapPuzzle.java \
 		puzzlesolver/io/PlaintextPuzzlePrinter.java \
 		puzzlesolver/io/MalformedFileException.java \
 		puzzlesolver/core/MissingPiecesException.java \
@@ -25,4 +25,4 @@ PuzzleSolver.jar: $(CLASSES:.java=.class)
 javadoc:
 	javadoc puzzlesolver puzzlesolver.io puzzlesolver.core -d doc 
 clean:	
-	$(RM) *.jar puzzlesolver/*.class puzzlesolver/io/*.class puzzlesolver/core/*.class doc/puzzlesolver/* doc/resources/* doc/*
+	$(RM) -R *.jar puzzlesolver/*.class puzzlesolver/io/*.class puzzlesolver/core/*.class doc/puzzlesolver/* doc/resources/* doc/*

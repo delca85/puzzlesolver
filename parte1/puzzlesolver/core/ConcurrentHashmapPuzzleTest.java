@@ -3,12 +3,12 @@ package puzzlesolver.core;
 import org.junit.Test;
 import java.util.Iterator;
 
-public class BFSHashmapPuzzleTest {
+public class ConcurrentHashmapPuzzleTest {
 
 	@Test
 	public void testConstructor() {
 		IPuzzle foo;
-		foo = new BFSHashmapPuzzle();
+		foo = new ConcurrentHashmapPuzzle();
 	}
 
 	@Test
@@ -22,7 +22,7 @@ public class BFSHashmapPuzzleTest {
 		IPuzzlePiece B1 = new BasicPuzzlePiece("B1", 'b', "A1", "VUOTO", "VUOTO", "B2");
 		IPuzzlePiece B2 = new BasicPuzzlePiece("B2", 'B', "A2", "VUOTO", "B1", "VUOTO");
 
-		IPuzzle foo = new BFSHashmapPuzzle();
+		IPuzzle foo = new ConcurrentHashmapPuzzle();
 		foo.addPiece(A1);
 		foo.addPiece(A2);
 		foo.addPiece(B1);
@@ -40,7 +40,7 @@ public class BFSHashmapPuzzleTest {
 		IPuzzlePiece B1 = new BasicPuzzlePiece("B1", 'b', "A1", "VUOTO", "VUOTO", "B2");
 		IPuzzlePiece B2 = new BasicPuzzlePiece("B2", 'B', "A2", "VUOTO", "B1", "VUOTO");
 
-		IPuzzle foo = new BFSHashmapPuzzle();
+		IPuzzle foo = new ConcurrentHashmapPuzzle();
 		foo.addPiece(A1);
 		foo.addPiece(A2);
 		foo.addPiece(B1);
@@ -61,7 +61,7 @@ public class BFSHashmapPuzzleTest {
 		IPuzzlePiece B1 = new BasicPuzzlePiece("B1", 'b', "A1", "VUOTO", "VUOTO", "B2");
 		IPuzzlePiece B2 = new BasicPuzzlePiece("B2", 'B', "A2", "VUOTO", "B1", "VUOTO");
 
-		IPuzzle foo = new BFSHashmapPuzzle();
+		IPuzzle foo = new ConcurrentHashmapPuzzle();
 		foo.addPiece(A1);
 		foo.addPiece(A2);
 		foo.addPiece(B1);
@@ -82,7 +82,7 @@ public class BFSHashmapPuzzleTest {
 		IPuzzlePiece B1 = new BasicPuzzlePiece("B1", 'b', "A1", "VUOTO", "VUOTO", "B2");
 		IPuzzlePiece B2 = new BasicPuzzlePiece("B2", 'B', "A2", "VUOTO", "B1", "VUOTO");
 
-		IPuzzle foo = new BFSHashmapPuzzle();
+		IPuzzle foo = new ConcurrentHashmapPuzzle();
 		foo.addPiece(A1);
 		foo.addPiece(A2);
 		foo.addPiece(B1);
@@ -101,7 +101,7 @@ public class BFSHashmapPuzzleTest {
 		IPuzzlePiece A2 = new BasicPuzzlePiece("A2", 'A', "VUOTO", "B2", "A1", "VUOTO");
 		IPuzzlePiece B2 = new BasicPuzzlePiece("B2", 'B', "A2", "VUOTO", "B1", "VUOTO");
 
-		IPuzzle foo = new BFSHashmapPuzzle();
+		IPuzzle foo = new ConcurrentHashmapPuzzle();
 		foo.addPiece(A1);
 		foo.addPiece(A2);
 		foo.addPiece(B2);
@@ -120,7 +120,7 @@ public class BFSHashmapPuzzleTest {
 		IPuzzlePiece B1 = new BasicPuzzlePiece("B1", 'b', "A1", "VUOTO", "VUOTO", "B2");
 		IPuzzlePiece B2 = new BasicPuzzlePiece("B2", 'B', "A2", "VUOTO", "B1", "VUOTO");
 
-		IPuzzle foo = new BFSHashmapPuzzle();
+		IPuzzle foo = new ConcurrentHashmapPuzzle();
 		foo.addPiece(A1);
 		foo.addPiece(A2);
 		foo.addPiece(B2);
@@ -164,7 +164,7 @@ public class BFSHashmapPuzzleTest {
 		IPuzzlePiece C2 = new BasicPuzzlePiece("C2", 'C', "B2", "VUOTO", "C1", "C3");
 		IPuzzlePiece C3 = new BasicPuzzlePiece("C3", '6', "B3", "VUOTO", "C2", "VUOTO");
 
-		IPuzzle foo = new BFSHashmapPuzzle();
+		IPuzzle foo = new ConcurrentHashmapPuzzle();
 		foo.addPiece(A1);
 		foo.addPiece(A2);
 		foo.addPiece(A3);
@@ -189,7 +189,7 @@ public class BFSHashmapPuzzleTest {
 		IPuzzlePiece B1 = new BasicPuzzlePiece("B1", 'b', "A1", "VUOTO", "VUOTO", "B2");
 		IPuzzlePiece B2 = new BasicPuzzlePiece("B2", 'B', "A2", "VUOTO", "B1", "VUOTO");
 
-		IPuzzle foo = new BFSHashmapPuzzle();
+		IPuzzle foo = new ConcurrentHashmapPuzzle();
 		foo.addPiece(A1);
 		foo.addPiece(A2);
 		foo.addPiece(B1);
