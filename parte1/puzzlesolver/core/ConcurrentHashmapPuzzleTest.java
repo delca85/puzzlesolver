@@ -2,13 +2,25 @@ package puzzlesolver.core;
 
 import org.junit.Test;
 import java.util.Iterator;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ConcurrentHashmapPuzzleTest {
-
+	final static int POOLSIZE = 4;
+	ExecutorService xs;
+	
+	public ConcurrentHashmapPuzzleTest () {
+		xs = Executors.newFixedThreadPool(POOLSIZE);
+	}
+	
+	public void finalize () {
+		xs.shutdown();
+	}
+	
 	@Test
 	public void testConstructor() {
 		IPuzzle foo;
-		foo = new ConcurrentHashmapPuzzle();
+		foo = new ConcurrentHashmapPuzzle(xs);
 	}
 
 	@Test
@@ -22,7 +34,7 @@ public class ConcurrentHashmapPuzzleTest {
 		IPuzzlePiece B1 = new BasicPuzzlePiece("B1", 'b', "A1", "VUOTO", "VUOTO", "B2");
 		IPuzzlePiece B2 = new BasicPuzzlePiece("B2", 'B', "A2", "VUOTO", "B1", "VUOTO");
 
-		IPuzzle foo = new ConcurrentHashmapPuzzle();
+		IPuzzle foo = new ConcurrentHashmapPuzzle(xs);
 		foo.addPiece(A1);
 		foo.addPiece(A2);
 		foo.addPiece(B1);
@@ -40,7 +52,7 @@ public class ConcurrentHashmapPuzzleTest {
 		IPuzzlePiece B1 = new BasicPuzzlePiece("B1", 'b', "A1", "VUOTO", "VUOTO", "B2");
 		IPuzzlePiece B2 = new BasicPuzzlePiece("B2", 'B', "A2", "VUOTO", "B1", "VUOTO");
 
-		IPuzzle foo = new ConcurrentHashmapPuzzle();
+		IPuzzle foo = new ConcurrentHashmapPuzzle(xs);
 		foo.addPiece(A1);
 		foo.addPiece(A2);
 		foo.addPiece(B1);
@@ -61,7 +73,7 @@ public class ConcurrentHashmapPuzzleTest {
 		IPuzzlePiece B1 = new BasicPuzzlePiece("B1", 'b', "A1", "VUOTO", "VUOTO", "B2");
 		IPuzzlePiece B2 = new BasicPuzzlePiece("B2", 'B', "A2", "VUOTO", "B1", "VUOTO");
 
-		IPuzzle foo = new ConcurrentHashmapPuzzle();
+		IPuzzle foo = new ConcurrentHashmapPuzzle(xs);
 		foo.addPiece(A1);
 		foo.addPiece(A2);
 		foo.addPiece(B1);
@@ -82,7 +94,7 @@ public class ConcurrentHashmapPuzzleTest {
 		IPuzzlePiece B1 = new BasicPuzzlePiece("B1", 'b', "A1", "VUOTO", "VUOTO", "B2");
 		IPuzzlePiece B2 = new BasicPuzzlePiece("B2", 'B', "A2", "VUOTO", "B1", "VUOTO");
 
-		IPuzzle foo = new ConcurrentHashmapPuzzle();
+		IPuzzle foo = new ConcurrentHashmapPuzzle(xs);
 		foo.addPiece(A1);
 		foo.addPiece(A2);
 		foo.addPiece(B1);
@@ -101,7 +113,7 @@ public class ConcurrentHashmapPuzzleTest {
 		IPuzzlePiece A2 = new BasicPuzzlePiece("A2", 'A', "VUOTO", "B2", "A1", "VUOTO");
 		IPuzzlePiece B2 = new BasicPuzzlePiece("B2", 'B', "A2", "VUOTO", "B1", "VUOTO");
 
-		IPuzzle foo = new ConcurrentHashmapPuzzle();
+		IPuzzle foo = new ConcurrentHashmapPuzzle(xs);
 		foo.addPiece(A1);
 		foo.addPiece(A2);
 		foo.addPiece(B2);
@@ -120,7 +132,7 @@ public class ConcurrentHashmapPuzzleTest {
 		IPuzzlePiece B1 = new BasicPuzzlePiece("B1", 'b', "A1", "VUOTO", "VUOTO", "B2");
 		IPuzzlePiece B2 = new BasicPuzzlePiece("B2", 'B', "A2", "VUOTO", "B1", "VUOTO");
 
-		IPuzzle foo = new ConcurrentHashmapPuzzle();
+		IPuzzle foo = new ConcurrentHashmapPuzzle(xs);
 		foo.addPiece(A1);
 		foo.addPiece(A2);
 		foo.addPiece(B2);
@@ -164,7 +176,7 @@ public class ConcurrentHashmapPuzzleTest {
 		IPuzzlePiece C2 = new BasicPuzzlePiece("C2", 'C', "B2", "VUOTO", "C1", "C3");
 		IPuzzlePiece C3 = new BasicPuzzlePiece("C3", '6', "B3", "VUOTO", "C2", "VUOTO");
 
-		IPuzzle foo = new ConcurrentHashmapPuzzle();
+		IPuzzle foo = new ConcurrentHashmapPuzzle(xs);
 		foo.addPiece(A1);
 		foo.addPiece(A2);
 		foo.addPiece(A3);
@@ -189,7 +201,7 @@ public class ConcurrentHashmapPuzzleTest {
 		IPuzzlePiece B1 = new BasicPuzzlePiece("B1", 'b', "A1", "VUOTO", "VUOTO", "B2");
 		IPuzzlePiece B2 = new BasicPuzzlePiece("B2", 'B', "A2", "VUOTO", "B1", "VUOTO");
 
-		IPuzzle foo = new ConcurrentHashmapPuzzle();
+		IPuzzle foo = new ConcurrentHashmapPuzzle(xs);
 		foo.addPiece(A1);
 		foo.addPiece(A2);
 		foo.addPiece(B1);

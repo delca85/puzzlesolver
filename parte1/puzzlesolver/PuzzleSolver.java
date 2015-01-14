@@ -6,6 +6,8 @@ import java.nio.file.Paths;
 import java.nio.file.NoSuchFileException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import puzzlesolver.core.ConcurrentHashmapPuzzle;
 import puzzlesolver.core.BasicPuzzlePiece;
@@ -19,8 +21,13 @@ import puzzlesolver.io.IPuzzlePrinter;
  * Usage: java PuzzleSolver input.txt output.txt
  */
 public class PuzzleSolver {
-
+	
+	final static int POOLSIZE = 4;
+	
 	public static void main(String[] args) {
+		
+		ExecutorService xs = Executors.newFixedThreadPool(POOLSIZE);
+		
 		if (args.length != 2) {
 			System.err.println("Usage: java PuzzleSolver input.txt output.txt");
 			return;
@@ -34,7 +41,7 @@ public class PuzzleSolver {
 			try {
 				Iterator<PuzzleFileParser.PieceStruct> it = tokenList.iterator();
 
-				IPuzzle puzzle = new ConcurrentHashmapPuzzle();
+				IPuzzle puzzle = new ConcurrentHashmapPuzzle(xs);
 
 				while (it.hasNext()) {
 					PuzzleFileParser.PieceStruct struct = it.next();
@@ -63,5 +70,8 @@ public class PuzzleSolver {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		xs.shutdown();
+		
 	}
 }
