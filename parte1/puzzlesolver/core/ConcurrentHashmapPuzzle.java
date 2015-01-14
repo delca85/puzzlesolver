@@ -5,6 +5,29 @@ import java.util.HashMap;
 public class ConcurrentHashmapPuzzle extends HashmapPuzzle {
 	
 	private static void linkSE(IPuzzlePiece t, HashMap<String, IPuzzlePiece> map) throws MissingPiecesException {
+		while (!t.isECol()) {
+			if (!t.isSRow()) {
+				IPuzzlePiece southNeighbour = map.get(t.getSouthId());
+				// This is  ~O(1) for realistic inputs
+				if (southNeighbour == null) {
+					throw new MissingPiecesException();
+					// The piece set is incomplete (or northId is wrong)
+				}
+				t.setSouth(southNeighbour);
+			}
+
+			IPuzzlePiece eastNeighbour = map.get(t.getEastId());
+			// This is  ~O(1) for realistic inputs
+			if (eastNeighbour == null) {
+				throw new MissingPiecesException();
+				// The piece set is incomplete (or northId is wrong)
+			}
+			t.setEast(eastNeighbour);
+			
+			t = t.getEast();
+	
+		}
+
 		if (!t.isSRow()) {
 			IPuzzlePiece southNeighbour = map.get(t.getSouthId());
 			// This is  ~O(1) for realistic inputs
@@ -13,17 +36,7 @@ public class ConcurrentHashmapPuzzle extends HashmapPuzzle {
 				// The piece set is incomplete (or northId is wrong)
 			}
 			t.setSouth(southNeighbour);
-		}
-
-		if (!t.isECol()) {
-			IPuzzlePiece eastNeighbour = map.get(t.getEastId());
-			// This is  ~O(1) for realistic inputs
-			if (eastNeighbour == null) {
-				throw new MissingPiecesException();
-				// The piece set is incomplete (or northId is wrong)
-			}
-			t.setEast(eastNeighbour);
-		}
+		}		
 	}
 
 	private static void linkColSE (IPuzzlePiece nWCorner, HashMap<String, IPuzzlePiece> map) throws MissingPiecesException {
