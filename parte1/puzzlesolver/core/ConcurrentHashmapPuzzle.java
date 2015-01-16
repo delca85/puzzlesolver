@@ -36,6 +36,7 @@ public class ConcurrentHashmapPuzzle extends HashmapPuzzle {
 						// The piece set is incomplete (or northId is wrong)
 					}
 					t.setSouth(southNeighbour);
+					southNeighbour.setNorth(t);
 				}
 
 				IPuzzlePiece eastNeighbour = map.get(t.getEastId());
@@ -45,7 +46,7 @@ public class ConcurrentHashmapPuzzle extends HashmapPuzzle {
 					// The piece set is incomplete (or northId is wrong)
 				}
 				t.setEast(eastNeighbour);
-
+				eastNeighbour.setWest(t);
 				t = t.getEast();
 
 			}
@@ -58,8 +59,8 @@ public class ConcurrentHashmapPuzzle extends HashmapPuzzle {
 					// The piece set is incomplete (or northId is wrong)
 				}
 				t.setSouth(southNeighbour);
+				southNeighbour.setNorth(t);
 			}
-
 			
 			return null;
 		}
