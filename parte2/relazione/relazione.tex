@@ -159,6 +159,13 @@ private void linkColSE () throws MissingPiecesException {
 
 \end{verbatim}
 
+\subsection{Guadagno}
+Poich\`e i puzzle sono rettangolari, ciascuna istanza di \Classname{RowLinker} iterer\`a sullo stesso numero di pezzi.
+\`E dunque realizzato il requisito di uniformit\`a per puzzle di dimensioni $n \times m$ con $n, m \gg 1$.
+
+Sono tuttavia casi degeneri quelli in cui il puzzle \`e formato da una sola riga o una sola colonna.
+Nel caso di una sola riga, l'algoritmo non presenterebbe, di fatto, parallelismo.
+Nel caso di una sola colonna di dimensione $n$, si avrebbero $n$ thread che opererebbero su un solo pezzo, causando un grande overhead.
 
 \subsection{Thread-safety, interferenze, deadlock}
 Non \`e possibile avere interferenze o deadlock all'interno dell'algoritmo di risoluzione.
