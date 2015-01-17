@@ -116,7 +116,7 @@ public class ConcurrentHashmapPuzzle extends HashmapPuzzle {
 		}
 	}
 	
-	public synchronized void solve() throws MissingPiecesException {
+	public void solve() throws MissingPiecesException {
 		assert(NWCorner != null);
 		if (solved == false) {
 			linkColSE();
@@ -124,12 +124,4 @@ public class ConcurrentHashmapPuzzle extends HashmapPuzzle {
 		solved = true;
 	}
 
-	@Override
-	public synchronized void addPiece(IPuzzlePiece p) {
-		solved = false;
-		if (p.isNWCorner()) {
-			NWCorner = p;
-		}
-		pieceHashMap.put(p.getId(), p);
-	}
 }
