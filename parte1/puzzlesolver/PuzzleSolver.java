@@ -22,7 +22,9 @@ import puzzlesolver.io.IPuzzlePrinter;
  */
 public class PuzzleSolver {
 	
-	final static int POOLSIZE = 4;
+	final static int N_CPUS = Runtime.getRuntime().availableProcessors();
+	final static int POOLSIZE = N_CPUS+1;
+	// Goetz, JCIP, §8.2 Sizing Thread Pools
 	
 	public static void main(String[] args) {
 		
