@@ -8,14 +8,26 @@ import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
+/**
+ * Concurrent, thread-safe HashmapPuzzle.
+ * Handles each row in a parallel fashion.
+ */
 public class ConcurrentHashmapPuzzle extends HashmapPuzzle {
 	
 	private final ExecutorService executor;
 	
+	/**
+	 * @param executor An ExecutorService instance, will be used to concurrently solve the puzzle
+	 */
 	public ConcurrentHashmapPuzzle(ExecutorService executor) {
 		this.executor = executor;
 	}
 	
+	/**
+	 * Links together the pieces forming a row.
+	 * This is thread-safe if it can be guaranteed that no other
+	 * Linker instances are working on the same row.
+	 */
 	class Linker implements Callable<Void> {
 		
 		IPuzzlePiece t; 
@@ -69,7 +81,7 @@ public class ConcurrentHashmapPuzzle extends HashmapPuzzle {
 		
 		IPuzzlePiece it = NWCorner;
 		int rows = 0;
-		
+		// JCIP
 		CompletionService<Void> completionService = new ExecutorCompletionService<Void>(executor);
 		while (!it.isSRow()) {
 			completionService.submit(new Linker(it, pieceHashMap));
@@ -81,14 +93,14 @@ public class ConcurrentHashmapPuzzle extends HashmapPuzzle {
 		}
 		completionService.submit(new Linker(it, pieceHashMap));
 		rows++;
-		//
-		
+
 		try {
 			for (int i = 0; i < rows; i++) {
 				Future<Void> f = completionService.take();
 				f.get();
-				// OK
 			}
+			// This completes without blocking or raising
+			// execptions iff exactly n Callables have completed
 		} catch (InterruptedException ie) {
 			Thread.currentThread().interrupt();
 		} catch (ExecutionException e) {
