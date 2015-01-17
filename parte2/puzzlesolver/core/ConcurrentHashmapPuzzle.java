@@ -28,12 +28,12 @@ public class ConcurrentHashmapPuzzle extends HashmapPuzzle {
 	 * This is thread-safe if it can be guaranteed that no other
 	 * Linker instances are working on the same row.
 	 */
-	class Linker implements Callable<Void> {
+	class RowLinker implements Callable<Void> {
 		
 		IPuzzlePiece t; 
 		HashMap<String, IPuzzlePiece> map;
 		
-		Linker(IPuzzlePiece t, HashMap<String, IPuzzlePiece> map) {
+		RowLinker(IPuzzlePiece t, HashMap<String, IPuzzlePiece> map) {
 			this.t = t;
 			this.map = map;
 		}
@@ -84,14 +84,14 @@ public class ConcurrentHashmapPuzzle extends HashmapPuzzle {
 		// JCIP
 		CompletionService<Void> completionService = new ExecutorCompletionService<Void>(executor);
 		while (!it.isSRow()) {
-			completionService.submit(new Linker(it, pieceHashMap));
+			completionService.submit(new RowLinker(it, pieceHashMap));
 			it = pieceHashMap.get(it.getSouthId());
 			if (it == null) {
 				throw new MissingPiecesException();
 			}
 			rows++;
 		}
-		completionService.submit(new Linker(it, pieceHashMap));
+		completionService.submit(new RowLinker(it, pieceHashMap));
 		rows++;
 
 		try {
