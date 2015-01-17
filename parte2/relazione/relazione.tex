@@ -82,17 +82,33 @@ L'iterazione per riga \`e implementata nel \interfaceName{Callable} \classname{R
 
 \begin{verbatim}
 public Void call() throws MissingPiecesException {
+
+	t = angolo NW
+
 	while (!ultima colonna est) {
-		if (!ultima riga sud) {
-			// Collega vicino sud con pezzo t e viceversa                      
+		if (!prima riga nord) {
+			// Aggiungi riferimento a vicino nord
 		}
-		// Collega vicino est con pezzo t e viceversa
+		if (!ultima riga sud) {
+			// Aggiungi riferimento a vicino sud
+		}
+		if (!prima colonna ovest) {
+			// Aggiungi riferimento a vicino ovest
+		}
+
 		t = vicino est
 	}
 
+	if (!prima riga nord) {
+		// Aggiungi riferimento a vicino nord
+	}
 	if (!ultima riga sud) {
-		// Collega vicino sud con pezzo t e viceversa
-	}	
+		// Aggiungi riferimento a vicino sud
+	}
+	if (!prima colonna ovest) {
+		// Aggiungi riferimento a vicino ovest
+	}
+
 	return null;
 }
 \end{verbatim}
@@ -149,7 +165,7 @@ Non \`e possibile avere interferenze o deadlock all'interno dell'algoritmo di ri
 Infatti, il metodo \classname{Hashmap}.\methodname{get} \`e thread-safe, a patto di non aggiungere elementi alla tavola hash durante la soluzione del puzzle, e ciascun \classname{PuzzlePiece} viene modificato da uno e un solo thread (quello corrispondente alla riga a cui il pezzo appartiene).
 Similmente, non \`e possibile ottenere deadlock perch\`e non si presentano le condizioni di Coffman (\`e in particolare immediato che non ci pu\`o essere attesa circolare).
 
-La classe risultante non \`e per\`o thread-safe, e il suo uso in un programma terzo dovrebbe essere condizionato alla gestione manuale della concorrenza.
+La classe risultante non \`e per\`o (a dispetto del nome) thread-safe, e il suo uso in un programma terzo dovrebbe essere condizionato alla gestione manuale della concorrenza.
 
 Si manifestano in particolare delle race condition sull'attributo \methodname{solved}: sarebbe possibile, ad esempio, avviare \methodname{solve} e aggiungere, frattanto, un pezzo al puzzle con il metodo \methodname{add}: se \methodname{solve} alzasse il flag \methodname{solved} \emph{dopo} la terminazione di \methodname{add}, il puzzle sarebbe marcato come \emph{risolto} trovandosi in realt\`a in uno stato imprevedibile.
 
