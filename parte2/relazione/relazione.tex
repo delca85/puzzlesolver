@@ -1,0 +1,177 @@
+\documentclass[a4paper]{article}
+\usepackage[italian]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{cite}
+\usepackage{hyperref}
+\newcommand{\Classname}[1]{\textsc{#1}}
+\newcommand{\Ifacename}[1]{\textsc{#1}}
+\newcommand{\Methodname}[1]{\texttt{#1}}
+\newcommand{\Pkgname}[1]{\texttt{#1}}
+\usepackage{listings} % Include the listings-package
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+
+\lstset{
+language=Java,
+basicstyle=\small\sffamily,
+numbers=left,
+numberstyle=\tiny,
+frame=tb,
+columns=fullflexible,
+showstringspaces=false
+}
+
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\tikzstyle{frame} = [
+rectangle, draw,
+text width=4em, text centered,
+minimum height=3em
+% minimum width=5em
+]
+\tikzstyle{line} = [draw, -latex']
+
+
+\title{PuzzleSolver - Relazione Programmazione Concorrente e Distribuita, Parte 2}
+\author{Tobia Tesan - \#1051819}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+La presente relazione dettaglia e motiva le scelte progettuali dell'allegato programma \texttt{PuzzleSolver}, che realizza le specifiche della parte 2 del progetto di Programmazione Concorrente e Distribuita per l'A.A. 2014/2015 \cite{prspec}.
+\end{abstract}
+
+\tableofcontents
+
+\section{Vista d'insieme}
+
+Per realizzare le specifiche della parte 2 del progetto sono state necessarie modifiche minimali alla gerarchia delle classi.
+\`E stato infatti sufficiente introdurre una classe \classname{ConcurrentHashmapPuzzle} che, come \classname{BFSHashmapPuzzle} estende \classname{HashmapPuzzle}.
+
+L'organizzazione risultante \`e di conseguenza la seguente:
+
+\begin{verbatim}
+|-- core
+|   |-- BasicPuzzlePiece.java
+|   |-- BasicPuzzlePieceTest.java
+|   |-- ConcurrentHashmapPuzzle.java
+|   |-- ConcurrentHashmapPuzzleTest.java
+|   |-- HashmapPuzzle.java
+|   |-- IPuzzle.java
+|   |-- IPuzzlePiece.java
+|   |-- MissingPiecesException.java
+|   `-- PuzzleNotSolvedException.java
+|-- io
+|   |-- IPuzzlePrinter.java
+|   |-- MalformedFileException.java
+|   |-- PlaintextPuzzlePrinter.java
+|   `-- PuzzleFileParser.java
+`-- PuzzleSolver.java
+\end{verbatim}
+
+\classname{ConcurrentHashmapPuzzle} include una classe annidata \classname{RowLinker} che implementa \Ifacename{Callable}.
+\classname{ConcurrentHashmapPuzzle} differisce nell'interfaccia esposta al pubblico nel fatto che prende un argomento di tipo \classname{ExecutorService}, che viene usato per eseguire \classname{RowLinker}.
+\`E stato anche necessario fare delle minime modifiche al metodo \methodname{main}, in modo che questo istanzi il medesimo \classname{ExecutorService}.
+
+\section{\classname{ConcurrentHashmapPuzzle}}
+\subsection{Algoritmo}
+L'idea di base dell'algoritmo scelto consistente nell'iterare parallelamente su ciascuna riga del puzzle e aggiornare i riferimenti da e verso i \emph{soli} vicini S ed E.
+\subsection{Implementazione}
+L'iterazione per riga \`e implementata nel \interfaceName{Callable} \classname{RowLinker}, di cui \`e riportata di seguito una versione semplificata (in particolare non si gestiscono i pezzi mancanti).
+
+\begin{verbatim}
+public Void call() throws MissingPiecesException {
+	while (!ultima colonna est) {
+		if (!ultima riga sud) {
+			// Collega vicino sud con pezzo t e viceversa                      
+		}
+		// Collega vicino est con pezzo t e viceversa
+		t = vicino est
+	}
+
+	if (!ultima riga sud) {
+		// Collega vicino sud con pezzo t e viceversa
+	}	
+	return null;
+}
+\end{verbatim}
+
+L'esecuzione parallela ruota intorno a un \classname{ExecutorCompletionService} che istanzia un \classname{RowLinker} per ogni riga e attende, usando il metodo bloccante \ifacename{Future.get()}, che siano completati tutti.
+Si \`e fatto riferimento a JCIP §6.3.6.
+
+\begin{verbatim}
+private void linkColSE () throws MissingPiecesException {
+	assert(NWCorner != null);
+	
+	IPuzzlePiece it = NWCorner;
+	int rows = 0;
+	// JCIP
+	CompletionService<Void> completionService = new ExecutorCompletionService<Void>(executor);
+	while (!it.isSRow()) {
+		completionService.submit(new RowLinker(it, pieceHashMap));
+		it = pieceHashMap.get(it.getSouthId());
+		if (it == null) {
+			throw new MissingPiecesException();
+		}
+		rows++;
+	}
+	completionService.submit(new RowLinker(it, pieceHashMap));
+	rows++;
+
+	try {
+		for (int i = 0; i < rows; i++) {
+			Future<Void> f = completionService.take();
+			f.get();
+		}
+		// This completes without blocking or raising
+		// execptions iff exactly n Callables have completed
+	} catch (InterruptedException ie) {
+		Thread.currentThread().interrupt();
+	} catch (ExecutionException e) {
+		Throwable t = e.getCause();
+		  if (t instanceof RuntimeException) 
+	            throw (RuntimeException) t;
+	        else if (t instanceof Error)
+	            throw (Error) t;
+	        else if (t instanceof MissingPiecesException)
+	        	throw (MissingPiecesException) t;
+	        else
+	            throw new IllegalStateException("Not unchecked", e);
+	}
+}
+
+\end{verbatim}
+
+
+\subsection{Thread-safety, interferenze, deadlock}
+Non \`e possibile avere interferenze o deadlock all'interno dell'algoritmo di risoluzione.
+Infatti, il metodo \classname{Hashmap}.\methodname{get} \`e thread-safe, a patto di non aggiungere elementi alla tavola hash durante la soluzione del puzzle, e ciascun \classname{PuzzlePiece} viene modificato da uno e un solo thread (quello corrispondente alla riga a cui il pezzo appartiene).
+Similmente, non \`e possibile ottenere deadlock perch\`e non si presentano le condizioni di Coffman (\`e in particolare immediato che non ci pu\`o essere attesa circolare).
+
+La classe risultante non \`e per\`o thread-safe, e il suo uso in un programma terzo dovrebbe essere condizionato alla gestione manuale della concorrenza.
+
+Si manifestano in particolare delle race condition sull'attributo \methodname{solved}: sarebbe possibile, ad esempio, avviare \methodname{solve} e aggiungere, frattanto, un pezzo al puzzle con il metodo \methodname{add}: se \methodname{solve} alzasse il flag \methodname{solved} \emph{dopo} la terminazione di \methodname{add}, il puzzle sarebbe marcato come \emph{risolto} trovandosi in realt\`a in uno stato imprevedibile.
+
+\section{Compilazione e utilizzo}
+\begin{verbatim}
+$ cd parte2/ 
+$ make
+$ ./puzzlesolver.sh input.txt output.txt
+\end{verbatim}
+oppure
+\begin{verbatim}
+$ cd parte2/ 
+$ make
+$ java -jar PuzzleSolver.jar input.txt output.txt
+\end{verbatim}
+
+Opzionalmente:
+\begin{verbatim}
+$ make javadoc
+\end{verbatim}
+
+
+\bibliography{mybib}{}
+\bibliographystyle{plain}
+\end{document}
