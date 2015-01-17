@@ -2,6 +2,6 @@ for x in samples/*;
 do echo "========================"; 
 echo $x; 
 echo "====================="; 
-./PuzzleSolver $x /dev/stdout;
+./puzzlesolver.sh $x /dev/stdout;
 done
 
