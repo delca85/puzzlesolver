@@ -26,24 +26,24 @@ public class ConcurrentHashmapPuzzle extends HashmapPuzzle {
 			this.map = map;
 		}
 		
-		private Void linkSE() throws MissingPiecesException {
+		@Override
+		public Void call() throws MissingPiecesException {
 			while (!t.isECol()) {
 				if (!t.isSRow()) {
 					IPuzzlePiece southNeighbour = map.get(t.getSouthId());
 					// This is  ~O(1) for realistic inputs
+					// HashMap.get is thread-safe
 					if (southNeighbour == null) {
 						throw new MissingPiecesException();
-						// The piece set is incomplete (or northId is wrong)
+						// The piece set is incomplete (or southId is wrong)
 					}
 					t.setSouth(southNeighbour);
 					southNeighbour.setNorth(t);
 				}
 
 				IPuzzlePiece eastNeighbour = map.get(t.getEastId());
-				// This is  ~O(1) for realistic inputs
 				if (eastNeighbour == null) {
 					throw new MissingPiecesException();
-					// The piece set is incomplete (or northId is wrong)
 				}
 				t.setEast(eastNeighbour);
 				eastNeighbour.setWest(t);
@@ -53,23 +53,15 @@ public class ConcurrentHashmapPuzzle extends HashmapPuzzle {
 
 			if (!t.isSRow()) {
 				IPuzzlePiece southNeighbour = map.get(t.getSouthId());
-				// This is  ~O(1) for realistic inputs
 				if (southNeighbour == null) {
 					throw new MissingPiecesException();
-					// The piece set is incomplete (or northId is wrong)
 				}
 				t.setSouth(southNeighbour);
 				southNeighbour.setNorth(t);
 			}
 			
 			return null;
-		}
-		
-		@Override
-		public Void call() throws Exception {
-			return linkSE();
-		}
-		
+		}		
 	}
 
 	private void linkColSE () throws MissingPiecesException {
