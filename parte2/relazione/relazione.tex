@@ -47,7 +47,7 @@ La presente relazione dettaglia e motiva le scelte progettuali dell'allegato pro
 \section{Vista d'insieme}
 
 Per realizzare le specifiche della parte 2 del progetto sono state necessarie modifiche minimali alla gerarchia delle classi.
-\`E stato infatti sufficiente introdurre una classe \classname{ConcurrentHashmapPuzzle} che, come \classname{BFSHashmapPuzzle} estende \classname{HashmapPuzzle}.
+\`E stato infatti sufficiente introdurre una classe \Classname{ConcurrentHashmapPuzzle} che, come \Classname{BFSHashmapPuzzle} estende \Classname{HashmapPuzzle}.
 
 L'organizzazione risultante \`e di conseguenza la seguente:
 
@@ -70,15 +70,16 @@ L'organizzazione risultante \`e di conseguenza la seguente:
 `-- PuzzleSolver.java
 \end{verbatim}
 
-\classname{ConcurrentHashmapPuzzle} include una classe annidata \classname{RowLinker} che implementa \Ifacename{Callable}.
-\classname{ConcurrentHashmapPuzzle} differisce nell'interfaccia esposta al pubblico nel fatto che prende un argomento di tipo \classname{ExecutorService}, che viene usato per eseguire \classname{RowLinker}.
-\`E stato anche necessario fare delle minime modifiche al metodo \methodname{main}, in modo che questo istanzi il medesimo \classname{ExecutorService}.
+\Classname{ConcurrentHashmapPuzzle} include una classe annidata \Classname{RowLinker} che implementa \Ifacename{Callable}.
+\Classname{ConcurrentHashmapPuzzle} differisce nell'interfaccia esposta al pubblico nel fatto che prende un argomento di tipo \Classname{ExecutorService}, che viene usato per eseguire \Classname{RowLinker}.
+\`E stato anche necessario fare delle minime modifiche al metodo \Methodname{main}, in modo che questo istanzi il medesimo \Classname{ExecutorService}.
 
-\section{\classname{ConcurrentHashmapPuzzle}}
+\section{\Classname{ConcurrentHashmapPuzzle}}
 \subsection{Algoritmo}
 L'idea di base dell'algoritmo scelto consistente nell'iterare parallelamente su ciascuna riga del puzzle e aggiornare i riferimenti da e verso i \emph{soli} vicini S ed E.
+
 \subsection{Implementazione}
-L'iterazione per riga \`e implementata nel \interfaceName{Callable} \classname{RowLinker}, di cui \`e riportata di seguito una versione semplificata (in particolare non si gestiscono i pezzi mancanti).
+L'iterazione per riga \`e implementata nel \Ifacename{Callable} \Classname{RowLinker}, di cui \`e riportata di seguito una versione semplificata (in particolare non si gestiscono i pezzi mancanti).
 
 \begin{verbatim}
 public Void call() throws MissingPiecesException {
@@ -113,7 +114,7 @@ public Void call() throws MissingPiecesException {
 }
 \end{verbatim}
 
-L'esecuzione parallela ruota intorno a un \classname{ExecutorCompletionService} che istanzia un \classname{RowLinker} per ogni riga e attende, usando il metodo bloccante \ifacename{Future.get()}, che siano completati tutti.
+L'esecuzione parallela ruota intorno a un \Classname{ExecutorCompletionService} che istanzia un \Classname{RowLinker} per ogni riga e attende, usando il metodo bloccante \Ifacename{Future.get()}, che siano completati tutti.
 Si \`e fatto riferimento a JCIP §6.3.6.
 
 \begin{verbatim}
@@ -169,12 +170,14 @@ Nel caso di una sola colonna di dimensione $n$, si avrebbero $n$ thread che oper
 
 \subsection{Thread-safety, interferenze, deadlock}
 Non \`e possibile avere interferenze o deadlock all'interno dell'algoritmo di risoluzione.
-Infatti, il metodo \classname{Hashmap}.\methodname{get} \`e thread-safe, a patto di non aggiungere elementi alla tavola hash durante la soluzione del puzzle, e ciascun \classname{PuzzlePiece} viene modificato da uno e un solo thread (quello corrispondente alla riga a cui il pezzo appartiene).
+Infatti, il metodo \Classname{Hashmap}.\Methodname{get} \`e thread-safe, a patto di non aggiungere elementi alla tavola hash durante la soluzione del puzzle, e ciascun \Classname{PuzzlePiece} viene modificato da uno e un solo thread (quello corrispondente alla riga a cui il pezzo appartiene).
 Similmente, non \`e possibile ottenere deadlock perch\`e non si presentano le condizioni di Coffman (\`e in particolare immediato che non ci pu\`o essere attesa circolare).
 
 La classe risultante non \`e per\`o (a dispetto del nome) thread-safe, e il suo uso in un programma terzo dovrebbe essere condizionato alla gestione manuale della concorrenza.
 
-Si manifestano in particolare delle race condition sull'attributo \methodname{solved}: sarebbe possibile, ad esempio, avviare \methodname{solve} e aggiungere, frattanto, un pezzo al puzzle con il metodo \methodname{add}: se \methodname{solve} alzasse il flag \methodname{solved} \emph{dopo} la terminazione di \methodname{add}, il puzzle sarebbe marcato come \emph{risolto} trovandosi in realt\`a in uno stato imprevedibile.
+Si manifestano in particolare delle race condition sull'attributo \Methodname{solved}: sarebbe possibile, ad esempio, avviare \Methodname{solve} e aggiungere, frattanto, un pezzo al puzzle con il metodo \Methodname{add}: se \Methodname{solve} alzasse il flag \Methodname{solved} \emph{dopo} la terminazione di \Methodname{add}, il puzzle sarebbe marcato come \emph{risolto} trovandosi in realt\`a in uno stato imprevedibile.
+
+
 
 \section{Compilazione e utilizzo}
 \begin{verbatim}
