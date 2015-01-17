@@ -50,7 +50,23 @@ public class ConcurrentHashmapPuzzle extends HashmapPuzzle {
 						// The piece set is incomplete (or southId is wrong)
 					}
 					t.setSouth(southNeighbour);
-					southNeighbour.setNorth(t);
+					// southNeighbour.setNorth(t);
+				}
+
+				if (!t.isWCol()) {
+					IPuzzlePiece westNeighbour = map.get(t.getWestId());
+					if (westNeighbour == null) {
+						throw new MissingPiecesException();
+					}
+					t.setWest(westNeighbour);
+				}
+				
+				if (!t.isNRow()) {
+					IPuzzlePiece northNeighbour = map.get(t.getNorthId());
+					if (northNeighbour == null) {
+						throw new MissingPiecesException();
+					}
+					t.setNorth(northNeighbour);
 				}
 
 				IPuzzlePiece eastNeighbour = map.get(t.getEastId());
@@ -58,7 +74,7 @@ public class ConcurrentHashmapPuzzle extends HashmapPuzzle {
 					throw new MissingPiecesException();
 				}
 				t.setEast(eastNeighbour);
-				eastNeighbour.setWest(t);
+
 				t = t.getEast();
 
 			}
@@ -69,9 +85,24 @@ public class ConcurrentHashmapPuzzle extends HashmapPuzzle {
 					throw new MissingPiecesException();
 				}
 				t.setSouth(southNeighbour);
-				southNeighbour.setNorth(t);
+			}
+
+			if (!t.isWCol()) {
+				IPuzzlePiece westNeighbour = map.get(t.getWestId());
+				if (westNeighbour == null) {
+					throw new MissingPiecesException();
+				}
+				t.setWest(westNeighbour);
 			}
 			
+			if (!t.isNRow()) {
+				IPuzzlePiece northNeighbour = map.get(t.getNorthId());
+				if (northNeighbour == null) {
+					throw new MissingPiecesException();
+				}
+				t.setNorth(northNeighbour);
+			}
+
 			return null;
 		}		
 	}
