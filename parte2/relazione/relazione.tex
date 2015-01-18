@@ -140,46 +140,46 @@ Viene inoltre gestita \Classname{InterruptedException} - corrispondente a una in
   \centering
 \label{linkcol}
 \begin{lstlisting}[frame=single]
-	private void linkColSE () throws MissingPiecesException {
-		assert(NWCorner != null);
-		
-		IPuzzlePiece it = NWCorner;
-		int rows = 0;
-		// JCIP
-		CompletionService<Void> completionService = 
-                new ExecutorCompletionService<Void>(executor);
-		while (!it.isSRow()) {
-			completionService.submit(new RowLinker(it, pieceHashMap));
-			it = pieceHashMap.get(it.getSouthId());
-			if (it == null) {
-				throw new MissingPiecesException();
-			}
-			rows++;
-		}
+private void linkColSE () throws MissingPiecesException {
+	assert(NWCorner != null);
+	
+	IPuzzlePiece it = NWCorner;
+	int rows = 0;
+	// JCIP
+	CompletionService<Void> completionService = 
+             new ExecutorCompletionService<Void>(executor);
+	while (!it.isSRow()) {
 		completionService.submit(new RowLinker(it, pieceHashMap));
-		rows++;
-
-		try {
-			for (int i = 0; i < rows; i++) {
-				Future<Void> f = completionService.take();
-				f.get();
-			}
-			// This completes without blocking or raising
-			// execptions iff exactly n Callables have completed
-		} catch (InterruptedException ie) {
-			Thread.currentThread().interrupt();
-		} catch (ExecutionException e) {
-			Throwable t = e.getCause();
-			// Unchecked
-			if (t instanceof RuntimeException) 
-				throw (RuntimeException) t;
-			else if (t instanceof Error)
-				throw (Error) t;
-			// Checked
-			else if (t instanceof MissingPiecesException)
-				throw (MissingPiecesException) t;
+		it = pieceHashMap.get(it.getSouthId());
+		if (it == null) {
+			throw new MissingPiecesException();
 		}
+		rows++;
 	}
+	completionService.submit(new RowLinker(it, pieceHashMap));
+	rows++;
+
+	try {
+		for (int i = 0; i < rows; i++) {
+			Future<Void> f = completionService.take();
+			f.get();
+		}
+		// This completes without blocking or raising
+		// execptions iff exactly n Callables have completed
+	} catch (InterruptedException ie) {
+		Thread.currentThread().interrupt();
+	} catch (ExecutionException e) {
+		Throwable t = e.getCause();
+		// Unchecked
+		if (t instanceof RuntimeException) 
+			throw (RuntimeException) t;
+		else if (t instanceof Error)
+			throw (Error) t;
+		// Checked
+		else if (t instanceof MissingPiecesException)
+			throw (MissingPiecesException) t;
+	}
+}
 \end{lstlisting}
 \caption {\textsc{ConcurrentHashmapPuzzle.linkColSE()}}
 \end{figure}
