@@ -39,7 +39,7 @@ minimum height=3em
 \maketitle
 
 \begin{abstract}
-La presente relazione dettaglia e motiva le scelte progettuali dell'allegato programma \texttt{PuzzleSolver}, che realizza le specifiche della parte 2 del progetto di Programmazione Concorrente e Distribuita per l'A.A. 2014/2015 \cite{prspec}.
+La presente relazione dettaglia e motiva le scelte progettuali dell'allegato programma \texttt{PuzzleSolver}, che realizza le specifiche della parte 2 del progetto di Programmazione Concorrente e Distribuita per l'A.A. 2014/2015.
 \end{abstract}
 
 \tableofcontents
@@ -76,92 +76,118 @@ L'organizzazione risultante \`e di conseguenza la seguente:
 
 \section{\Classname{ConcurrentHashmapPuzzle}}
 \subsection{Algoritmo}
-L'idea di base dell'algoritmo scelto consistente nell'iterare parallelamente su ciascuna riga del puzzle e aggiornare i riferimenti da e verso i \emph{soli} vicini S ed E.
+L'idea di base dell'algoritmo scelto consistente nell'iterare parallelamente su ciascuna riga del puzzle e aggiornare i riferimenti verso (ma non \emph{da}) i vicini N, S, W, E.
 
 \subsection{Implementazione}
-L'iterazione per riga \`e implementata nel \Ifacename{Callable} \Classname{RowLinker}, di cui \`e riportata di seguito una versione semplificata (in particolare non si gestiscono i pezzi mancanti).
+L'iterazione per riga \`e implementata nel \Ifacename{Callable} \Classname{RowLinker}, di cui \`e riportata in Fig. \ref{rowlinker} una versione semplificata (in particolare non si gestiscono i pezzi mancanti).
 
-\begin{verbatim}
+
+\begin{figure}[h!]
+  \centering
+\begin{lstlisting}[frame=single]
 public Void call() throws MissingPiecesException {
 
 	t = angolo NW
 
 	while (!ultima colonna est) {
 		if (!prima riga nord) {
+                        // Preleva vicino nord da HashMap,
+                        // MissingPiecesException se non trovato;
+
 			// Aggiungi riferimento a vicino nord
+
 		}
 		if (!ultima riga sud) {
+                        // Preleva vicino sud da HashMap,
+                        // MissingPiecesException se non trovato;
+
 			// Aggiungi riferimento a vicino sud
 		}
 		if (!prima colonna ovest) {
-			// Aggiungi riferimento a vicino ovest
+                        // ...
 		}
 
 		t = vicino est
 	}
 
 	if (!prima riga nord) {
-		// Aggiungi riferimento a vicino nord
+                // ...
 	}
 	if (!ultima riga sud) {
-		// Aggiungi riferimento a vicino sud
+                // ...
 	}
 	if (!prima colonna ovest) {
-		// Aggiungi riferimento a vicino ovest
+                // ...
 	}
 
 	return null;
 }
-\end{verbatim}
+\end{lstlisting}
+\caption {Scheletro di \textsc{RowLinker.call()}}
+\label{rowlinker}
+\end{figure}
 
-L'esecuzione parallela ruota intorno a un \Classname{ExecutorCompletionService} che istanzia un \Classname{RowLinker} per ogni riga e attende, usando il metodo bloccante \Ifacename{Future.get()}, che siano completati tutti.
-Si \`e fatto riferimento a JCIP §6.3.6.
 
-\begin{verbatim}
-private void linkColSE () throws MissingPiecesException {
-	assert(NWCorner != null);
-	
-	IPuzzlePiece it = NWCorner;
-	int rows = 0;
-	// JCIP
-	CompletionService<Void> completionService = new ExecutorCompletionService<Void>(executor);
-	while (!it.isSRow()) {
+L'esecuzione parallela ruota intorno a un \Classname{ExecutorCompletionService} che istanzia un \Classname{RowLinker} per ogni riga e attende, usando il metodo bloccante \Ifacename{Future.get()}, che siano completati tutti - in modo sostanzialmente analogo a istanziare manualmente un numero di thread e restare in attesa del loro completamento con una \Methodname{join()}.
+Si \`e fatto riferimento a \cite{goetz2006java} (§6.3.6) per l'uso di \Classname{ExecutorCompletionService}.
+
+Il metodo \Classname{Future}.\Methodname{get} pu\`o sollevare \Classname{InterruptedException}, \Classname{ExecutionException}.
+\Classname{ExecutionException} \`e un wrapper intorno a eventuali eccezioni sollevate dal \Methodname{call()}, in questo caso \Classname{Linker}.\Methodname{call()}: l'unica eccezione \emph{checked} da esso sollevata \`e \Classname{MissingPiecesException}, che viene estratta e sollevata, insieme alle eccezioni \emph{unchecked}.
+
+Viene inoltre gestita \Classname{InterruptedException} - corrispondente a una interruzione brusca della \Methodname{call()} - interrompendo il thread principale.
+
+\begin{figure}[h!]
+  \centering
+\label{linkcol}
+\begin{lstlisting}[frame=single]
+	private void linkColSE () throws MissingPiecesException {
+		assert(NWCorner != null);
+		
+		IPuzzlePiece it = NWCorner;
+		int rows = 0;
+		// JCIP
+		CompletionService<Void> completionService = 
+                new ExecutorCompletionService<Void>(executor);
+		while (!it.isSRow()) {
+			completionService.submit(new RowLinker(it, pieceHashMap));
+			it = pieceHashMap.get(it.getSouthId());
+			if (it == null) {
+				throw new MissingPiecesException();
+			}
+			rows++;
+		}
 		completionService.submit(new RowLinker(it, pieceHashMap));
-		it = pieceHashMap.get(it.getSouthId());
-		if (it == null) {
-			throw new MissingPiecesException();
-		}
 		rows++;
-	}
-	completionService.submit(new RowLinker(it, pieceHashMap));
-	rows++;
 
-	try {
-		for (int i = 0; i < rows; i++) {
-			Future<Void> f = completionService.take();
-			f.get();
+		try {
+			for (int i = 0; i < rows; i++) {
+				Future<Void> f = completionService.take();
+				f.get();
+			}
+			// This completes without blocking or raising
+			// execptions iff exactly n Callables have completed
+		} catch (InterruptedException ie) {
+			Thread.currentThread().interrupt();
+		} catch (ExecutionException e) {
+			Throwable t = e.getCause();
+			// Unchecked
+			if (t instanceof RuntimeException) 
+				throw (RuntimeException) t;
+			else if (t instanceof Error)
+				throw (Error) t;
+			// Checked
+			else if (t instanceof MissingPiecesException)
+				throw (MissingPiecesException) t;
 		}
-		// This completes without blocking or raising
-		// execptions iff exactly n Callables have completed
-	} catch (InterruptedException ie) {
-		Thread.currentThread().interrupt();
-	} catch (ExecutionException e) {
-		Throwable t = e.getCause();
-		  if (t instanceof RuntimeException) 
-	            throw (RuntimeException) t;
-	        else if (t instanceof Error)
-	            throw (Error) t;
-	        else if (t instanceof MissingPiecesException)
-	        	throw (MissingPiecesException) t;
-	        else
-	            throw new IllegalStateException("Not unchecked", e);
 	}
-}
+\end{lstlisting}
+\caption {\textsc{ConcurrentHashmapPuzzle.linkColSE()}}
+\end{figure}
 
-\end{verbatim}
 
-\subsection{Guadagno}
+\subsection{Uniformit\`a}
 Poich\`e i puzzle sono rettangolari, ciascuna istanza di \Classname{RowLinker} iterer\`a sullo stesso numero di pezzi.
+
 \`E dunque realizzato il requisito di uniformit\`a per puzzle di dimensioni $n \times m$ con $n, m \gg 1$.
 
 Sono tuttavia casi degeneri quelli in cui il puzzle \`e formato da una sola riga o una sola colonna.
@@ -169,11 +195,13 @@ Nel caso di una sola riga, l'algoritmo non presenterebbe, di fatto, parallelismo
 Nel caso di una sola colonna di dimensione $n$, si avrebbero $n$ thread che opererebbero su un solo pezzo, causando un grande overhead.
 
 \subsection{Thread-safety, interferenze, deadlock}
-Non \`e possibile avere interferenze o deadlock all'interno dell'algoritmo di risoluzione.
-Infatti, il metodo \Classname{Hashmap}.\Methodname{get} \`e thread-safe, a patto di non aggiungere elementi alla tavola hash durante la soluzione del puzzle, e ciascun \Classname{PuzzlePiece} viene modificato da uno e un solo thread (quello corrispondente alla riga a cui il pezzo appartiene).
-Similmente, non \`e possibile ottenere deadlock perch\`e non si presentano le condizioni di Coffman (\`e in particolare immediato che non ci pu\`o essere attesa circolare).
+\emph{Non \`e possibile avere interferenze o deadlock all'interno dell'algoritmo di risoluzione}.
 
-La classe risultante non \`e per\`o (a dispetto del nome) thread-safe, e il suo uso in un programma terzo dovrebbe essere condizionato alla gestione manuale della concorrenza.
+Infatti, il metodo \Classname{Hashmap}.\Methodname{get()} \`e thread-safe, a patto di non aggiungere elementi alla tavola hash durante la soluzione del puzzle, e ciascun \Classname{PuzzlePiece} viene modificato da uno e un solo thread (quello corrispondente alla riga a cui il pezzo appartiene).
+
+Similmente, non \`e possibile ottenere deadlock perch\`e non si presentano le condizioni di Coffman (\`e in particolare immediato che non ci pu\`o essere attesa circolare) \cite{tanenbaum2001modern}.
+
+\paragraph{Thread-safety} La classe risultante non \`e per\`o (a dispetto del nome) thread-safe, e il suo uso in un programma terzo dovrebbe essere condizionato alla gestione manuale della concorrenza.
 
 Si manifestano in particolare delle race condition sull'attributo \Methodname{solved}: sarebbe possibile, ad esempio, avviare \Methodname{solve} e aggiungere, frattanto, un pezzo al puzzle con il metodo \Methodname{add}: se \Methodname{solve} alzasse il flag \Methodname{solved} \emph{dopo} la terminazione di \Methodname{add}, il puzzle sarebbe marcato come \emph{risolto} trovandosi in realt\`a in uno stato imprevedibile.
 
@@ -199,5 +227,5 @@ $ make javadoc
 
 
 \bibliography{mybib}{}
-\bibliographystyle{plain}
+\bibliographystyle{alpha}
 \end{document}
