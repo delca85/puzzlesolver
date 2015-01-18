@@ -184,6 +184,9 @@ private void linkColSE () throws MissingPiecesException {
 \caption {\textsc{ConcurrentHashmapPuzzle.linkColSE()}}
 \end{figure}
 
+\subsection{Numero di thread}
+Il numero di istanze di \Classname{RowLinker} \`e, dopo l'ultimo \Methodname{submit()}, $x : 0 \leq x \leq n$ se $n$ \`e il numero di righe del puzzle.
+Il numero di thread \emph{runnable} in un dato istante $t$ \`e limitato superiormente dalla dimensione del \Classname{ExecutorService} (\cite{goetz2006java}).
 
 \subsection{Uniformit\`a}
 Poich\`e i puzzle sono rettangolari, ciascuna istanza di \Classname{RowLinker} iterer\`a sullo stesso numero di pezzi.
