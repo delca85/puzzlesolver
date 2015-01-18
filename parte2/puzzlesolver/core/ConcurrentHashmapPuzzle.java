@@ -112,7 +112,7 @@ public class ConcurrentHashmapPuzzle extends HashmapPuzzle {
 		
 		IPuzzlePiece it = NWCorner;
 		int rows = 0;
-		// JCIP
+		// JCIP (§6.3.6)
 		CompletionService<Void> completionService = new ExecutorCompletionService<Void>(executor);
 		while (!it.isSRow()) {
 			completionService.submit(new RowLinker(it, pieceHashMap));
