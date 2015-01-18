@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
 /**
- * Concurrent, thread-safe HashmapPuzzle.
+ * Concurrent puzzle solver.
  * Handles each row in a parallel fashion.
  */
 public class ConcurrentHashmapPuzzle extends HashmapPuzzle {
