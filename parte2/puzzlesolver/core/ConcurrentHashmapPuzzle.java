@@ -136,14 +136,14 @@ public class ConcurrentHashmapPuzzle extends HashmapPuzzle {
 			Thread.currentThread().interrupt();
 		} catch (ExecutionException e) {
 			Throwable t = e.getCause();
-			  if (t instanceof RuntimeException) 
-		            throw (RuntimeException) t;
-		        else if (t instanceof Error)
-		            throw (Error) t;
-		        else if (t instanceof MissingPiecesException)
-		        	throw (MissingPiecesException) t;
-		        else
-		            throw new IllegalStateException("Not unchecked", e);
+			// Unchecked
+			if (t instanceof RuntimeException) 
+				throw (RuntimeException) t;
+			else if (t instanceof Error)
+				throw (Error) t;
+			// Checked
+			else if (t instanceof MissingPiecesException)
+				throw (MissingPiecesException) t;
 		}
 	}
 	
