@@ -13,7 +13,7 @@ import java.rmi.RemoteException;
 /**
  * Usage: java PuzzleSolver servername
  */
-public class PuzzleServer {
+public class PuzzleSolverServer {
 	
 	final static int N_CPUS = Runtime.getRuntime().availableProcessors();
 	final static int POOLSIZE = N_CPUS+1;

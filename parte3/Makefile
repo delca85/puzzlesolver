@@ -21,15 +21,15 @@ CLASSES = \
 		puzzlesolver/server/RemoteHashmapPuzzle.java \
 		puzzlesolver/server/FreezableHashmapPuzzle.java \
 		puzzlesolver/server/FrozenArrayPuzzle.java \
-		puzzlesolver/PuzzleServer.java \
-		puzzlesolver/PuzzleClient.java
+		puzzlesolver/PuzzleSolverServer.java \
+		puzzlesolver/PuzzleSolverClient.java
 
-default:	PuzzleServer.jar PuzzleClient.jar
-PuzzleServer.jar: $(CLASSES:.java=.class)
-	jar cvfe PuzzleServer.jar puzzlesolver.PuzzleServer puzzlesolver/*.class puzzlesolver/io/*.class puzzlesolver/core/*.class puzzlesolver/server/*.class
+default:	PuzzleSolverServer.jar PuzzleSolverClient.jar
+PuzzleSolverServer.jar: $(CLASSES:.java=.class)
+	jar cvfe PuzzleSolverServer.jar puzzlesolver.PuzzleSolverServer puzzlesolver/*.class puzzlesolver/io/*.class puzzlesolver/core/*.class puzzlesolver/server/*.class
 
-PuzzleClient.jar: $(CLASSES:.java=.class)
-	jar cvfe PuzzleClient.jar puzzlesolver.PuzzleClient puzzlesolver/*.class puzzlesolver/io/*.class puzzlesolver/core/*.class puzzlesolver/server/*.class
+PuzzleSolverClient.jar: $(CLASSES:.java=.class)
+	jar cvfe PuzzleSolverClient.jar puzzlesolver.PuzzleSolverClient puzzlesolver/*.class puzzlesolver/io/*.class puzzlesolver/core/*.class puzzlesolver/server/*.class
 
 javadoc:
 	javadoc puzzlesolver puzzlesolver.io puzzlesolver.core -d doc 

@@ -23,7 +23,7 @@ import puzzlesolver.server.IRemotePuzzle;
  * Usage: java PuzzleClient input.txt output.txt server
  */
 
-public class PuzzleClient {
+public class PuzzleSolverClient {
 
 	final static int MAX_RETRIES = 5;
 	
