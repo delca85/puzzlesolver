@@ -26,10 +26,10 @@ CLASSES = \
 
 default:	PuzzleServer.jar PuzzleClient.jar
 PuzzleServer.jar: $(CLASSES:.java=.class)
-	jar cvfe PuzzleServer.jar puzzlesolver.PuzzleServer puzzlesolver/*.class puzzlesolver/io/*.class puzzlesolver/core/*.class
+	jar cvfe PuzzleServer.jar puzzlesolver.PuzzleServer puzzlesolver/*.class puzzlesolver/io/*.class puzzlesolver/core/*.class puzzlesolver/server/*.class
 
 PuzzleClient.jar: $(CLASSES:.java=.class)
-	jar cvfe PuzzleClient.jar puzzlesolver.PuzzleClient puzzlesolver/*.class puzzlesolver/io/*.class puzzlesolver/core/*.class
+	jar cvfe PuzzleClient.jar puzzlesolver.PuzzleClient puzzlesolver/*.class puzzlesolver/io/*.class puzzlesolver/core/*.class puzzlesolver/server/*.class
 
 javadoc:
 	javadoc puzzlesolver puzzlesolver.io puzzlesolver.core -d doc 
