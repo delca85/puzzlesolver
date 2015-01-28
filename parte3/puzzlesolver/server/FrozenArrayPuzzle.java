@@ -146,12 +146,12 @@ public class FrozenArrayPuzzle extends ArrayPuzzle implements Serializable {
 	}
 	@Override
 	public void solve() throws MissingPiecesException {
+		// Frozen puzzle is read-only;
 		throw new RuntimeException();
-		// TODO eccezione migliore
 	}
 	@Override
 	public void addPiece(IPuzzlePiece p) {
-		// TODO Auto-generated method stub
+		// Frozen puzzle is read-only;
 		throw new RuntimeException();
 	}
 
