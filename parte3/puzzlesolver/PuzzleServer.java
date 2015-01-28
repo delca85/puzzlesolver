@@ -33,9 +33,9 @@ public class PuzzleServer {
 		try{  
 			IRemotePuzzle puzzle = new RemoteHashmapPuzzle(xs);  
 			Naming.rebind(rmiAddress, puzzle);  
-	        System.err.println("Server ready");
+	        System.out.println("Server ready");
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
+			System.err.println("RemoteException while trying to bind to "+rmiAddress);
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
 			System.err.println("Malformed URL:"+rmiAddress);
