@@ -18,28 +18,27 @@ public class PuzzleServer {
 	final static int N_CPUS = Runtime.getRuntime().availableProcessors();
 	final static int POOLSIZE = N_CPUS+1;
 	// Goetz, JCIP, §8.2 Sizing Thread Pools
-	
+
 	public static void main(String[] args) {
-		
+
 		ExecutorService xs = Executors.newFixedThreadPool(POOLSIZE);
-		
-		
-		
+
 		if (args.length != 1) {
 			System.err.println("Usage: java PuzzleServer servername");
 			return;
 		}
 
+		String rmiAddress = "rmi://"+args[0]+":5000/puzzle";
+
 		try{  
 			IRemotePuzzle puzzle = new RemoteHashmapPuzzle(xs);  
-			Naming.rebind("rmi://"+args[0]+":5000/puzzle", puzzle);  
+			Naming.rebind(rmiAddress, puzzle);  
 	        System.err.println("Server ready");
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("Malformed URL:"+rmiAddress);
 		}
 	}
 }
