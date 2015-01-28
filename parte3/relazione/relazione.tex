@@ -111,7 +111,7 @@ puzzlesolver
 \subsubsection{puzzlesolver.server.IRemotePuzzle}
 L'interfaccia \Ifacename{IRemotePuzzle} offre gli stessi metodi di \Ifacename{IPuzzle} con l'aggiunta della clausola \texttt{throws } \Ifacename{RemoteException} ed \`e dunque idonea ad essere utilizzata con RMI.
 \subsubsection{puzzlesolver.client.ExponentialBackoffPuzzleWrapper}
-\Classname{ExponentialBackoffPuzzleWrapper} \`e un wrapper intorno a un \Ifacename{RemotePuzzle} che prova a fare backoff esponenziale un numero \texttt{MAX_RETRIES} di volte prima di rilanciare l'eccezione \Classname{RemoteException}.
+\Classname{ExponentialBackoffPuzzleWrapper} \`e un wrapper intorno a un \Ifacename{RemotePuzzle} che prova a fare backoff esponenziale un numero \texttt{MAX\_RETRIES} di volte prima di rilanciare l'eccezione \Classname{RemoteException}.
 \subsubsection{puzzlesolver.server.FreezableHashmapPuzzle}
 \Classname{FreezableHashmapPuzzle} estende \Classname{ConcurrentHashmapPuzzle} aggiungendo un metodo \Methodname{freeze} che restituisce un \emph{nuovo} \Ifacename{IPuzzle} risolto e ``congelato''.
 \subsubsection{puzzlesolver.server.RemoteHashmapPuzzle}
