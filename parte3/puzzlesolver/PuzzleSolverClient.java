@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.NoSuchFileException;
+import java.rmi.ConnectException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -124,8 +125,10 @@ public class PuzzleSolverClient {
 			System.err.println("Could not parse - malformed file!");
 		} catch (NoSuchFileException e) {
 			System.err.println("File not found!");
+		} catch (ConnectException e) {
+			System.err.println("ConnectException while trying to connect to RMI resource "+rmiAddress);
 		} catch (IOException e) {
 			e.printStackTrace();
-		}		
+		}
 	}
 }
