@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.nio.file.NoSuchFileException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,8 +22,11 @@ import puzzlesolver.server.IRemotePuzzle;
 /**
  * Usage: java PuzzleClient input.txt output.txt server
  */
+
 public class PuzzleClient {
 
+	final static int MAX_RETRIES = 5;
+	
 	public static void main(String[] args) {
 		
 		if (args.length != 3) {
@@ -52,9 +56,60 @@ public class PuzzleClient {
 					            ));
 				}
 
-				puzzle.solve();
+				class ExponentialBackoff {
+					public void backoffSolve(IRemotePuzzle puzzle) throws RemoteException, MissingPiecesException {
+						int i = 0;
+						while (i < MAX_RETRIES) {
+							try { 
+								puzzle.solve();
+								return;
+							} catch (RemoteException e) {
+								try {
+									Thread.sleep(2^i * 100);
+								} catch (InterruptedException e1) {
+									e1.printStackTrace();
+								}
+							}
+							i++;
+						}
+						puzzle.solve();
+					}
+					
+					public IPuzzle backoffGetPuzzle(IRemotePuzzle puzzle) throws RemoteException {
+						int i = 0;
+						while (i < MAX_RETRIES) {
+							try { 
+								return puzzle.getPuzzle();
+							} catch (RemoteException e) {
+								try {
+									Thread.sleep(2^i * 100);
+								} catch (InterruptedException e1) {
+									e1.printStackTrace();
+								}
+							}
+							i++;
+						}
+						return puzzle.getPuzzle();
+					}
+				}
+				
+				try {
+					(new ExponentialBackoff()).backoffSolve(puzzle);
+				} catch (RemoteException e) {
+					System.err.println("Connection error, couldn't solve puzzle after "+MAX_RETRIES+" attempts.");
+					return;
+				}
+
+				IPuzzle frozen;
+				
+				try {
+					frozen = (new ExponentialBackoff()).backoffGetPuzzle(puzzle);
+				} catch (RemoteException e) {
+					System.err.println("Connection error, couldn't retrieve solved puzzle after "+MAX_RETRIES+" attempts.");
+					return;
+				}
+				
 				IPuzzlePrinter printer = new PlaintextPuzzlePrinter(dstPath);
-				IPuzzle frozen = puzzle.getPuzzle();
 				printer.print(frozen);
 			} catch (MissingPiecesException e) {
 				System.err.println("Pieces seem to be missing from input.");
