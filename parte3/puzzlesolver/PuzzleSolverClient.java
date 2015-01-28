@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import puzzlesolver.core.BasicPuzzlePiece;
+import puzzlesolver.core.IPuzzlePiece;
 import puzzlesolver.core.MissingPiecesException;
 import puzzlesolver.core.IPuzzle;
 import puzzlesolver.io.PlaintextPuzzlePrinter;
@@ -46,19 +47,7 @@ public class PuzzleSolverClient {
 			try {
 				Iterator<PuzzleFileParser.PieceStruct> it = tokenList.iterator();
 
-				while (it.hasNext()) {
-					PuzzleFileParser.PieceStruct struct = it.next();
-					puzzle.addPiece(new BasicPuzzlePiece(
-					                struct.id,
-					                struct.character,
-					                struct.n,
-					                struct.s,
-					                struct.w,
-					                struct.e
-					            ));
-				}
-
-				class ExponentialBackoff {
+				class ExponentialBackoff {		
 					public void backoffSolve(IRemotePuzzle puzzle) throws RemoteException, MissingPiecesException {
 						int i = 0;
 						while (i < MAX_RETRIES) {
@@ -93,8 +82,37 @@ public class PuzzleSolverClient {
 						}
 						return puzzle.getPuzzle();
 					}
+					
+					public void backoffAddPiece(IRemotePuzzle puzzle, IPuzzlePiece piece) throws RemoteException {
+						int i = 0;
+						while (i < MAX_RETRIES) {
+							try { 
+								puzzle.addPiece(piece);
+							} catch (RemoteException e) {
+								try {
+									Thread.sleep(2^i * 100);
+								} catch (InterruptedException e1) {
+									e1.printStackTrace();
+								}
+							}
+							i++;
+						}
+						puzzle.addPiece(piece);
+					}
 				}
 				
+				while (it.hasNext()) {
+					PuzzleFileParser.PieceStruct struct = it.next();
+					(new ExponentialBackoff()).backoffAddPiece(puzzle, new BasicPuzzlePiece(
+					                struct.id,
+					                struct.character,
+					                struct.n,
+					                struct.s,
+					                struct.w,
+					                struct.e
+					            ));
+				}
+
 				try {
 					(new ExponentialBackoff()).backoffSolve(puzzle);
 				} catch (RemoteException e) {
