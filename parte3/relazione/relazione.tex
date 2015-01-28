@@ -121,6 +121,7 @@ L'interfaccia \Ifacename{IRemotePuzzle} offre gli stessi metodi di \Ifacename{IP
 \Classname{ArrayPuzzle} \`e una classe \emph{astratta} che rappresenta un puzzle sotto forma di array.
 \subsubsection{puzzlesolver.server.FrozenArrayPuzzle}
 \Classname{FrozenArrayPuzzle} \`e un'estensione minimale di \Classname{ArrayPuzzle}.
+Solleva una \Classname{RuntimeException} se si tenta di effettuare operazioni in scrittura.
 
 \subsection{Modifiche a classi esistenti}
 \`E stato possibile evitare di fare modifiche a classi esistenti, con l'eccezione di avere esplicitamente dichiarato \Ifacename{Serializable} la classe \Classname{BasicPuzzlePiece}.
