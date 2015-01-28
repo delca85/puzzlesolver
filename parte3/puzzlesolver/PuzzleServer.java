@@ -1,30 +1,14 @@
 package puzzlesolver;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.NoSuchFileException;
-import java.util.Iterator;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import puzzlesolver.core.BasicPuzzlePiece;
-import puzzlesolver.core.MissingPiecesException;
-import puzzlesolver.core.IPuzzle;
-import puzzlesolver.io.PlaintextPuzzlePrinter;
-import puzzlesolver.io.MalformedFileException;
-import puzzlesolver.io.PuzzleFileParser;
-import puzzlesolver.io.IPuzzlePrinter;
 import puzzlesolver.server.IRemotePuzzle;
 import puzzlesolver.server.RemoteHashmapPuzzle;
 
-import java.rmi.registry.Registry;
-import java.rmi.registry.LocateRegistry;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 
 /**
  * Usage: java PuzzleSolver input.txt output.txt

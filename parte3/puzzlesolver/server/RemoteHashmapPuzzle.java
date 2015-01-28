@@ -2,11 +2,9 @@ package puzzlesolver.server;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 
-import puzzlesolver.core.ConcurrentHashmapPuzzle;
 import puzzlesolver.core.IPuzzle;
 import puzzlesolver.core.IPuzzlePiece;
 import puzzlesolver.core.MissingPiecesException;
@@ -69,7 +67,6 @@ public class RemoteHashmapPuzzle extends UnicastRemoteObject implements IRemoteP
 
 	@Override
 	public IPuzzle getPuzzle() throws RemoteException {
-		// TODO Auto-generated method stub
 		return chp.getFrozen();
 	}
 }

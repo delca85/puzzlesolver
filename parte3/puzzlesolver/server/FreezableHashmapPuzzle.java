@@ -1,10 +1,7 @@
 package puzzlesolver.server;
 
-import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
-
 import puzzlesolver.core.ConcurrentHashmapPuzzle;
-import puzzlesolver.core.IPuzzlePiece;
 
 public class FreezableHashmapPuzzle extends ConcurrentHashmapPuzzle {
 

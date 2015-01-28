@@ -1,12 +1,9 @@
 package puzzlesolver.server;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map.Entry;
 
 import puzzlesolver.core.ArrayPuzzle;
-import puzzlesolver.core.HashmapPuzzle;
 import puzzlesolver.core.IPuzzle;
 import puzzlesolver.core.IPuzzlePiece;
 import puzzlesolver.core.MissingPiecesException;

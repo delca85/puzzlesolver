@@ -8,8 +8,6 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import puzzlesolver.core.BasicPuzzlePiece;
 import puzzlesolver.core.MissingPiecesException;
@@ -19,7 +17,7 @@ import puzzlesolver.io.MalformedFileException;
 import puzzlesolver.io.PuzzleFileParser;
 import puzzlesolver.io.IPuzzlePrinter;
 import puzzlesolver.server.IRemotePuzzle;
-import puzzlesolver.server.RemoteHashmapPuzzle;
+
 /**
  * Usage: java PuzzleSolver input.txt output.txt
  */
