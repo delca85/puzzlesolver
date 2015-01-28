@@ -12,7 +12,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import puzzlesolver.core.BasicPuzzlePiece;
-import puzzlesolver.core.IPuzzlePiece;
 import puzzlesolver.core.MissingPiecesException;
 import puzzlesolver.core.IPuzzle;
 import puzzlesolver.client.ExponentialBackoffPuzzleWrapper;
