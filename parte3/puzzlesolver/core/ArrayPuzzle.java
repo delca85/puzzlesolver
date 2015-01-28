@@ -21,7 +21,7 @@ public abstract class ArrayPuzzle implements IPuzzle, Serializable {
 
 			@Override
 			public boolean hasNext() {
-				if (j < array.length - 1) {
+				if (j < array.length) {
 					return true;
 				} else {
 					return false;
@@ -44,7 +44,7 @@ public abstract class ArrayPuzzle implements IPuzzle, Serializable {
 		
 		@Override
 		public boolean hasNext() {
-			if (i < array.length - 1) {
+			if (i < array.length) {
 				return true;
 			} else {
 				return false;
