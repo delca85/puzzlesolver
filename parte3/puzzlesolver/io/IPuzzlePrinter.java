@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import puzzlesolver.core.IPuzzle;
 import puzzlesolver.core.PuzzleNotSolvedException;
+import puzzlesolver.server.IRemotePuzzle;
 
 /**
  * Classes implementing IPuzzlePrinter provide capabilities to output

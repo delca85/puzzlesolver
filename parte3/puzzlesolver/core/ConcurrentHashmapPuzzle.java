@@ -22,7 +22,7 @@ public class ConcurrentHashmapPuzzle extends HashmapPuzzle {
 	public ConcurrentHashmapPuzzle(ExecutorService executor) {
 		this.executor = executor;
 	}
-	
+
 	/**
 	 * Links together the pieces forming a row.
 	 * This is thread-safe if it can be guaranteed that no other

@@ -16,13 +16,20 @@ CLASSES = \
 		puzzlesolver/io/PuzzleFileParser.java \
 		puzzlesolver/core/IPuzzlePiece.java \
 		puzzlesolver/io/IPuzzlePrinter.java \
-		puzzlesolver/PuzzleSolver.java
+		puzzlesolver/server/IRemotePuzzle.java \
+		puzzlesolver/server/RemoteHashmapPuzzle.java \
+		puzzlesolver/PuzzleServer.java \
+		puzzlesolver/PuzzleClient.java
 
-default: PuzzleSolver.jar
+default:	PuzzleServer.jar PuzzleClient.jar
+PuzzleServer.jar: $(CLASSES:.java=.class)
+	jar cvfe PuzzleServer.jar puzzlesolver.PuzzleServer puzzlesolver/*.class puzzlesolver/io/*.class puzzlesolver/core/*.class
 
-PuzzleSolver.jar: $(CLASSES:.java=.class)
-	jar cvfe PuzzleSolver.jar puzzlesolver.PuzzleSolver puzzlesolver/*.class puzzlesolver/io/*.class puzzlesolver/core/*.class
+PuzzleClient.jar: $(CLASSES:.java=.class)
+	jar cvfe PuzzleClient.jar puzzlesolver.PuzzleClient puzzlesolver/*.class puzzlesolver/io/*.class puzzlesolver/core/*.class
+
 javadoc:
 	javadoc puzzlesolver puzzlesolver.io puzzlesolver.core -d doc 
+
 clean:	
-	$(RM) -R *.jar puzzlesolver/*.class puzzlesolver/io/*.class puzzlesolver/core/*.class doc/puzzlesolver/* doc/resources/* doc/*
+	$(RM) -R *.jar puzzlesolver/*.class puzzlesolver/server/*.class puzzlesolver/client/*.class puzzlesolver/io/*.class puzzlesolver/core/*.class doc/puzzlesolver/* doc/resources/* doc/*

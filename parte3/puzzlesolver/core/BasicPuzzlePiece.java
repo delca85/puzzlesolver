@@ -1,6 +1,8 @@
 package puzzlesolver.core;
 
-public class BasicPuzzlePiece implements IPuzzlePiece {
+import java.io.Serializable;
+
+public class BasicPuzzlePiece implements IPuzzlePiece, Serializable	 {
 
 	private enum Direction {
 		NORTH,
