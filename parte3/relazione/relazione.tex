@@ -1,0 +1,142 @@
+\documentclass[a4paper]{article}
+
+\usepackage[italian]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{cite}
+\usepackage{hyperref}
+\newcommand{\Classname}[1]{\textsc{#1}}
+\newcommand{\Ifacename}[1]{\textsc{#1}}
+\newcommand{\Methodname}[1]{\texttt{#1}}
+\newcommand{\Pkgname}[1]{\texttt{#1}}
+\usepackage{listings} % Include the listings-package
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+
+\lstset{
+language=Java,
+basicstyle=\small\sffamily,
+numbers=left,
+numberstyle=\tiny,
+frame=tb,
+columns=fullflexible,
+showstringspaces=false
+}
+
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\tikzstyle{frame} = [
+rectangle, draw,
+text width=4em, text centered,
+minimum height=3em
+% minimum width=5em
+]
+\tikzstyle{line} = [draw, -latex']
+
+
+\title{PuzzleSolver - Relazione Programmazione Concorrente e Distribuita, Parte 3}
+\author{Tobia Tesan - \#1051819}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+La presente relazione dettaglia e motiva le scelte progettuali dei programmi \texttt{PuzzleSolverServer} e \texttt{PuzzleSolverClient}, che realizzano le specifiche della parte 3 del progetto di Programmazione Concorrente e Distribuita per l'A.A. 2014/2015.
+\end{abstract}
+
+\tableofcontents
+
+\section{Vista d'insieme}
+\subsection{Premessa}
+Implementare una strategia di comunicazione client/server efficiente senza modifiche drastiche alla struttura delle classi non e' stato del tutto triviale a causa delle peculiarit\`a delle classi e strutture dati impiegate nelle parti 1 e 2.
+
+In particolare, nella parte 1 si \`e concepita un interfaccia \Ifacename{PuzzlePrinter} con un metodo \Methodname{print} che prendeva come argomento un \Ifacename{IPuzzle} risolto, la cui implementazione stampava in console la soluzione del puzzle.
+Per utilizzarla occorre dunque una istanza di \Ifacename{IPuzzle} sul client.
+
+D'altra parte l'implementazione di \Ifacename{IPuzzle} prevista in parte 1 e parte 2 si presta molto male ad essere serializzata e trasferita al client una volta risolta, poich\`e contiene una \Classname{HashMap} di \Classname{BasicPuzzlePiece}, ognuno dei quali contiene quattro riferimenti ai vicini che si perdono nella serializzazione.
+\label{intro}
+Si \`e d'altronde preferito evitare di agire ridefinendo \Methodname{readObject} e \Methodname{writeObject} per correggere la situazione e si \`e invece agito come dettagliato in seguito.
+
+\subsection{Strategia di comunicazione}
+La strategia di comunicazione scelta \`e la seguente:
+\begin{enumerate}
+\item Il programma server istanzia un oggetto \Ifacename{IRemotePuzzle}.
+\item Il programma client recupera un riferimento remoto all'oggetto \Ifacename{IRemotePuzzle}
+\item Il programma client legge il file di input con \Classname{PuzzleFileParser}, immutato dalla prima versione, costruisce localmente un \Ifacename{IPuzzlePiece} e chiama il metodo \Methodname{addPiece} sull'oggetto remoto.
+\item Il programma client chiama \Methodname{solve()} sull'oggetto remoto
+\item \label{foo} Il programma client ottiene un oggetto locale \Ifacename{IPuzzle} attraverso il metodo \Ifacename{IRemotePuzzle}.\Methodname{freeze()}.
+\item Il programma client stampa il risultato attraverso la classe \Classname{PlaintextPuzzlePrinter}, immutata dalla prima versione, passando l'oggetto locale recuperato al punto precedente.
+\end{enumerate}
+
+Il passo \ref{foo} \`e reso necessario dal fatto che, come detto in \ref{intro}, l'oggetto remoto non \`e serializzabile.
+Il metodo \Methodname{freeze} restituisce un oggetto serializzabile che pu\`o essere stampato localmente.
+
+\subsection{Robustezza}
+Il programma client avvolge il riferimento remoto \Ifacename{IRemotePuzzle} con una classe \Classname{ExponentialBackoffPuzzleWrapper}, che prova a fare backoff esponenziale sulle chiamate ai metodi dell'oggetto remoto prima di lasciare risalire la \Classname{RemoteException}.
+
+\section{Organizzazione delle classi}
+
+\`E riportato di seguito l'elenco delle classi.
+Le nuove classi sono marcate da \texttt{*}
+
+\begin{verbatim}
+puzzlesolver
+|-- client
+|   `-- ExponentialBackoffPuzzleWrapper.java *
+|-- core
+|   |-- ArrayPuzzle.java *
+|   |-- BasicPuzzlePiece.java
+|   |-- BasicPuzzlePieceTest.java
+|   |-- ConcurrentHashmapPuzzle.java
+|   |-- ConcurrentHashmapPuzzleTest.java
+|   |-- HashmapPuzzle.java
+|   |-- IPuzzle.java
+|   |-- IPuzzlePiece.java
+|   |-- MissingPiecesException.java
+|   `-- PuzzleNotSolvedException.java
+|-- io
+|   |-- IPuzzlePrinter.java
+|   |-- MalformedFileException.java
+|   |-- PlaintextPuzzlePrinter.java
+|   `-- PuzzleFileParser.java
+|-- PuzzleSolverClient.java *
+|-- PuzzleSolverServer.java *
+`-- server
+    |-- FreezableHashmapPuzzle.java *
+    |-- FrozenArrayPuzzle.java *
+    |-- IRemotePuzzle.java *
+    `-- RemoteHashmapPuzzle.java *
+\end{verbatim}
+
+\subsection{Nuove classi}
+\subsubsection{puzzlesolver.client.ExponentialBackoffPuzzleWrapper}
+\subsubsection{puzzlesolver.core.ArrayPuzzle}
+\subsubsection{puzzlesolver.server.FreezableHashmapPuzzle}
+\subsubsection{puzzlesolver.server.RemoteHashmapPuzzle}
+\subsubsection{puzzlesolver.server.FrozenArrayPuzzle}
+\subsubsection{puzzlesolver.server.IRemotePuzzle}
+
+\subsection{Modifiche a classi esistenti}
+\`E stato possibile evitare di fare modifiche a classi esistenti, con l'eccezione di avere esplicitamente dichiarato \Ifacename{Serializable} la classe \Classname{BasicPuzzlePiece}
+
+\section{Compilazione e utilizzo}
+\begin{verbatim}
+$ cd parte3/ 
+$ make
+$ ./puzzlesolverserver.sh localhost &
+$ ./puzzlesolverclient.sh input.txt output.txt localhost
+\end{verbatim}
+oppure
+\begin{verbatim}
+$ cd parte2/ 
+$ make
+$ java -jar PuzzleSolverServer.jar localhost &
+$ java -jar PuzzleSolverClient.jar input.txt output.txt localhost
+\end{verbatim}
+
+% \bibliography{mybib}{}
+% \bibliographystyle{alpha}
+\appendix
+\section{Addendum alla parte 2}
+Nella parte 2 si \`e scelto di cambiare l'algoritmo risolutivo poich\`e l'attraversamento \emph{breadth-first} si adatta molto male ad essere parallelizzato.
+Nello specifico, il fatto che la struttura dati scelta \emph{non sia} un albero ma lo contenga solamente come sottoinsieme dei suoi spigoli e vertici, presentando dunque cicli e diversi percorsi tra due nodi, fa s\`i che sia molto difficile partizionare il lavoro in unit\`a indipendenti e fare in modo che ciascun thread sappia quando fermarsi.
+\end{document}
