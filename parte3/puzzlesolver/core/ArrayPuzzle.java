@@ -59,14 +59,9 @@ public abstract class ArrayPuzzle implements IPuzzle, Serializable {
 		public void remove() {
 			throw new UnsupportedOperationException();
 		}
-	}
-	
-	
-	
+	}	
 	
 	IPuzzlePiece[][] array;
-	int cols;
-	int rows;
 	protected boolean solved;
 	
 	public ArrayPuzzle(int rows, int cols) {
@@ -103,12 +98,12 @@ public abstract class ArrayPuzzle implements IPuzzle, Serializable {
 
 	@Override
 	public int getRows() throws PuzzleNotSolvedException {
-		return rows;
+		return array.length;
 	}
 
 	@Override
 	public int getCols() throws PuzzleNotSolvedException {
-		return cols;
+		return array[0].length;
 	}
 
 }
