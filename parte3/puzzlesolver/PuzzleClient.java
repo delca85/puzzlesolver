@@ -40,9 +40,10 @@ public class PuzzleClient {
 		String rmiAddress = "rmi://"+serverName+":5000/puzzle";
 		try {
 			List<PuzzleFileParser.PieceStruct> tokenList = PuzzleFileParser.parseFile(srcPath);
+			IRemotePuzzle puzzle = (IRemotePuzzle)Naming.lookup(rmiAddress);
+
 			try {
 				Iterator<PuzzleFileParser.PieceStruct> it = tokenList.iterator();
-				IRemotePuzzle puzzle = (IRemotePuzzle)Naming.lookup(rmiAddress);
 
 				while (it.hasNext()) {
 					PuzzleFileParser.PieceStruct struct = it.next();
@@ -111,11 +112,12 @@ public class PuzzleClient {
 				
 				IPuzzlePrinter printer = new PlaintextPuzzlePrinter(dstPath);
 				printer.print(frozen);
+				
 			} catch (MissingPiecesException e) {
 				System.err.println("Pieces seem to be missing from input.");
-			} catch (NotBoundException e) {
-				System.err.println("Could not look up "+rmiAddress);
 			}
+		} catch (NotBoundException e) {
+			System.err.println("Could not look up "+rmiAddress);
 		} catch (IllegalArgumentException e) {
 			System.err.println("A puzzle piece appears to be invalid.");
 		} catch (MalformedFileException e) {
