@@ -71,7 +71,7 @@ public class PuzzleSolverClient {
 				IPuzzle frozen;
 				
 				try {
-					frozen = puzzleWrapper.backoffGetPuzzle();
+					frozen = puzzleWrapper.backoffFreeze();
 				} catch (RemoteException e) {
 					System.err.println("Connection error, couldn't retrieve solved puzzle after "+MAX_RETRIES+" attempts.");
 					return;

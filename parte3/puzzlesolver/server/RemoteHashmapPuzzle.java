@@ -13,48 +13,48 @@ import puzzlesolver.core.PuzzleNotSolvedException;
 
 public class RemoteHashmapPuzzle extends UnicastRemoteObject implements IRemotePuzzle {
 
-	private FreezableHashmapPuzzle chp;
+	private FreezableHashmapPuzzle puzzle;
 	
 	public RemoteHashmapPuzzle(ExecutorService xs) throws RemoteException {
 		super();
-		chp = new FreezableHashmapPuzzle(xs);
+		puzzle = new FreezableHashmapPuzzle(xs);
 	}
 
 	@Override
 	public void addPiece(IPuzzlePiece p) throws RemoteException {
-		chp.addPiece(p);	
+		puzzle.addPiece(p);	
 	}
 
 	@Override
 	public void solve() throws MissingPiecesException, RemoteException {
-		chp.solve();
+		puzzle.solve();
 		
 	}
 
 	@Override
 	public Iterator<Iterator<IPuzzlePiece>> iterator() throws RemoteException {
-		return chp.iterator();
+		return puzzle.iterator();
 	}
 
 	@Override
 	public String getSolution() throws PuzzleNotSolvedException,
 			RemoteException {
-		return chp.getSolution();
+		return puzzle.getSolution();
 	}
 
 	@Override
 	public int getRows() throws PuzzleNotSolvedException, RemoteException {
-		return chp.getRows();
+		return puzzle.getRows();
 	}
 
 	@Override
 	public int getCols() throws PuzzleNotSolvedException, RemoteException {
-		return chp.getCols();
+		return puzzle.getCols();
 	}
 	
 	public String getSolutionRows() throws PuzzleNotSolvedException, RemoteException {
 		String output = ""; 
-		for (Iterator<Iterator<IPuzzlePiece>> rowIt = chp.iterator();
+		for (Iterator<Iterator<IPuzzlePiece>> rowIt = puzzle.iterator();
 		        rowIt.hasNext();) {
 			for (Iterator<IPuzzlePiece> colIt = rowIt.next();
 			        colIt.hasNext();) {
@@ -66,8 +66,8 @@ public class RemoteHashmapPuzzle extends UnicastRemoteObject implements IRemoteP
 	}
 
 	@Override
-	public IPuzzle getPuzzle() throws RemoteException {
-		return chp.getFrozen();
+	public IPuzzle freeze() throws RemoteException {
+		return puzzle.freeze();
 	}
 }
 

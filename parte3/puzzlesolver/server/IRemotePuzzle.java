@@ -50,5 +50,5 @@ public interface IRemotePuzzle extends Remote {
 	 */
 	public int getCols() throws PuzzleNotSolvedException, RemoteException;
 	
-	public IPuzzle getPuzzle() throws RemoteException;
+	public IPuzzle freeze() throws RemoteException;
 }

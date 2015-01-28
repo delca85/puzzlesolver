@@ -7,10 +7,9 @@ public class FreezableHashmapPuzzle extends ConcurrentHashmapPuzzle {
 
 	public FreezableHashmapPuzzle(ExecutorService executor) {
 		super(executor);
-		// TODO Auto-generated constructor stub
 	}
 
-	public FrozenArrayPuzzle getFrozen() {
+	public FrozenArrayPuzzle freeze() {
 		return new FrozenArrayPuzzle(this);
 	}
 	

@@ -34,11 +34,11 @@ public class ExponentialBackoffPuzzleWrapper {
 		puzzle.solve();
 	}
 	
-	public IPuzzle backoffGetPuzzle() throws RemoteException {
+	public IPuzzle backoffFreeze() throws RemoteException {
 		int i = 0;
 		while (i < MAX_RETRIES) {
 			try { 
-				return puzzle.getPuzzle();
+				return puzzle.freeze();
 			} catch (RemoteException e) {
 				try {
 					Thread.sleep(2^i * 100);
@@ -48,7 +48,7 @@ public class ExponentialBackoffPuzzleWrapper {
 			}
 			i++;
 		}
-		return puzzle.getPuzzle();
+		return puzzle.freeze();
 	}
 	
 	public void backoffAddPiece(IPuzzlePiece piece) throws RemoteException {
