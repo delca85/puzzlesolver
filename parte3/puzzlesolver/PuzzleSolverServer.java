@@ -17,6 +17,7 @@ public class PuzzleSolverServer {
 	
 	final static int N_CPUS = Runtime.getRuntime().availableProcessors();
 	final static int POOLSIZE = N_CPUS+1;
+	final static int RMI_PORT = 1099;
 	// Goetz, JCIP, §8.2 Sizing Thread Pools
 
 	public static void main(String[] args) {
@@ -28,7 +29,7 @@ public class PuzzleSolverServer {
 			return;
 		}
 
-		String rmiAddress = "rmi://"+args[0]+":5000/puzzle";
+		String rmiAddress = "rmi://"+args[0]+":"+RMI_PORT+"/puzzle";
 
 		try{  
 			IRemotePuzzle puzzle = new RemoteHashmapPuzzle(xs);  

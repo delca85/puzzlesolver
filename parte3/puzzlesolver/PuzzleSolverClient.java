@@ -29,7 +29,7 @@ import puzzlesolver.server.IRemotePuzzle;
 public class PuzzleSolverClient {
 
 	final static int MAX_RETRIES = 5;
-
+	final static int RMI_PORT =1099;
 	public static void main(String[] args) {
 
 		if (args.length != 3) {
@@ -40,7 +40,7 @@ public class PuzzleSolverClient {
 		Path srcPath = Paths.get(args[0]);
 		Path dstPath = Paths.get(args[1]);
 		String serverName = args[2];
-		String rmiAddress = "rmi://"+serverName+":5000/puzzle";
+		String rmiAddress = "rmi://"+serverName+":"+RMI_PORT+"/puzzle";
 		try {
 			List<PuzzleFileParser.PieceStruct> tokenList = PuzzleFileParser.parseFile(srcPath);
 			IRemotePuzzle puzzle = (IRemotePuzzle)Naming.lookup(rmiAddress);

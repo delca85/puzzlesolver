@@ -135,6 +135,7 @@ Solleva una \Classname{RuntimeException} se si tenta di effettuare operazioni in
 \begin{verbatim}
 $ cd parte3/ 
 $ make
+$ rmiregistry 1099 &
 $ ./puzzlesolverserver.sh localhost &
 $ ./puzzlesolverclient.sh input.txt output.txt localhost
 \end{verbatim}
@@ -142,6 +143,7 @@ oppure
 \begin{verbatim}
 $ cd parte3/ 
 $ make
+$ rmiregistry 1099 &
 $ java -jar PuzzleSolverServer.jar localhost &
 $ java -jar PuzzleSolverClient.jar input.txt output.txt localhost
 \end{verbatim}
