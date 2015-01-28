@@ -33,13 +33,13 @@ public class PuzzleClient {
 		Path srcPath = Paths.get(args[0]);
 		Path dstPath = Paths.get(args[1]);
 		String serverName = args[2];
-		
+		String rmiAddress = "rmi://"+serverName+":5000/puzzle";
 		try {
 			List<PuzzleFileParser.PieceStruct> tokenList = PuzzleFileParser.parseFile(srcPath);
 			try {
 				Iterator<PuzzleFileParser.PieceStruct> it = tokenList.iterator();
-				IRemotePuzzle puzzle = (IRemotePuzzle)Naming.lookup("rmi://"+serverName+":5000/puzzle");  
-				
+				IRemotePuzzle puzzle = (IRemotePuzzle)Naming.lookup(rmiAddress);
+
 				while (it.hasNext()) {
 					PuzzleFileParser.PieceStruct struct = it.next();
 					puzzle.addPiece(new BasicPuzzlePiece(
@@ -59,8 +59,7 @@ public class PuzzleClient {
 			} catch (MissingPiecesException e) {
 				System.err.println("Pieces seem to be missing from input.");
 			} catch (NotBoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.err.println("Could not look up "+rmiAddress);
 			}
 		} catch (IllegalArgumentException e) {
 			System.err.println("A puzzle piece appears to be invalid.");
