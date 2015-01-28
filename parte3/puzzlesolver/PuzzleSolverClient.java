@@ -27,9 +27,9 @@ import puzzlesolver.server.IRemotePuzzle;
 public class PuzzleSolverClient {
 
 	final static int MAX_RETRIES = 5;
-	
+
 	public static void main(String[] args) {
-		
+
 		if (args.length != 3) {
 			System.err.println("Usage: java PuzzleSolver input.txt output.txt server");
 			return;
