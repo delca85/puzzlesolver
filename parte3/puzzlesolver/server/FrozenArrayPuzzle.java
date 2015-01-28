@@ -10,10 +10,10 @@ import puzzlesolver.core.MissingPiecesException;
 
 public class FrozenArrayPuzzle extends ArrayPuzzle implements Serializable {
 
-	private class StringPuzzlePiece implements IPuzzlePiece, Serializable {
+	private class CharPuzzlePieceStub implements IPuzzlePiece, Serializable {
 		char character;
 		
-		StringPuzzlePiece(char character) {
+		CharPuzzlePieceStub(char character) {
 			this.character = character;
 		}
 		
@@ -136,7 +136,7 @@ public class FrozenArrayPuzzle extends ArrayPuzzle implements Serializable {
 		        rowIt.hasNext();) {
 			for (Iterator<IPuzzlePiece> colIt = rowIt.next();
 			        colIt.hasNext();) {
-				put(new StringPuzzlePiece(colIt.next().getCharacter()), i, j);
+				put(new CharPuzzlePieceStub(colIt.next().getCharacter()), i, j);
 				j++;
 			}
 			j = 0;
