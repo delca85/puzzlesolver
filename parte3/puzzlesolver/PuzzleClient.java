@@ -19,10 +19,10 @@ import puzzlesolver.io.IPuzzlePrinter;
 import puzzlesolver.server.IRemotePuzzle;
 
 /**
- * Usage: java PuzzleSolver input.txt output.txt
+ * Usage: java PuzzleClient input.txt output.txt server
  */
 public class PuzzleClient {
-	
+
 	public static void main(String[] args) {
 		
 		if (args.length != 3) {

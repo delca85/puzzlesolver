@@ -11,7 +11,7 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 
 /**
- * Usage: java PuzzleSolver input.txt output.txt
+ * Usage: java PuzzleSolver servername
  */
 public class PuzzleServer {
 	
