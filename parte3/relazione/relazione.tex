@@ -47,14 +47,19 @@ La presente relazione dettaglia e motiva le scelte progettuali dei programmi \te
 
 \section{Vista d'insieme}
 \subsection{Premessa}
-Implementare una strategia di comunicazione client/server efficiente senza modifiche drastiche alla struttura delle classi non e' stato del tutto triviale a causa delle peculiarit\`a delle classi e strutture dati impiegate nelle parti 1 e 2.
+Implementare una strategia di comunicazione client/server efficiente senza modifiche drastiche alla struttura delle classi non \`e stato del tutto triviale a causa delle peculiarit\`a delle classi e strutture dati impiegate nelle parti 1 e 2.
 
 In particolare, nella parte 1 si \`e concepita un interfaccia \Ifacename{PuzzlePrinter} con un metodo \Methodname{print} che prendeva come argomento un \Ifacename{IPuzzle} risolto, la cui implementazione stampava in console la soluzione del puzzle.
 Per utilizzarla occorre dunque una istanza di \Ifacename{IPuzzle} sul client.
 
 D'altra parte l'implementazione di \Ifacename{IPuzzle} prevista in parte 1 e parte 2 si presta molto male ad essere serializzata e trasferita al client una volta risolta, poich\`e contiene una \Classname{HashMap} di \Classname{BasicPuzzlePiece}, ognuno dei quali contiene quattro riferimenti ai vicini che si perdono nella serializzazione.
 \label{intro}
+
 Si \`e d'altronde preferito evitare di agire ridefinendo \Methodname{readObject} e \Methodname{writeObject} per correggere la situazione e si \`e invece agito come dettagliato in seguito.
+Si \`e anche voluto evitare fino alla fine di fare modifiche significative a classi esistenti per restare nello spirito della OOP.
+
+
+Dovendo riorganizzare da capo il programma in vista del suo sviluppo concorrente e distribuito si riorganizzerebbero diversamente le classi, in particolare si avrebbe una classe serializzabile rappresentante una soluzione o si resituirebbe direttamente la soluzione come stringa.
 
 \subsection{Strategia di comunicazione}
 La strategia di comunicazione scelta \`e la seguente:
@@ -63,7 +68,7 @@ La strategia di comunicazione scelta \`e la seguente:
 \item Il programma client recupera un riferimento remoto all'oggetto \Ifacename{IRemotePuzzle}
 \item Il programma client legge il file di input con \Classname{PuzzleFileParser}, immutato dalla prima versione, costruisce localmente un \Ifacename{IPuzzlePiece} e chiama il metodo \Methodname{addPiece} sull'oggetto remoto.
 \item Il programma client chiama \Methodname{solve()} sull'oggetto remoto
-\item \label{foo} Il programma client ottiene un oggetto locale \Ifacename{IPuzzle} attraverso il metodo \Ifacename{IRemotePuzzle}.\Methodname{freeze()}.
+\item \label{foo} Il programma client ottiene un oggetto locale \Ifacename{IPuzzle} rappresentante il puzzle risolto attraverso il metodo \Ifacename{IRemotePuzzle}.\Methodname{freeze()}.
 \item Il programma client stampa il risultato attraverso la classe \Classname{PlaintextPuzzlePrinter}, immutata dalla prima versione, passando l'oggetto locale recuperato al punto precedente.
 \end{enumerate}
 
@@ -72,7 +77,7 @@ Il metodo \Methodname{freeze} restituisce un oggetto serializzabile che pu\`o es
 
 \subsection{Robustezza}
 Il programma client avvolge il riferimento remoto \Ifacename{IRemotePuzzle} con una classe \Classname{ExponentialBackoffPuzzleWrapper}, che prova a fare backoff esponenziale sulle chiamate ai metodi dell'oggetto remoto prima di lasciare risalire la \Classname{RemoteException}.
-
+Il programma client e il programma server gestiscono esplicitamente eventuali \Classname{MalformedUrlException} o \Classname{ConnectException} con un messaggio di errore informativo.
 \section{Organizzazione delle classi}
 
 \`E riportato di seguito l'elenco delle classi.
@@ -108,18 +113,18 @@ puzzlesolver
 \end{verbatim}
 
 \subsection{Nuove classi}
-\subsubsection{puzzlesolver.server.IRemotePuzzle}
+\subsubsection{\texttt{puzzlesolver.server.IRemotePuzzle}}
 L'interfaccia \Ifacename{IRemotePuzzle} offre gli stessi metodi di \Ifacename{IPuzzle} con l'aggiunta della clausola \texttt{throws } \Ifacename{RemoteException} ed \`e dunque idonea ad essere utilizzata con RMI.
-\subsubsection{puzzlesolver.client.ExponentialBackoffPuzzleWrapper}
-\Classname{ExponentialBackoffPuzzleWrapper} \`e un wrapper intorno a un \Ifacename{RemotePuzzle} che prova a fare backoff esponenziale un numero \texttt{MAX\_RETRIES} di volte prima di rilanciare l'eccezione \Classname{RemoteException}.
-\subsubsection{puzzlesolver.server.FreezableHashmapPuzzle}
-\Classname{FreezableHashmapPuzzle} estende \Classname{ConcurrentHashmapPuzzle} aggiungendo un metodo \Methodname{freeze} che restituisce un \emph{nuovo} \Ifacename{IPuzzle} risolto e ``congelato''.
-\subsubsection{puzzlesolver.server.RemoteHashmapPuzzle}
+\subsubsection{\texttt{puzzlesolver.client.ExponentialBackoffPuzzleWrapper}}
+\Classname{ExponentialBackoffPuzzleWrapper} \`e un wrapper intorno a un \Ifacename{RemotePuzzle} che prova a fare backoff esponenziale un numero \texttt{MAX\_RETRIES} di volte, entrambi specificati nel costruttore, prima di rilanciare l'eccezione \Classname{RemoteException}.
+\subsubsection{\texttt{puzzlesolver.server.FreezableHashmapPuzzle}}
+\Classname{FreezableHashmapPuzzle} estende \Classname{ConcurrentHashmapPuzzle}, immutato dalla prima versione, aggiungendo un metodo \Methodname{freeze} che restituisce un \emph{nuovo} \Ifacename{IPuzzle} risolto e ``congelato''.
+\subsubsection{\texttt{puzzlesolver.server.RemoteHashmapPuzzle}}
 \Classname{RemoteHashmapPuzzle} estende \Classname{UnicastRemoteObject} e implementa \Classname{IRemotePuzzle}.
 \`E sostanzialmente un wrapper intorno a un \Classname{FreezableHashmapPuzzle}.
-\subsubsection{puzzlesolver.core.ArrayPuzzle}
+\subsubsection{\texttt{puzzlesolver.core.ArrayPuzzle}}
 \Classname{ArrayPuzzle} \`e una classe \emph{astratta} che rappresenta un puzzle sotto forma di array.
-\subsubsection{puzzlesolver.server.FrozenArrayPuzzle}
+\subsubsection{\texttt{puzzlesolver.server.FrozenArrayPuzzle}}
 \Classname{FrozenArrayPuzzle} \`e un'estensione minimale di \Classname{ArrayPuzzle}.
 Solleva una \Classname{RuntimeException} se si tenta di effettuare operazioni in scrittura.
 
@@ -135,7 +140,7 @@ $ ./puzzlesolverclient.sh input.txt output.txt localhost
 \end{verbatim}
 oppure
 \begin{verbatim}
-$ cd parte2/ 
+$ cd parte3/ 
 $ make
 $ java -jar PuzzleSolverServer.jar localhost &
 $ java -jar PuzzleSolverClient.jar input.txt output.txt localhost
