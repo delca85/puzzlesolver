@@ -14,6 +14,7 @@ CLASSES = \
 		puzzlesolver/io/MalformedFileException.java \
 		puzzlesolver/core/MissingPiecesException.java \
 		puzzlesolver/core/IPuzzle.java \
+		puzzlesolver/client/ExponentialBackoffPuzzleWrapper.java \
 		puzzlesolver/io/PuzzleFileParser.java \
 		puzzlesolver/core/IPuzzlePiece.java \
 		puzzlesolver/io/IPuzzlePrinter.java \
@@ -26,10 +27,10 @@ CLASSES = \
 
 default:	PuzzleSolverServer.jar PuzzleSolverClient.jar
 PuzzleSolverServer.jar: $(CLASSES:.java=.class)
-	jar cvfe PuzzleSolverServer.jar puzzlesolver.PuzzleSolverServer puzzlesolver/*.class puzzlesolver/io/*.class puzzlesolver/core/*.class puzzlesolver/server/*.class
+	jar cvfe PuzzleSolverServer.jar puzzlesolver.PuzzleSolverServer puzzlesolver/*.class puzzlesolver/io/*.class puzzlesolver/core/*.class puzzlesolver/server/*.class puzzlesolver/client/*.class
 
 PuzzleSolverClient.jar: $(CLASSES:.java=.class)
-	jar cvfe PuzzleSolverClient.jar puzzlesolver.PuzzleSolverClient puzzlesolver/*.class puzzlesolver/io/*.class puzzlesolver/core/*.class puzzlesolver/server/*.class
+	jar cvfe PuzzleSolverClient.jar puzzlesolver.PuzzleSolverClient puzzlesolver/*.class puzzlesolver/io/*.class puzzlesolver/core/*.class puzzlesolver/server/*.class puzzlesolver/client/*.class
 
 javadoc:
 	javadoc puzzlesolver puzzlesolver.io puzzlesolver.core -d doc 

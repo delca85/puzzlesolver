@@ -15,6 +15,7 @@ import puzzlesolver.core.BasicPuzzlePiece;
 import puzzlesolver.core.IPuzzlePiece;
 import puzzlesolver.core.MissingPiecesException;
 import puzzlesolver.core.IPuzzle;
+import puzzlesolver.client.ExponentialBackoffPuzzleWrapper;
 import puzzlesolver.io.PlaintextPuzzlePrinter;
 import puzzlesolver.io.MalformedFileException;
 import puzzlesolver.io.PuzzleFileParser;
@@ -46,64 +47,11 @@ public class PuzzleSolverClient {
 
 			try {
 				Iterator<PuzzleFileParser.PieceStruct> it = tokenList.iterator();
-
-				class ExponentialBackoff {		
-					public void backoffSolve(IRemotePuzzle puzzle) throws RemoteException, MissingPiecesException {
-						int i = 0;
-						while (i < MAX_RETRIES) {
-							try { 
-								puzzle.solve();
-								return;
-							} catch (RemoteException e) {
-								try {
-									Thread.sleep(2^i * 100);
-								} catch (InterruptedException e1) {
-									e1.printStackTrace();
-								}
-							}
-							i++;
-						}
-						puzzle.solve();
-					}
-					
-					public IPuzzle backoffGetPuzzle(IRemotePuzzle puzzle) throws RemoteException {
-						int i = 0;
-						while (i < MAX_RETRIES) {
-							try { 
-								return puzzle.getPuzzle();
-							} catch (RemoteException e) {
-								try {
-									Thread.sleep(2^i * 100);
-								} catch (InterruptedException e1) {
-									e1.printStackTrace();
-								}
-							}
-							i++;
-						}
-						return puzzle.getPuzzle();
-					}
-					
-					public void backoffAddPiece(IRemotePuzzle puzzle, IPuzzlePiece piece) throws RemoteException {
-						int i = 0;
-						while (i < MAX_RETRIES) {
-							try { 
-								puzzle.addPiece(piece);
-							} catch (RemoteException e) {
-								try {
-									Thread.sleep(2^i * 100);
-								} catch (InterruptedException e1) {
-									e1.printStackTrace();
-								}
-							}
-							i++;
-						}
-						puzzle.addPiece(piece);
-					}
-				}
+				ExponentialBackoffPuzzleWrapper puzzleWrapper = new ExponentialBackoffPuzzleWrapper(puzzle, MAX_RETRIES);
 				
 				while (it.hasNext()) {
 					PuzzleFileParser.PieceStruct struct = it.next();
-					(new ExponentialBackoff()).backoffAddPiece(puzzle, new BasicPuzzlePiece(
+					puzzleWrapper.backoffAddPiece(new BasicPuzzlePiece(
 					                struct.id,
 					                struct.character,
 					                struct.n,
@@ -114,7 +62,7 @@ public class PuzzleSolverClient {
 				}
 
 				try {
-					(new ExponentialBackoff()).backoffSolve(puzzle);
+					puzzleWrapper.backoffSolve();
 				} catch (RemoteException e) {
 					System.err.println("Connection error, couldn't solve puzzle after "+MAX_RETRIES+" attempts.");
 					return;
@@ -123,7 +71,7 @@ public class PuzzleSolverClient {
 				IPuzzle frozen;
 				
 				try {
-					frozen = (new ExponentialBackoff()).backoffGetPuzzle(puzzle);
+					frozen = puzzleWrapper.backoffGetPuzzle();
 				} catch (RemoteException e) {
 					System.err.println("Connection error, couldn't retrieve solved puzzle after "+MAX_RETRIES+" attempts.");
 					return;
