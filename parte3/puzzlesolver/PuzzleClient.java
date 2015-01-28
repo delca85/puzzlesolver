@@ -56,9 +56,8 @@ public class PuzzleClient {
 
 				puzzle.solve();
 				IPuzzlePrinter printer = new PlaintextPuzzlePrinter(dstPath);
-				IPuzzle serialized = puzzle.getPuzzle();
-				System.out.println(puzzle.getSolution());
-				printer.print(serialized);
+				IPuzzle frozen = puzzle.getPuzzle();
+				printer.print(frozen);
 			} catch (MissingPiecesException e) {
 				System.err.println("Pieces seem to be missing from input.");
 			} catch (NotBoundException e) {

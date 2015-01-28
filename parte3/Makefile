@@ -8,6 +8,7 @@ JC = javac
 CLASSES = \
 		puzzlesolver/core/BasicPuzzlePiece.java \
 		puzzlesolver/core/HashmapPuzzle.java \
+		puzzlesolver/core/ArrayPuzzle.java \
 		puzzlesolver/core/ConcurrentHashmapPuzzle.java \
 		puzzlesolver/io/PlaintextPuzzlePrinter.java \
 		puzzlesolver/io/MalformedFileException.java \
@@ -18,6 +19,8 @@ CLASSES = \
 		puzzlesolver/io/IPuzzlePrinter.java \
 		puzzlesolver/server/IRemotePuzzle.java \
 		puzzlesolver/server/RemoteHashmapPuzzle.java \
+		puzzlesolver/server/FreezableHashmapPuzzle.java \
+		puzzlesolver/server/FrozenArrayPuzzle.java \
 		puzzlesolver/PuzzleServer.java \
 		puzzlesolver/PuzzleClient.java
 

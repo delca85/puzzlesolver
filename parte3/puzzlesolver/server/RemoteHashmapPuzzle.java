@@ -2,6 +2,7 @@ package puzzlesolver.server;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 
@@ -14,11 +15,11 @@ import puzzlesolver.core.PuzzleNotSolvedException;
 
 public class RemoteHashmapPuzzle extends UnicastRemoteObject implements IRemotePuzzle {
 
-	private SerializableConcurrentHashmapPuzzle chp;
+	private FreezableHashmapPuzzle chp;
 	
 	public RemoteHashmapPuzzle(ExecutorService xs) throws RemoteException {
 		super();
-		chp = new SerializableConcurrentHashmapPuzzle(xs);
+		chp = new FreezableHashmapPuzzle(xs);
 	}
 
 	@Override
@@ -53,7 +54,23 @@ public class RemoteHashmapPuzzle extends UnicastRemoteObject implements IRemoteP
 		return chp.getCols();
 	}
 	
-	public SerializableConcurrentHashmapPuzzle getPuzzle() throws RemoteException {
-		return chp;
+	public String getSolutionRows() throws PuzzleNotSolvedException, RemoteException {
+		String output = ""; 
+		for (Iterator<Iterator<IPuzzlePiece>> rowIt = chp.iterator();
+		        rowIt.hasNext();) {
+			for (Iterator<IPuzzlePiece> colIt = rowIt.next();
+			        colIt.hasNext();) {
+				output += colIt.next().getCharacter();
+			}
+			output += "\n";
+		}
+		return output;
+	}
+
+	@Override
+	public IPuzzle getPuzzle() throws RemoteException {
+		// TODO Auto-generated method stub
+		return chp.getFrozen();
 	}
 }
+

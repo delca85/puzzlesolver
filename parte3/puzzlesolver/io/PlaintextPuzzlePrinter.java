@@ -31,7 +31,7 @@ public class PlaintextPuzzlePrinter implements IPuzzlePrinter {
 		String output = "";
 		output += puzzle.getSolution();
 		output += "\n\n";
-				for (Iterator<Iterator<IPuzzlePiece>> rowIt = puzzle.iterator();
+		for (Iterator<Iterator<IPuzzlePiece>> rowIt = puzzle.iterator();
 		        rowIt.hasNext();) {
 			for (Iterator<IPuzzlePiece> colIt = rowIt.next();
 			        colIt.hasNext();) {
